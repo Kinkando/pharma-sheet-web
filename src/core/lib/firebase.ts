@@ -1,5 +1,5 @@
-import config from '@/config/config';
 import { initializeApp } from 'firebase/app';
+import config from '@/config/config';
 
 const app = initializeApp(config.firebase.credential);
 
