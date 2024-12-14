@@ -1,11 +1,12 @@
 import { GlobalContext } from '@/core/context';
 import React, { JSX, useContext, useMemo, useState } from 'react';
-import Topbar from './Topbar';
 import { Backdrop } from '@mui/material';
 import { Home } from '@mui/icons-material';
 import Sidebar from './Sidebar';
+import Topbar from './Topbar';
 
 export type Router = {
+  title: string;
   icon: JSX.Element;
   name: string;
   path: string;
@@ -13,8 +14,9 @@ export type Router = {
 
 const skipBaseLayoutPaths = ['/sign-in'];
 
-const routers: Router[] = [
+export const routers: Router[] = [
   {
+    title: 'Home | PHARMA SHEET',
     icon: <Home />,
     name: 'Home',
     path: '/',

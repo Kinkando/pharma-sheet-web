@@ -6,7 +6,6 @@ import SignInCard from './SignInCard';
 import { GlobalContext } from '@/core/context';
 
 export default function SignIn() {
-  document.title = 'Sign In | a Board';
   const { user } = useContext(GlobalContext);
   if (user) {
     return <></>;
