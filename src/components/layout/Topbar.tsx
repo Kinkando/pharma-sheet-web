@@ -1,11 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { User } from '@/core/@types/user';
+import { User } from '@/core/@types';
 import { Router } from './BaseLayout';
 import { Divider, Drawer, IconButton } from '@mui/material';
 import { Logout, Menu as MenuIcon } from '@mui/icons-material';
-import { useScreen } from '@/core/hooks/screen';
+import { useScreen } from '@/core/hooks';
 
 export type TopbarProps = {
   pathname: string;

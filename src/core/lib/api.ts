@@ -4,9 +4,9 @@ import axios, {
   AxiosRequestHeaders,
   HttpStatusCode,
 } from 'axios';
-import config from '@/config/config';
-import { APIResponse } from '@/core/@types/api';
-import { refreshToken } from '@/core/repository/authen';
+import { config } from '@/config';
+import { APIResponse } from '@/core/@types';
+import { refreshToken } from '@/core/repository';
 
 const axiosController: Controller = {};
 
@@ -75,7 +75,7 @@ instance.interceptors.response.use(
   },
 );
 
-export default async function client<T>(
+export async function client<T>(
   config: AxiosRequestCustomConfig,
 ): Promise<APIResponse<T>> {
   const controller = new AbortController();

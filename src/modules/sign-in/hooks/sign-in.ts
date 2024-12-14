@@ -1,9 +1,8 @@
 import { AxiosError } from 'axios';
 import { useCallback, useContext, useState } from 'react';
-import GlobalContext from '@/core/context/global';
-import { signInWithGoogle } from '@/core/lib/authen';
-import { verifyToken } from '@/core/repository/authen';
-import { getUser } from '@/core/repository/user';
+import { GlobalContext } from '@/core/context';
+import { signInWithGoogle } from '@/core/lib';
+import { getUser, verifyToken } from '@/core/repository';
 
 export function useSignIn() {
   const { alert, setUser } = useContext(GlobalContext);

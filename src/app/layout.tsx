@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { PublicEnvScript } from 'next-runtime-env';
 import NextTopLoader from 'nextjs-toploader';
-import GlobalContextProvider from '@/core/context/GlobalContextProvider';
+import { GlobalContextProvider } from '@/components/layout/GlobalContextProvider';
 
 export const metadata: Metadata = {
   title: 'Create Next App',

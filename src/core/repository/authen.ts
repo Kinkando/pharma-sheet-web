@@ -1,6 +1,6 @@
 import axios from 'axios';
-import config from '@/config/config';
-import { JWT } from '@/core/@types/authen';
+import { config } from '@/config';
+import { JWT } from '@/core/@types';
 
 const instance = axios.create({
   baseURL: config.apiHost,

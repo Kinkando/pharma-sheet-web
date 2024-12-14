@@ -1,6 +1,6 @@
 import { HttpStatusCode } from 'axios';
-import { User } from '@/core/@types/user';
-import client from '@/core/lib/api';
+import { User } from '@/core/@types';
+import { client } from '@/core/lib';
 
 export async function getUser() {
   const accessToken = localStorage.getItem('accessToken');

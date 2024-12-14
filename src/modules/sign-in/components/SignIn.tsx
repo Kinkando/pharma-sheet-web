@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useContext } from 'react';
 import SignInCard from './SignInCard';
-import GlobalContext from '@/core/context/global';
+import { GlobalContext } from '@/core/context';
 
 export default function SignIn() {
   document.title = 'Sign In | a Board';

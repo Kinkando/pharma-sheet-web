@@ -1,4 +1,4 @@
-import GlobalContext from '@/core/context/global';
+import { GlobalContext } from '@/core/context';
 import React, { JSX, useContext, useMemo, useState } from 'react';
 import Topbar from './Topbar';
 import { Backdrop } from '@mui/material';

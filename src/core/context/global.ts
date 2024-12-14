@@ -1,8 +1,7 @@
 import { createContext, Dispatch, SetStateAction } from 'react';
-import { Alert } from '@/core/@types/alert';
-import { User } from '@/core/@types/user';
+import { Alert, User } from '@/core/@types';
 
-const GlobalContext = createContext<{
+export const GlobalContext = createContext<{
   alert: (alert: Alert) => void;
   user?: User;
   setUser: Dispatch<SetStateAction<User | undefined>>;
@@ -12,5 +11,3 @@ const GlobalContext = createContext<{
   setUser: () => {},
   isReady: false,
 });
-
-export default GlobalContext;

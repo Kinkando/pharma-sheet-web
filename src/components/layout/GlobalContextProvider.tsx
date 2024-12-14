@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react';
 import { Comic_Neue } from 'next/font/google';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { createTheme, ThemeProvider } from '@mui/material';
-import { Alert } from '@/core/@types/alert';
-import GlobalContext from '@/core/context/global';
-import { useUser } from '@/core/hooks/user';
-import AlertComponent from '@/components/ui/Alert';
+import { Alert } from '@/core/@types';
+import { GlobalContext } from '@/core/context';
+import { useUser } from '@/core/hooks';
+import { Alert as AlertComponent } from '@/components/ui';
 import BaseLayout from '@/components/layout/BaseLayout';
 
 const comicNeue = Comic_Neue({
@@ -21,7 +21,7 @@ const theme = createTheme({
   },
 });
 
-export default function GlobalContextProvider({
+export function GlobalContextProvider({
   children,
 }: {
   children: React.ReactNode;

@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
-import { getWarehouses } from '@/core/repository/warehouse';
-import GlobalContext from '@/core/context/global';
-import { getMedicines } from '@/core/repository/medicine';
+import { getMedicines, getWarehouses } from '@/core/repository';
+import { GlobalContext } from '@/core/context';
 import { FilterMedicine, Medicine, Warehouse } from '@/core/@types';
 
 export function useMedicine() {

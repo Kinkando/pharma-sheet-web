@@ -1,6 +1,6 @@
 import { HttpStatusCode } from 'axios';
-import { Warehouse } from '@/core/@types/warehouse';
-import client from '@/core/lib/api';
+import { Warehouse } from '@/core/@types';
+import { client } from '@/core/lib';
 
 export async function getWarehouses() {
   const { data, status, error } = await client<Warehouse[]>({

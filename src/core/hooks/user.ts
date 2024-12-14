@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { User } from '@/core/@types/user';
-import { getUser } from '@/core/repository/user';
+import { User } from '@/core/@types';
+import { getUser } from '@/core/repository';
 
 export function useUser() {
   const [isReady, setIsReady] = useState(false);

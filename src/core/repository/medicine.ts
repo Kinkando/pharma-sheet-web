@@ -1,6 +1,6 @@
 import { HttpStatusCode } from 'axios';
 import { Data, FilterMedicine, Medicine } from '@/core/@types';
-import client from '@/core/lib/api';
+import { client } from '@/core/lib';
 
 export async function getMedicines(filter: FilterMedicine) {
   const { data, status, error } = await client<Data<Medicine>>({

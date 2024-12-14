@@ -1,4 +1,4 @@
-import { Severity } from '@/core/@types/alert';
+import { Severity } from '@/core/@types';
 import { Close } from '@mui/icons-material';
 import { Slide, Alert as AlertMaterial, IconButton, Fade } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -10,12 +10,7 @@ export type AlertProps = {
   message: string;
 };
 
-export default function Alert({
-  isOpen,
-  onDismiss,
-  severity,
-  message,
-}: AlertProps) {
+export function Alert({ isOpen, onDismiss, severity, message }: AlertProps) {
   const [_message, _setMessage] = useState('');
   const [_severity, _setSeverity] = useState<Severity>('info');
 

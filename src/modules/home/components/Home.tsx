@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { CircularProgress, MenuItem, Select, TextField } from '@mui/material';
 import { useMedicine } from '@/modules/home/hooks/medicine';
-import { useDebounceSearchTerm } from '@/core/hooks/debouncedSearchTerm';
+import { useDebounceSearchTerm } from '@/core/hooks';
 import { Close, Search } from '@mui/icons-material';
 import Image from 'next/image';
 import { MedicineCard } from './MedicineCard';
