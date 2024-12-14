@@ -2,15 +2,19 @@
 
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { CircularProgress, MenuItem, Select, TextField } from '@mui/material';
 import { Close, Search } from '@mui/icons-material';
-import { WarehouseRole } from '@/core/@types';
+import { Medicine, WarehouseRole } from '@/core/@types';
 import { useDebounceSearchTerm } from '@/core/hooks';
+import { GlobalContext } from '@/core/context';
 import { useMedicine } from '@/modules/home/hooks/medicine';
 import { MedicineCard } from './MedicineCard';
+import { DeleteMedicineModal } from './DeleteMedicineModal';
+import { deleteMedicine } from '@/core/repository';
 
 export default function Home() {
+  const { alert } = useContext(GlobalContext);
   const searchParam = useSearchParams();
   const [search, setSearch] = useState(searchParam.get('search') || '');
   const { debouncedSearchTerm, setDebouncedSearchTerm } = useDebounceSearchTerm(
@@ -19,6 +23,10 @@ export default function Home() {
   );
   const { warehouses, medicines, fetchMedicine, warehouse, setWarehouse } =
     useMedicine(searchParam.get('warehouseID'));
+  const [selectedMedicine, setSelectedMedicine] = useState<Medicine>();
+  const [openModal, setOpenModal] = useState<
+    'closed' | 'view' | 'edit' | 'delete'
+  >('closed');
 
   const selectWarehouse = useCallback(
     (warehouseID: string) => {
@@ -34,14 +42,31 @@ export default function Home() {
 
   useEffect(() => {
     if (warehouse?.warehouseID && warehouses.length) {
-      fetchMedicine({
-        limit: 999,
-        page: 1,
-        warehouseID: warehouse.warehouseID,
-        search: debouncedSearchTerm,
-      });
+      fetchData();
     }
   }, [warehouses, warehouse, debouncedSearchTerm]);
+
+  const fetchData = useCallback(async () => {
+    if (!warehouse) {
+      return;
+    }
+    await fetchMedicine({
+      limit: 999,
+      page: 1,
+      warehouseID: warehouse.warehouseID,
+      search: debouncedSearchTerm,
+    });
+  }, [warehouse, debouncedSearchTerm]);
+
+  const removeMedicine = async (medicineID: string) => {
+    try {
+      await deleteMedicine(medicineID);
+      setSelectedMedicine(undefined);
+      await fetchData();
+    } catch (error) {
+      alert({ message: `${error}`, severity: 'error' });
+    }
+  };
 
   return (
     <>
@@ -126,9 +151,26 @@ export default function Home() {
               deletable={[WarehouseRole.ADMIN, WarehouseRole.EDITOR].includes(
                 warehouse?.role,
               )}
+              selectMedicine={(medicine, mode) => {
+                setSelectedMedicine(medicine);
+                setOpenModal(mode);
+              }}
             />
           ))}
       </main>
+
+      {selectedMedicine && (
+        <>
+          <DeleteMedicineModal
+            isOpen={openModal === 'delete'}
+            onClose={() => setOpenModal('closed')}
+            medicine={selectedMedicine}
+            onDelete={async () =>
+              await removeMedicine(selectedMedicine.medicineID)
+            }
+          />
+        </>
+      )}
     </>
   );
 }

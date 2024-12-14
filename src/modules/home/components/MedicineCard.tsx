@@ -1,4 +1,3 @@
-import { useRouter } from 'next/navigation';
 import { Medicine } from '@/core/@types';
 import { Delete, Edit } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
@@ -7,18 +6,22 @@ export type MedicineCardProps = {
   medicine: Medicine;
   editable?: boolean;
   deletable?: boolean;
+  selectMedicine: (
+    medicine: Medicine,
+    mode: 'view' | 'edit' | 'delete',
+  ) => void;
 };
 
 export function MedicineCard({
   medicine,
   editable,
   deletable,
+  selectMedicine,
 }: MedicineCardProps) {
-  const { push } = useRouter();
   return (
     <div
       className="w-full px-4 py-2 rounded-lg cursor-pointer border border-gray-300"
-      onClick={() => push(`/medicine/${medicine.medicineID}`)}
+      onClick={() => selectMedicine(medicine, 'view')}
     >
       <h2 className="font-bold line-clamp-1">{medicine.description}</h2>
       <p className="">{medicine.address}</p>
@@ -27,6 +30,7 @@ export function MedicineCard({
           <IconButton
             onClick={(e) => {
               e.stopPropagation();
+              selectMedicine(medicine, 'delete');
             }}
           >
             <Delete />
@@ -36,6 +40,7 @@ export function MedicineCard({
           <IconButton
             onClick={(e) => {
               e.stopPropagation();
+              selectMedicine(medicine, 'edit');
             }}
           >
             <Edit />

@@ -13,3 +13,13 @@ export async function getMedicines(filter: FilterMedicine) {
   }
   throw Error(error);
 }
+
+export async function deleteMedicine(medicineID: string) {
+  const { status, error } = await client({
+    url: `/medicine/${medicineID}`,
+    method: 'DELETE',
+  });
+  if (status !== HttpStatusCode.NoContent) {
+    throw Error(error);
+  }
+}
