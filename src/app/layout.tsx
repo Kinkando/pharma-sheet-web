@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { PublicEnvScript } from 'next-runtime-env';
+import NextTopLoader from 'nextjs-toploader';
+import GlobalContextProvider from '@/core/context/GlobalContextProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -32,7 +34,18 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <NextTopLoader
+          color="#49A569"
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          crawl={true}
+          showSpinner={false}
+          easing="ease"
+          speed={200}
+          shadow="0 0 10px #49A569,0 0 5px #49A569"
+        />
+        <GlobalContextProvider>{children}</GlobalContextProvider>
       </body>
     </html>
   );
