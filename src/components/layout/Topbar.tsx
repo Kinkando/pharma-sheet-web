@@ -6,7 +6,7 @@ import { Router } from './BaseLayout';
 import { Divider, Drawer, IconButton } from '@mui/material';
 import { Logout, Menu as MenuIcon } from '@mui/icons-material';
 import { useScreen } from '@/core/hooks';
-import { useClickOutside } from '@/core/hooks/clickOutside';
+import { useClickOutside } from '@/core/hooks';
 
 export type TopbarProps = {
   pathname: string;

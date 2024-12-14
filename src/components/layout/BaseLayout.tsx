@@ -59,9 +59,10 @@ export default function BaseLayout({
       <Backdrop
         open={openDrawer}
         onClick={() => setOpenDrawer(false)}
+        className="z-10"
       ></Backdrop>
       <main className="w-full h-[calc(100vh-60px)] lg:flex">
-        <section className="bg-white text-black max-w-48 min-w-48 w-48 hidden lg:block overflow-y-auto hide-scrollbar">
+        <section className="bg-white text-black max-w-48 min-w-48 w-48 hidden lg:block overflow-y-auto hide-scrollbar z-20">
           <Sidebar pathname={pathname} routers={routers} />
         </section>
         <main className="bg-white text-black lg:bg-gray-100 w-full h-full lg:p-6 overflow-y-auto">
