@@ -6,6 +6,7 @@ import { Router } from './BaseLayout';
 import { Divider, Drawer, IconButton } from '@mui/material';
 import { Logout, Menu as MenuIcon } from '@mui/icons-material';
 import { useScreen } from '@/core/hooks';
+import { useClickOutside } from '@/core/hooks/clickOutside';
 
 export type TopbarProps = {
   pathname: string;
@@ -34,21 +35,12 @@ export default function Topbar({
     [onOpenDrawer],
   );
 
-  // Handle Click Outside of User Menu
-  useEffect(() => {
-    if (!isOpen || width < 1024) {
-      return;
-    }
-    const handleOutSideClick = (event: MouseEvent) => {
-      if (!userPanel.current?.contains(event.target as HTMLElement)) {
-        openDrawer(false);
-      }
-    };
-    window.addEventListener('mousedown', handleOutSideClick);
-    return () => {
-      window.removeEventListener('mousedown', handleOutSideClick);
-    };
-  }, [userPanel, isOpen, width, openDrawer]);
+  useClickOutside(userPanel, !isOpen || width < 1024, () => openDrawer(false), [
+    userPanel,
+    isOpen,
+    width,
+    openDrawer,
+  ]);
 
   const signOut = () => {
     localStorage.removeItem('accessToken');
