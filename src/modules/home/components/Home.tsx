@@ -226,6 +226,7 @@ export default function Home() {
         <Fab
           color="primary"
           aria-label="add"
+          size="small"
           onClick={() => setOpenModal('create')}
         >
           <Add />
