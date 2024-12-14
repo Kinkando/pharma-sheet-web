@@ -8,6 +8,7 @@ import { Alert } from '@/core/@types/alert';
 import GlobalContext from '@/core/context/global';
 import { useUser } from '@/core/hooks/user';
 import AlertComponent from '@/components/ui/Alert';
+import BaseLayout from '@/components/layout/BaseLayout';
 
 const comicNeue = Comic_Neue({
   weight: ['300', '400', '700'],
@@ -59,7 +60,11 @@ export default function GlobalContextProvider({
           {...alert}
           onDismiss={() => setAlert((alert) => ({ ...alert, isOpen: false }))}
         />
-        {isReady && <div className={`${comicNeue.className}`}>{children}</div>}
+        {isReady && (
+          <div className={`${comicNeue.className}`}>
+            <BaseLayout pathname={pathname}>{children}</BaseLayout>
+          </div>
+        )}
       </GlobalContext.Provider>
     </ThemeProvider>
   );
