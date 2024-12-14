@@ -1,37 +1,55 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { CircularProgress, MenuItem, Select, TextField } from '@mui/material';
-import { useMedicine } from '@/modules/home/hooks/medicine';
-import { useDebounceSearchTerm } from '@/core/hooks';
-import { Close, Search } from '@mui/icons-material';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
+import { CircularProgress, MenuItem, Select, TextField } from '@mui/material';
+import { Close, Search } from '@mui/icons-material';
+import { WarehouseRole } from '@/core/@types';
+import { useDebounceSearchTerm } from '@/core/hooks';
+import { useMedicine } from '@/modules/home/hooks/medicine';
 import { MedicineCard } from './MedicineCard';
 
 export default function Home() {
-  const [selectedWarehouseID, setSelectedWarehouseID] = useState<string>('');
-  const [search, setSearch] = useState('');
-  const { debouncedSearchTerm } = useDebounceSearchTerm(search);
-  const { warehouses, medicines, fetchMedicine } = useMedicine();
+  const searchParam = useSearchParams();
+  const [search, setSearch] = useState(searchParam.get('search') || '');
+  const { debouncedSearchTerm, setDebouncedSearchTerm } = useDebounceSearchTerm(
+    search,
+    searchParam.get('search') ?? '',
+  );
+  const { warehouses, medicines, fetchMedicine, warehouse, setWarehouse } =
+    useMedicine(searchParam.get('warehouseID'));
+
+  const selectWarehouse = useCallback(
+    (warehouseID: string) => {
+      const warehouse = warehouses.find(
+        (warehouse) => warehouse.warehouseID === warehouseID,
+      );
+      if (warehouse) {
+        setWarehouse(warehouse);
+      }
+    },
+    [setWarehouse, warehouses],
+  );
 
   useEffect(() => {
-    if (selectedWarehouseID) {
+    if (warehouse?.warehouseID && warehouses.length) {
       fetchMedicine({
         limit: 999,
         page: 1,
-        warehouseID: selectedWarehouseID,
+        warehouseID: warehouse.warehouseID,
         search: debouncedSearchTerm,
       });
     }
-  }, [selectedWarehouseID, debouncedSearchTerm]);
+  }, [warehouses, warehouse, debouncedSearchTerm]);
 
   return (
     <>
       <main className="space-y-4 h-full">
         <Select
-          value={selectedWarehouseID}
+          value={warehouse?.warehouseID ?? ''}
           displayEmpty
-          onChange={(e) => setSelectedWarehouseID(e.target.value)}
+          onChange={(e) => selectWarehouse(e.target.value)}
           className="w-full"
         >
           <MenuItem value="" disabled>
@@ -44,35 +62,49 @@ export default function Home() {
           ))}
         </Select>
 
-        <TextField
-          placeholder="Search"
-          className="w-full"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          disabled={!selectedWarehouseID}
-          slotProps={{
-            input: {
-              startAdornment: (
-                <div className="mr-2">
-                  <Search />
-                </div>
-              ),
-              endAdornment:
-                search !== debouncedSearchTerm ? (
-                  <div className="ml-2 cursor-pointer">
-                    <CircularProgress color="primary" size={24} />
+        {warehouse?.warehouseID && (
+          <TextField
+            placeholder="Search"
+            className="w-full"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                setDebouncedSearchTerm(search);
+              }
+            }}
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <div
+                    className="mr-2 cursor-pointer"
+                    onClick={() => setDebouncedSearchTerm(search)}
+                  >
+                    <Search />
                   </div>
-                ) : search ? (
-                  <div className="ml-2 cursor-pointer">
-                    <Close onClick={() => setSearch('')} />
-                  </div>
-                ) : undefined,
-            },
-          }}
-        />
+                ),
+                endAdornment:
+                  search !== debouncedSearchTerm ? (
+                    <div className="ml-2 mt-2 cursor-pointer">
+                      <CircularProgress color="primary" size={24} />
+                    </div>
+                  ) : search ? (
+                    <div className="ml-2 cursor-pointer">
+                      <Close
+                        onClick={() => {
+                          setSearch('');
+                          setDebouncedSearchTerm('');
+                        }}
+                      />
+                    </div>
+                  ) : undefined,
+              },
+            }}
+          />
+        )}
 
-        {selectedWarehouseID && !medicines.length && (
-          <div className="w-full h-full flex flex-col items-center justify-center">
+        {warehouse?.warehouseID && !medicines.length && (
+          <div className="w-full flex flex-col items-center justify-center">
             <Image
               src="/images/empty.png"
               width={200}
@@ -83,9 +115,19 @@ export default function Home() {
           </div>
         )}
 
-        {medicines.map((medicine) => (
-          <MedicineCard key={medicine.medicineID} medicine={medicine} />
-        ))}
+        {warehouse?.warehouseID &&
+          medicines.map((medicine) => (
+            <MedicineCard
+              key={medicine.medicineID}
+              medicine={medicine}
+              editable={[WarehouseRole.ADMIN, WarehouseRole.EDITOR].includes(
+                warehouse?.role,
+              )}
+              deletable={[WarehouseRole.ADMIN, WarehouseRole.EDITOR].includes(
+                warehouse?.role,
+              )}
+            />
+          ))}
       </main>
     </>
   );

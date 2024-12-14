@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-export function useDebounceSearchTerm(searchTerm: string) {
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(''); // Store the debounced value
+export function useDebounceSearchTerm(searchTerm: string, init?: string) {
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(init ?? ''); // Store the debounced value
   // Debounce effect
   useEffect(() => {
     // Set a timeout to update the debouncedSearchTerm after 3 seconds of inactivity
