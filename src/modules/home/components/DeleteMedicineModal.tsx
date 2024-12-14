@@ -56,6 +56,8 @@ export function DeleteMedicineModal({
         Are you sure to delete medicine{' '}
         <span className="text-red-500">{medicine.description}</span>?
       </DialogContent>
+
+      <Divider />
       <DialogActions>
         <Button
           variant="outlined"
