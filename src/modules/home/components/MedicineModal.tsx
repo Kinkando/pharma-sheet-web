@@ -92,11 +92,11 @@ export function MedicineModal({
     return [
       !!medicine.address,
       !!medicine.description.trim(),
-      !!medicine.floor,
+      medicine.floor >= 0,
+      medicine.no >= 0,
       !!medicine.label,
       !!medicine.lockerID,
       !!medicine.medicalName,
-      !!medicine.no,
     ].every((pass) => pass);
   }, [medicine]);
 
@@ -185,10 +185,14 @@ export function MedicineModal({
               {item.type === 'select' && item.onSelect && (
                 <Select
                   value={item.value}
+                  displayEmpty
                   onChange={item.onSelect}
                   className="w-full"
                   size="small"
                 >
+                  <MenuItem value="" disabled>
+                    กรุณาเลือกตู้
+                  </MenuItem>
                   {lockers.map((locker) => (
                     <MenuItem key={locker.lockerID} value={locker.lockerID}>
                       {locker.lockerName}
