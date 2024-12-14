@@ -8,6 +8,7 @@ import { Logout, Menu as MenuIcon } from '@mui/icons-material';
 import { useScreen } from '@/core/hooks/screen';
 
 export type TopbarProps = {
+  pathname: string;
   user: User;
   routers: Router[];
   isOpenDrawer: boolean;
@@ -15,6 +16,7 @@ export type TopbarProps = {
 };
 
 export default function Topbar({
+  pathname,
   user,
   routers,
   isOpenDrawer,
@@ -90,7 +92,7 @@ export default function Topbar({
         <div
           className={
             isOpen
-              ? 'absolute right-8 top-16 bg-white text-black shadow-[2px_5px_15px_0px_rgba(204,204,204,1)] rounded-lg py-2 border'
+              ? 'absolute z-20 right-8 top-16 bg-white text-black shadow-[2px_5px_15px_0px_rgba(204,204,204,1)] rounded-lg py-2 border'
               : 'hidden'
           }
           ref={userPanel}
@@ -135,7 +137,7 @@ export default function Topbar({
           onClose={() => openDrawer(false)}
           variant="persistent"
           classes={{
-            paper: 'w-full max-w-[360px]',
+            paper: 'w-[calc(100%-30px)] max-w-[360px]',
           }}
         >
           <div className="p-4 flex items-center gap-4 w-full overflow-hidden">
@@ -166,7 +168,12 @@ export default function Topbar({
                   href={router.path}
                   onClick={() => openDrawer(false)}
                 >
-                  <div className="px-4 py-2 flex items-center gap-2 hover:bg-blue-200 ease-in duration-150 transition-colors rounded-lg cursor-pointer">
+                  <div
+                    className={
+                      'px-4 py-2 flex items-center gap-2 hover:bg-blue-200 ease-in duration-150 transition-colors rounded-lg cursor-pointer' +
+                      (pathname.startsWith(router.path) ? ' bg-blue-200' : '')
+                    }
+                  >
                     {router.icon}
                     <span>{router.name}</span>
                   </div>

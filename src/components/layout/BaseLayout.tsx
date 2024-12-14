@@ -50,6 +50,7 @@ export default function BaseLayout({
   return (
     <>
       <Topbar
+        pathname={pathname}
         user={user}
         routers={routers}
         onOpenDrawer={setOpenDrawer}
@@ -61,7 +62,7 @@ export default function BaseLayout({
       ></Backdrop>
       <main className="w-full h-[calc(100vh-60px)] lg:flex">
         <section className="bg-white text-black max-w-48 min-w-48 w-48 hidden lg:block overflow-y-auto hide-scrollbar">
-          <Sidebar routers={routers} />
+          <Sidebar pathname={pathname} routers={routers} />
         </section>
         <main className="bg-white text-black lg:bg-gray-100 w-full h-full lg:p-6 overflow-y-auto">
           <div className="bg-white lg:p-6 p-4 lg:rounded-lg">{children}</div>
