@@ -12,6 +12,7 @@ import { useMedicine } from '@/modules/home/hooks/medicine';
 import { MedicineCard } from './MedicineCard';
 import { DeleteMedicineModal } from './DeleteMedicineModal';
 import { deleteMedicine } from '@/core/repository';
+import { ViewMedicineModal } from './ViewMedicineModal';
 
 export default function Home() {
   const { alert } = useContext(GlobalContext);
@@ -161,6 +162,11 @@ export default function Home() {
 
       {selectedMedicine && (
         <>
+          <ViewMedicineModal
+            isOpen={openModal === 'view'}
+            onClose={() => setOpenModal('closed')}
+            medicine={selectedMedicine}
+          />
           <DeleteMedicineModal
             isOpen={openModal === 'delete'}
             onClose={() => setOpenModal('closed')}

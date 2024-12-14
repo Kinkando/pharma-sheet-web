@@ -1,6 +1,7 @@
 export interface Medicine {
   medicineID: string;
   lockerID: string;
+  lockerName: string;
   floor: number;
   no: number;
   address: string;

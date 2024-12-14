@@ -20,33 +20,35 @@ export function MedicineCard({
 }: MedicineCardProps) {
   return (
     <div
-      className="w-full px-4 py-2 rounded-lg cursor-pointer border border-gray-300"
+      className="w-full px-4 py-2 rounded-lg cursor-pointer border border-gray-300 hover:bg-gray-100 ease-in duration-150 transition-colors"
       onClick={() => selectMedicine(medicine, 'view')}
     >
       <h2 className="font-bold line-clamp-1">{medicine.description}</h2>
       <p className="">{medicine.address}</p>
-      <div className="flex items-center justify-end">
-        {deletable && (
-          <IconButton
-            onClick={(e) => {
-              e.stopPropagation();
-              selectMedicine(medicine, 'delete');
-            }}
-          >
-            <Delete />
-          </IconButton>
-        )}
-        {editable && (
-          <IconButton
-            onClick={(e) => {
-              e.stopPropagation();
-              selectMedicine(medicine, 'edit');
-            }}
-          >
-            <Edit />
-          </IconButton>
-        )}
-      </div>
+      {(deletable || editable) && (
+        <div className="flex items-center justify-end">
+          {deletable && (
+            <IconButton
+              onClick={(e) => {
+                e.stopPropagation();
+                selectMedicine(medicine, 'delete');
+              }}
+            >
+              <Delete />
+            </IconButton>
+          )}
+          {editable && (
+            <IconButton
+              onClick={(e) => {
+                e.stopPropagation();
+                selectMedicine(medicine, 'edit');
+              }}
+            >
+              <Edit />
+            </IconButton>
+          )}
+        </div>
+      )}
     </div>
   );
 }
