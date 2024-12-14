@@ -36,9 +36,16 @@ export async function refreshToken(refreshToken: string) {
 
 export async function revokeToken() {
   try {
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+      return;
+    }
     await instance.request({
       url: '/auth/token/revoke',
       method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
   } catch (error) {
     console.error(error);
