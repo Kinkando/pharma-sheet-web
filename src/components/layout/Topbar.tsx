@@ -69,7 +69,9 @@ export default function Topbar({
   return (
     <div className="flex items-center justify-between px-8 py-4 h-[60px] bg-blue-300 gap-6">
       <Link href="/">
-        <h1 className="font-bold text-xl text-black">Pharma Sheet</h1>
+        <h1 className="font-bold text-xl text-black line-clamp-1">
+          Pharma Sheet
+        </h1>
       </Link>
 
       {/* User Panel */}
