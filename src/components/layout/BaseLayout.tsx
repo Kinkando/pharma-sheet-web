@@ -66,7 +66,9 @@ export default function BaseLayout({
           <Sidebar pathname={pathname} routers={routers} />
         </section>
         <main className="bg-white text-black lg:bg-gray-100 w-full h-full lg:p-6 overflow-y-auto">
-          <div className="bg-white lg:p-6 p-4 lg:rounded-lg">{children}</div>
+          <div className="bg-white lg:p-6 p-4 lg:rounded-lg h-full">
+            {children}
+          </div>
         </main>
       </main>
     </>

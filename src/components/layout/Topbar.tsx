@@ -165,7 +165,7 @@ export default function Topbar({
                   <div
                     className={
                       'px-4 py-2 flex items-center gap-2 hover:bg-blue-200 ease-in duration-150 transition-colors rounded-lg cursor-pointer' +
-                      (pathname.startsWith(router.path) ? ' bg-blue-200' : '')
+                      (pathname === router.path ? ' bg-blue-200' : '')
                     }
                   >
                     {router.icon}

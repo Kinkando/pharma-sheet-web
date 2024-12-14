@@ -16,5 +16,6 @@ export function useDebounceSearchTerm(searchTerm: string) {
   }, [searchTerm]); // Runs when searchTerm changes
   return {
     debouncedSearchTerm,
+    setDebouncedSearchTerm,
   };
 }
