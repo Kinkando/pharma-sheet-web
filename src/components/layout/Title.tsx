@@ -12,7 +12,9 @@ export function DynamicTitle() {
       router?.title ??
       (pathname === '/sign-in'
         ? 'Sign In | PHARMA SHEET'
-        : 'Not Found | PHARMA SHEET')
+        : pathname === '/sign-up'
+          ? 'Sign Up | PHARMA SHEET'
+          : 'Not Found | PHARMA SHEET')
     );
   }, [pathname]);
 

@@ -7,7 +7,7 @@ import { Alert } from '@/core/@types';
 import { GlobalContext } from '@/core/context';
 import { useUser } from '@/core/hooks';
 import { Alert as AlertComponent } from '@/components/ui';
-import BaseLayout from '@/components/layout/BaseLayout';
+import BaseLayout, { unauthorizedPaths } from '@/components/layout/BaseLayout';
 
 const theme = createTheme({
   typography: {
@@ -40,9 +40,9 @@ export function GlobalContextProvider({
     if (!_isReady) {
       return;
     }
-    if (_isReady && user && pathname === '/sign-in') {
+    if (_isReady && user && unauthorizedPaths.includes(pathname)) {
       push(params.get('redirect') || '/');
-    } else if (_isReady && !user && !pathname.startsWith('/sign-in')) {
+    } else if (_isReady && !user && !unauthorizedPaths.includes(pathname)) {
       push(`/sign-in?redirect=${pathname}`);
       return;
     }
