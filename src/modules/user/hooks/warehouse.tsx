@@ -58,8 +58,10 @@ export function useWarehouse(warehouseID: string) {
     setIsLoading(true);
     try {
       const { status } = await createWarehouseUser(req);
-      if (status === HttpStatusCode.BadRequest) {
-        throw Error('email is invalid, please try again!');
+      if (status !== HttpStatusCode.NoContent) {
+        throw Error(
+          'This user is already in this warehouse, please try again!',
+        );
       }
       await fetchWarehouseUsers(req.warehouseID);
       setIsLoading(false);
@@ -73,7 +75,10 @@ export function useWarehouse(warehouseID: string) {
   const editWarehouseUser = async (req: UpdateWarehouseUser) => {
     setIsLoading(true);
     try {
-      await updateWarehouseUser(req);
+      const { status } = await updateWarehouseUser(req);
+      if (status !== HttpStatusCode.NoContent) {
+        throw Error('Edit role to user failed, please try again!');
+      }
       await fetchWarehouseUsers(req.warehouseID);
       setIsLoading(false);
     } catch (error) {
@@ -86,7 +91,10 @@ export function useWarehouse(warehouseID: string) {
   const removeWarehouseUser = async (req: DeleteWarehouseUser) => {
     setIsLoading(true);
     try {
-      await deleteWarehouseUser(req);
+      const { status } = await deleteWarehouseUser(req);
+      if (status !== HttpStatusCode.NoContent) {
+        throw Error('Remove user failed, please try again!');
+      }
       await fetchWarehouseUsers(req.warehouseID);
       setIsLoading(false);
     } catch (error) {
