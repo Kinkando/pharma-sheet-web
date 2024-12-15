@@ -4,9 +4,10 @@ import { ChangeEvent, DragEvent, useState } from 'react';
 export type DropFileProps = {
   onSelect: (file: FileList) => void;
   disabled?: boolean;
+  multiple?: boolean;
 };
 
-export function DropFile({ onSelect, disabled }: DropFileProps) {
+export function DropFile({ onSelect, disabled, multiple }: DropFileProps) {
   const [highlight, setHighlight] = useState(false);
   const selectFile = (e: ChangeEvent<HTMLInputElement>) => {
     const fileInput = e.target as HTMLInputElement;
@@ -50,7 +51,7 @@ export function DropFile({ onSelect, disabled }: DropFileProps) {
       <input
         id="select-file"
         type="file"
-        multiple
+        multiple={multiple}
         accept="image/*"
         hidden
         onChange={selectFile}
