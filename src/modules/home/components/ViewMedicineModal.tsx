@@ -40,7 +40,7 @@ export function ViewMedicineModal({
         value: medicine.address,
       },
       {
-        label: 'รายการยา',
+        label: 'ชื่อสามัญทางยา',
         value: medicine.description,
       },
       {

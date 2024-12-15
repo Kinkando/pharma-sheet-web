@@ -102,6 +102,14 @@ export function MedicineModal({
       setMedicine((value) => ({ ...value, [key]: e.target.value }));
   };
 
+  useEffect(() => {
+    let address = '';
+    if (medicine.floor >= 0 && medicine.no >= 0 && medicine.lockerID) {
+      address = `${lockers.find((locker) => locker.lockerID === medicine.lockerID)!.lockerName}-${medicine.floor}-${medicine.no}`;
+    }
+    setMedicine((value) => ({ ...value, address }));
+  }, [medicine.floor, medicine.lockerID, medicine.no]);
+
   const list = useMemo(
     () => [
       {
@@ -131,9 +139,10 @@ export function MedicineModal({
         value: medicine.address,
         onChange: setText('address'),
         type: 'text',
+        disabled: true,
       },
       {
-        label: 'รายการยา',
+        label: 'ชื่อสามัญทางยา',
         value: medicine.description,
         onChange: setText('description'),
         type: 'text',
@@ -205,6 +214,7 @@ export function MedicineModal({
                   onChange={item.onChange}
                   className="w-full"
                   size="small"
+                  disabled={item.disabled}
                 />
               )}
             </div>
