@@ -18,13 +18,13 @@ export const routers: Router[] = [
   {
     title: 'Home | PHARMA SHEET',
     icon: <Home />,
-    name: 'Home',
+    name: 'หน้าแรก',
     path: '/',
   },
   {
     title: 'Warehouse | PHARMA SHEET',
     icon: <Warehouse />,
-    name: 'Warehouse',
+    name: 'ศูนย์สุขภาพชุมชน',
     path: '/warehouse',
   },
   //   {
@@ -65,7 +65,7 @@ export default function BaseLayout({
         className="z-10"
       ></Backdrop>
       <main className="w-full h-[calc(100vh-60px)] lg:flex">
-        <section className="bg-white text-black max-w-48 min-w-48 w-48 hidden lg:block overflow-y-auto hide-scrollbar z-20">
+        <section className="bg-white text-black max-w-64 min-w-64 w-64 hidden lg:block overflow-y-auto hide-scrollbar z-20">
           <Sidebar pathname={pathname} routers={routers} />
         </section>
         <main className="bg-white text-black lg:bg-gray-100 w-full h-full lg:p-6">

@@ -118,7 +118,7 @@ export default function Topbar({
             onClick={signOut}
           >
             <Logout fontSize="small" />
-            <span>Sign Out</span>
+            <span>ออกจากระบบ</span>
           </div>
         </div>
       </div>
@@ -182,7 +182,7 @@ export default function Topbar({
               onClick={signOut}
             >
               <Logout />
-              <span>Sign Out</span>
+              <span>ออกจากระบบ</span>
             </div>
           </div>
         </Drawer>
