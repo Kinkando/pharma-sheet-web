@@ -10,11 +10,12 @@ import { Add } from '@mui/icons-material';
 import { WarehouseDetail, WarehouseRole } from '@/core/@types';
 import { ViewWarehouseModal } from './ViewWarehouseModal';
 import { DeleteWarehouseModal } from './DeleteWarehouseModal';
+import { AddWarehouseModal } from './AddWarehouseModal';
 
 export default function Warehouse() {
   const searchParam = useSearchParams();
   const [search, setSearch] = useState(searchParam.get('search') || '');
-  const { isLoading, warehouseDetails, removeWarehouse } =
+  const { isLoading, warehouseDetails, addWarehouse, removeWarehouse } =
     useWarehouseDetail(search);
   const [selectedWarehouseDetail, setWarehouseDetail] =
     useState<WarehouseDetail>();
@@ -57,10 +58,21 @@ export default function Warehouse() {
         )}
 
         <div className="absolute bottom-4 lg:bottom-10 right-4 lg:right-10">
-          <Fab color="primary" aria-label="add" size="small" onClick={() => {}}>
+          <Fab
+            color="primary"
+            aria-label="add"
+            size="small"
+            onClick={() => setOpenModal('add')}
+          >
             <Add />
           </Fab>
         </div>
+
+        <AddWarehouseModal
+          isOpen={openModal === 'add'}
+          onClose={() => setOpenModal('closed')}
+          onCreate={addWarehouse}
+        />
 
         {selectedWarehouseDetail && (
           <>

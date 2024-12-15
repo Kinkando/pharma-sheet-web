@@ -24,7 +24,7 @@ export type AddUserModalProps = {
 export function AddUserModal({ isOpen, onClose, onCreate }: AddUserModalProps) {
   const [email, setEmail] = useState('');
   const [role, setRole] = useState<WarehouseRole>(WarehouseRole.VIEWER);
-  const [isLoading, setIsDeleting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const isValid = useMemo(() => {
     // ^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$
@@ -37,14 +37,14 @@ export function AddUserModal({ isOpen, onClose, onCreate }: AddUserModalProps) {
     if (!isValid) {
       return;
     }
-    setIsDeleting(true);
+    setIsLoading(true);
     try {
       await onCreate(email, role);
       onClose();
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
     } finally {
-      setIsDeleting(false);
+      setIsLoading(false);
     }
   }, [email, role, isValid]);
 
