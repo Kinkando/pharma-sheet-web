@@ -1,4 +1,5 @@
 import { WarehouseDetail } from '@/core/@types';
+import { GlobalContext } from '@/core/context';
 import {
   createWarehouse,
   createWarehouseLocker,
@@ -9,9 +10,10 @@ import {
   updateWarehouseLocker,
 } from '@/core/repository';
 import { HttpStatusCode } from 'axios';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 
 export function useWarehouseDetail(search?: string) {
+  const { alert } = useContext(GlobalContext);
   const [warehouseDetails, setWarehouseDetails] = useState<WarehouseDetail[]>(
     [],
   );

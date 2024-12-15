@@ -52,7 +52,7 @@ export function AddWarehouseModal({
       <DialogTitle>
         <div className="flex items-center justify-between gap-4 overflow-hidden w-full">
           <div className="text-ellipsis whitespace-nowrap overflow-hidden w-full">
-            Add Warehouse
+            เพิ่มข้อมูลศูนย์สุขภาพชุมชน
           </div>
           <IconButton
             aria-label="close"
@@ -71,7 +71,7 @@ export function AddWarehouseModal({
       <DialogContent>
         <TextField
           type="text"
-          placeholder="Please enter a warehouse name"
+          placeholder="กรุณาใส่ชื่อศูนย์สุขภาพชุมชน"
           value={warehouseName}
           onChange={(e) => setWarehouseName(e.target.value)}
           disabled={isLoading}

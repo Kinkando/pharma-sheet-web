@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useWarehouseDetail } from '@/modules/warehouse/hooks/warehouseDetail';
 import { WarehouseCard } from './WarehouseCard';
 import { DelaySearchBox, LoadingScreen } from '@/components/ui';
@@ -11,13 +11,22 @@ import { WarehouseDetail, WarehouseRole } from '@/core/@types';
 import { ViewWarehouseModal } from './ViewWarehouseModal';
 import { DeleteWarehouseModal } from './DeleteWarehouseModal';
 import { AddWarehouseModal } from './AddWarehouseModal';
+import { EditWarehouseModal } from './EditWarehouseModal';
 
 export default function Warehouse() {
   const searchParam = useSearchParams();
   const [search, setSearch] = useState(searchParam.get('search') || '');
-  const { isLoading, warehouseDetails, addWarehouse, removeWarehouse } =
-    useWarehouseDetail(search);
-  const [selectedWarehouseDetail, setWarehouseDetail] =
+  const {
+    isLoading,
+    warehouseDetails,
+    addWarehouse,
+    editWarehouse,
+    removeWarehouse,
+    addLocker,
+    editLocker,
+    removeLocker,
+  } = useWarehouseDetail(search);
+  const [selectedWarehouseDetail, setSelectedWarehouseDetail] =
     useState<WarehouseDetail>();
 
   const [openModal, setOpenModal] = useState<
@@ -28,9 +37,20 @@ export default function Warehouse() {
     warehouseDetail: WarehouseDetail,
     event: 'view' | 'edit' | 'remove',
   ) => {
-    setWarehouseDetail(warehouseDetail);
+    setSelectedWarehouseDetail(warehouseDetail);
     setOpenModal(event);
   };
+
+  useEffect(() => {
+    if (selectedWarehouseDetail && warehouseDetails) {
+      setSelectedWarehouseDetail(
+        warehouseDetails.find(
+          (warehouse) =>
+            warehouse.warehouseID === selectedWarehouseDetail.warehouseID,
+        ),
+      );
+    }
+  }, [warehouseDetails, selectedWarehouseDetail]);
 
   return (
     <>
@@ -80,6 +100,15 @@ export default function Warehouse() {
               isOpen={openModal === 'view'}
               onClose={() => setOpenModal('closed')}
               warehouseDetail={selectedWarehouseDetail}
+            />
+            <EditWarehouseModal
+              isOpen={openModal === 'edit'}
+              onClose={() => setOpenModal('closed')}
+              warehouseDetail={selectedWarehouseDetail}
+              onEditWarehouse={editWarehouse}
+              onAddLocker={addLocker}
+              onEditLocker={editLocker}
+              onDeleteLocker={removeLocker}
             />
             <DeleteWarehouseModal
               isOpen={openModal === 'remove'}
