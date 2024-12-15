@@ -32,7 +32,7 @@ export const routers: Router[] = [
   {
     title: 'User | PHARMA SHEET',
     icon: <Group />,
-    name: 'User',
+    name: 'จัดการกับผู้ใช้งาน',
     path: '/user',
   },
 ];
