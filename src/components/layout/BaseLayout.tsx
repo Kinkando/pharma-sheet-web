@@ -1,7 +1,7 @@
 import { GlobalContext } from '@/core/context';
 import React, { JSX, useContext, useMemo, useState } from 'react';
 import { Backdrop } from '@mui/material';
-import { Home, Warehouse } from '@mui/icons-material';
+import { Group, Home, Warehouse } from '@mui/icons-material';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
 
@@ -27,11 +27,12 @@ export const routers: Router[] = [
     name: 'ศูนย์สุขภาพชุมชน',
     path: '/warehouse',
   },
-  //   {
-  //     icon: <Group />,
-  //     name: 'User',
-  //     path: '/user',
-  //   },
+  {
+    title: 'User | PHARMA SHEET',
+    icon: <Group />,
+    name: 'User',
+    path: '/user',
+  },
 ];
 
 export default function BaseLayout({

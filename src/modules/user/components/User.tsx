@@ -2,7 +2,7 @@
 
 import { useCallback, useState, Fragment, useContext } from 'react';
 import { Button, Divider, MenuItem, Select } from '@mui/material';
-import { useWarehouse } from '@/modules/warehouse/hooks/warehouse';
+import { useWarehouse } from '@/modules/user/hooks/warehouse';
 import {
   Warehouse as WarehouseModel,
   WarehouseRole,
@@ -14,7 +14,7 @@ import { AddUserModal } from './AddUserModal';
 import { UserCard } from './UserCard';
 import { GlobalContext } from '@/core/context';
 
-export default function Warehouse() {
+export default function User() {
   const [warehouse, setWarehouse] = useState<WarehouseModel>({
     warehouseID: '',
     warehouseName: '',

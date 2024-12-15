@@ -68,11 +68,7 @@ export function MedicineModal({
   useEffect(() => {
     if (isOpen) {
       setFile(null);
-      if (medicineInput) {
-        setMedicine({ ...medicineInput });
-      } else {
-        setMedicine({ ...initMedicine });
-      }
+      setMedicine(medicineInput ? { ...medicineInput } : { ...initMedicine });
     }
   }, [isOpen, medicineInput]);
 
