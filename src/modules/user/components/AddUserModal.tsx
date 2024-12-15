@@ -89,11 +89,11 @@ export function AddUserModal({ isOpen, onClose, onCreate }: AddUserModalProps) {
             <MenuItem value={WarehouseRole.VIEWER}>
               <p className="w-full">{WarehouseRole.VIEWER}</p>
             </MenuItem>
-            <MenuItem value={WarehouseRole.ADMIN}>
-              <p className="w-full">{WarehouseRole.ADMIN}</p>
-            </MenuItem>
             <MenuItem value={WarehouseRole.EDITOR}>
               <p className="w-full">{WarehouseRole.EDITOR}</p>
+            </MenuItem>
+            <MenuItem value={WarehouseRole.ADMIN}>
+              <p className="w-full">{WarehouseRole.ADMIN}</p>
             </MenuItem>
           </Select>
         </div>
