@@ -24,11 +24,11 @@ export function MedicineCard({
       onClick={() => selectMedicine(medicine, 'view')}
     >
       <h2 className="font-bold line-clamp-1">{medicine.description}</h2>
-      <p className="">
-        <b className="text-sm">บ้านเลขที่ยา:</b> {medicine.address}
+      <p className="text-sm">
+        บ้านเลขที่ยา: <b className="">{medicine.address}</b>
       </p>
-      <p className="">
-        <b className="text-sm">Label ตะกร้า:</b> {medicine.label}
+      <p className="text-sm">
+        Label ตะกร้า: <b className="">{medicine.label}</b>
       </p>
       {(deletable || editable) && (
         <div className="flex items-center justify-end">
