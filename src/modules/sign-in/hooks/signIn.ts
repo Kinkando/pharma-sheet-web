@@ -50,7 +50,9 @@ export function useSignIn() {
 
   const signInEmailPassword = useCallback(
     async (email: string, password: string) => {
-      signIn(async () => await signInWithEmailPassword(email, password));
+      if (email && password) {
+        signIn(async () => await signInWithEmailPassword(email, password));
+      }
     },
     [],
   );

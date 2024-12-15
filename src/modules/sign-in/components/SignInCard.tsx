@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
-import { useSignIn } from '@/modules/sign-in/hooks/sign-in';
+import { useSignIn } from '@/modules/sign-in/hooks/signIn';
 import { Button, Divider, TextField } from '@mui/material';
 import { LoadingScreen } from '@/components/ui';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
@@ -23,6 +23,9 @@ export default function SignInCard() {
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            onKeyDown={(e) =>
+              e.key === 'Enter' && signInEmailPassword(email, password)
+            }
             disabled={isSigningIn}
           />
         </div>
@@ -33,6 +36,9 @@ export default function SignInCard() {
             placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={(e) =>
+              e.key === 'Enter' && signInEmailPassword(email, password)
+            }
             disabled={isSigningIn}
             slotProps={{
               input: {
