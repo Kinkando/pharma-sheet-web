@@ -50,6 +50,7 @@ export function GlobalContextProvider({
       push(params.get('redirect') || '/');
     } else if (_isReady && !user && !pathname.startsWith('/sign-in')) {
       push(`/sign-in?redirect=${pathname}`);
+      return;
     }
     setIsReady(true);
   }, [pathname, _isReady, user, params]);
