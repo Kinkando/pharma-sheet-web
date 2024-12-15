@@ -24,7 +24,7 @@ export function UserCard({
   return (
     <div className="px-4 py-2 sm:flex sm:items-center sm:justify-between sm:gap-4 space-y-4 sm:space-y-0">
       <div className="flex items-center gap-4 w-full overflow-hidden">
-        <UserAvatar size="large" imageURL={user.imageURL} />
+        <UserAvatar size="large" imageURL={user.imageURL} email={user.email} />
 
         <div className="overflow-hidden text-ellipsis whitespace-nowrap">
           <div className="font-bold overflow-hidden text-ellipsis whitespace-nowrap">

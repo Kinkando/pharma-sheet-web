@@ -5,9 +5,11 @@ import { useMemo } from 'react';
 export type UserAvatarProps = {
   size?: 'small' | 'medium' | 'large';
   imageURL?: string;
+  avatar?: boolean;
+  email: string;
 };
 
-export function UserAvatar({ size, imageURL }: UserAvatarProps) {
+export function UserAvatar({ size, imageURL, avatar, email }: UserAvatarProps) {
   const imageSize = useMemo(() => {
     switch (size) {
       case 'large':
@@ -30,6 +32,17 @@ export function UserAvatar({ size, imageURL }: UserAvatarProps) {
         className="rounded-full"
       />
     );
+  } else if (avatar) {
+    return <Avatar sx={imageSize} />;
   }
-  return <Avatar sx={imageSize} />;
+  return (
+    <div className="rounded-full bg-blue-400 hover:brightness-90 ease-in duration-200 transition-[--tw-brightness]">
+      <div
+        className="flex items-center justify-center font-bold text-white"
+        style={{ ...imageSize }}
+      >
+        <span>{email ? email.charAt(0).toUpperCase() : 'G'}</span>
+      </div>
+    </div>
+  );
 }

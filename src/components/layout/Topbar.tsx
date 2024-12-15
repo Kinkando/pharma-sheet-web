@@ -73,7 +73,11 @@ export default function Topbar({
           size="small"
           onClick={() => setIsOpen((open) => !open)}
         >
-          <UserAvatar size="medium" imageURL={user.imageURL} />
+          <UserAvatar
+            size="medium"
+            imageURL={user.imageURL}
+            email={user.email}
+          />
         </IconButton>
 
         <div
@@ -85,7 +89,11 @@ export default function Topbar({
           ref={userPanel}
         >
           <div className="p-4 flex items-center gap-2 w-full overflow-hidden h-[60px] max-w-[400px]">
-            <UserAvatar size="medium" imageURL={user.imageURL} />
+            <UserAvatar
+              size="medium"
+              imageURL={user.imageURL}
+              email={user.email}
+            />
             <div className="overflow-hidden text-ellipsis whitespace-nowrap">
               <div className="text-black text-sm font-bold overflow-hidden text-ellipsis whitespace-nowrap">
                 {user.displayName}
@@ -120,7 +128,11 @@ export default function Topbar({
           }}
         >
           <div className="p-4 flex items-center gap-4 w-full overflow-hidden">
-            <UserAvatar size="large" imageURL={user.imageURL} />
+            <UserAvatar
+              size="large"
+              imageURL={user.imageURL}
+              email={user.email}
+            />
             <div className="overflow-hidden text-ellipsis whitespace-nowrap">
               <div className="font-bold overflow-hidden text-ellipsis whitespace-nowrap">
                 {user.displayName}
