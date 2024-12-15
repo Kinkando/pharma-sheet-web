@@ -141,7 +141,7 @@ export default function Home() {
           className="w-full"
         >
           <MenuItem value="" disabled>
-            <p className="w-full">กรุณาเลือกศูนย์ยา</p>
+            <p className="w-full">กรุณาเลือกศูนย์สุขภาพชุมชน</p>
           </MenuItem>
           {warehouses.map((warehouse) => (
             <MenuItem key={warehouse.warehouseID} value={warehouse.warehouseID}>
