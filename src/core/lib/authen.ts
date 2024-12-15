@@ -1,8 +1,7 @@
 import {
   getAuth,
-  getRedirectResult,
   GoogleAuthProvider,
-  signInWithRedirect,
+  signInWithPopup,
   signOut,
 } from 'firebase/auth';
 import app from './firebase';
@@ -12,9 +11,8 @@ auth.languageCode = 'th';
 
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
-  await signInWithRedirect(auth, provider);
-  const result = await getRedirectResult(auth);
-  return result?.user;
+  const response = await signInWithPopup(auth, provider);
+  return response?.user;
 }
 
 export async function signout() {
