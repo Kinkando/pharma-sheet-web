@@ -47,16 +47,6 @@ export function MedicineModal({
 }: MedicineModalProps) {
   const [medicine, setMedicine] = useState<Medicine>({ ...initMedicine });
 
-  useEffect(() => {
-    if (isOpen) {
-      if (medicineInput) {
-        setMedicine({ ...medicineInput });
-      } else {
-        setMedicine({ ...initMedicine });
-      }
-    }
-  }, [isOpen, medicineInput]);
-
   const [file, setFile] = useState<File | null>(null);
   const addFile = (file: FileList) => {
     if (file.length === 1) {
@@ -74,6 +64,17 @@ export function MedicineModal({
     }));
     setFile(null);
   };
+
+  useEffect(() => {
+    if (isOpen) {
+      setFile(null);
+      if (medicineInput) {
+        setMedicine({ ...medicineInput });
+      } else {
+        setMedicine({ ...initMedicine });
+      }
+    }
+  }, [isOpen, medicineInput]);
 
   const [isLoading, setIsLoading] = useState(false);
   const createMedicine = async (medicine: Medicine, file?: File) => {
