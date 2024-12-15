@@ -46,7 +46,7 @@ export async function getWarehouseUsers(warehouseID: string) {
 }
 
 export async function createWarehouse(warehouseName: string) {
-  return await client({
+  return await client<{ warehouseID: string }>({
     url: `/warehouse`,
     method: 'POST',
     data: { warehouseName },
@@ -75,7 +75,7 @@ export async function createWarehouseLocker(
   warehouseID: string,
   lockerName: string,
 ) {
-  return await client({
+  return await client<{ lockerID: string }>({
     url: `/warehouse/${warehouseID}/locker`,
     method: 'POST',
     data: { lockerName },
