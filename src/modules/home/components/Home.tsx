@@ -223,16 +223,18 @@ export default function Home() {
           ))}
       </main>
 
-      <div className="absolute bottom-4 lg:bottom-10 right-4 lg:right-10">
-        <Fab
-          color="primary"
-          aria-label="add"
-          size="small"
-          onClick={() => setOpenModal('create')}
-        >
-          <Add />
-        </Fab>
-      </div>
+      {warehouse && (
+        <div className="absolute bottom-4 lg:bottom-10 right-4 lg:right-10">
+          <Fab
+            color="primary"
+            aria-label="add"
+            size="small"
+            onClick={() => setOpenModal('create')}
+          >
+            <Add />
+          </Fab>
+        </div>
+      )}
 
       {warehouse && (
         <MedicineModal
