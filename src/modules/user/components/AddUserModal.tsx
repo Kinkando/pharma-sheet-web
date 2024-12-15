@@ -13,7 +13,7 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 export type AddUserModalProps = {
   isOpen: boolean;
@@ -26,8 +26,15 @@ export function AddUserModal({ isOpen, onClose, onCreate }: AddUserModalProps) {
   const [role, setRole] = useState<WarehouseRole>(WarehouseRole.VIEWER);
   const [isLoading, setIsDeleting] = useState(false);
 
+  const isValid = useMemo(() => {
+    // ^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$
+    return (
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email) && !!role
+    );
+  }, [email]);
+
   const addUser = useCallback(async () => {
-    if (!email || !role) {
+    if (!isValid) {
       return;
     }
     setIsDeleting(true);
@@ -39,7 +46,7 @@ export function AddUserModal({ isOpen, onClose, onCreate }: AddUserModalProps) {
     } finally {
       setIsDeleting(false);
     }
-  }, [email, role]);
+  }, [email, role, isValid]);
 
   useEffect(() => {
     if (isOpen) {
@@ -113,7 +120,7 @@ export function AddUserModal({ isOpen, onClose, onCreate }: AddUserModalProps) {
           variant="contained"
           color="success"
           onClick={addUser}
-          disabled={isLoading || !email || !role}
+          disabled={isLoading || !isValid}
         >
           {isLoading && (
             <CircularProgress size={16} className="mr-2 !text-white" />
