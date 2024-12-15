@@ -26,6 +26,7 @@ export default function SignIn() {
             height={230}
             objectFit="cover"
             priority
+            unoptimized
           />
         </section>
       </section>

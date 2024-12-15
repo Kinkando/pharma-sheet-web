@@ -79,6 +79,7 @@ export default function Topbar({
             alt="Avatar"
             width={36}
             height={36}
+            unoptimized
             className="rounded-full"
           />
         </IconButton>
@@ -100,6 +101,7 @@ export default function Topbar({
               height={36}
               objectFit="cover"
               className="rounded-full"
+              unoptimized
             />
             <div className="overflow-hidden text-ellipsis whitespace-nowrap">
               <div className="text-black text-sm font-bold overflow-hidden text-ellipsis whitespace-nowrap">
@@ -142,6 +144,7 @@ export default function Topbar({
               width={52}
               height={52}
               className="rounded-full"
+              unoptimized
             />
             <div className="overflow-hidden text-ellipsis whitespace-nowrap">
               <div className="font-bold overflow-hidden text-ellipsis whitespace-nowrap">

@@ -32,6 +32,7 @@ export default function SignInCard() {
               height={24}
               alt="Google Icon"
               className="w-6 h-6"
+              unoptimized
             />
             <span className="ml-4">Sign in with Google</span>
           </div>

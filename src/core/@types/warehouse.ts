@@ -15,3 +15,28 @@ export interface Locker {
   lockerID: string;
   lockerName: string;
 }
+
+export interface WarehouseUser {
+  userID: string;
+  email: string;
+  imageURL?: string;
+  displayName?: string;
+  role: WarehouseRole;
+}
+
+export interface CreateWarehouseUser {
+  warehouseID: string;
+  email: string;
+  role: WarehouseRole;
+}
+
+export interface UpdateWarehouseUser {
+  warehouseID: string;
+  userID: string;
+  role: WarehouseRole;
+}
+
+export interface DeleteWarehouseUser {
+  warehouseID: string;
+  userID: string;
+}

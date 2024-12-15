@@ -92,6 +92,7 @@ export function ViewMedicineModal({
                 loader={() => medicine.imageURL!}
                 width={400}
                 height={400}
+                unoptimized
               />
             </div>
           )}

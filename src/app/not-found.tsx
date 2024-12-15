@@ -12,6 +12,7 @@ export default function NotFoundPage() {
             src="/images/404.png"
             width={200}
             height={200}
+            unoptimized
           />
           <p className="font-bold text-xl uppercase">Page Not Found</p>
           <p className="max-w-96">

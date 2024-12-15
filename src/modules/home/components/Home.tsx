@@ -198,6 +198,7 @@ export default function Home() {
               width={200}
               height={200}
               alt="Empty Box"
+              unoptimized
             />
             <p>Medicine not found</p>
           </div>
