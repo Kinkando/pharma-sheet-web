@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Comic_Neue } from 'next/font/google';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { createTheme, ThemeProvider } from '@mui/material';
@@ -31,20 +31,28 @@ export function GlobalContextProvider({
     message: '',
     severity: 'info',
   });
-  const { user, setUser, isReady } = useUser();
+  const { user, setUser, isReady: _isReady } = useUser();
+  const [isReady, setIsReady] = useState(false);
 
   const { push } = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
 
-  // auth guard
   useEffect(() => {
-    if (isReady && user && pathname === '/sign-in') {
+    authGuard();
+  }, [pathname, _isReady, user, params]);
+
+  const authGuard = useCallback(async () => {
+    if (!_isReady) {
+      return;
+    }
+    if (_isReady && user && pathname === '/sign-in') {
       push(params.get('redirect') || '/');
-    } else if (isReady && !user && !pathname.startsWith('/sign-in')) {
+    } else if (_isReady && !user && !pathname.startsWith('/sign-in')) {
       push(`/sign-in?redirect=${pathname}`);
     }
-  }, [pathname, isReady, user, params]);
+    setIsReady(true);
+  }, [pathname, _isReady, user, params]);
 
   return (
     <ThemeProvider theme={theme}>

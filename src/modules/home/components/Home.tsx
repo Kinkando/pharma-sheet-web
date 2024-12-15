@@ -133,7 +133,7 @@ export default function Home() {
 
   return (
     <>
-      <main className="space-y-4 h-full">
+      <main className="space-y-4 lg:p-6 p-4">
         <Select
           value={warehouse?.warehouseID ?? ''}
           displayEmpty

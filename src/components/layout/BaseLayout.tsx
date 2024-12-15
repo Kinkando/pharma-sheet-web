@@ -69,7 +69,7 @@ export default function BaseLayout({
         </section>
         <main className="bg-white text-black lg:bg-gray-100 w-full h-full lg:p-6">
           <div className="bg-white lg:rounded-lg h-full overflow-auto">
-            <div className="lg:p-6 p-4">{children}</div>
+            {children}
           </div>
         </main>
       </main>
