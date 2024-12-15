@@ -40,7 +40,7 @@ export function RoleMenu({
     <div
       className={
         isOpen
-          ? 'absolute z-20 right-0 top-4 bg-white text-black shadow-[2px_5px_15px_0px_rgba(204,204,204,1)] rounded-lg py-2 border'
+          ? 'absolute z-20 left-0 top-10 bg-white text-black shadow-[2px_5px_15px_0px_rgba(204,204,204,1)] rounded-lg py-2 border'
           : 'hidden'
       }
       ref={ref}

@@ -55,7 +55,7 @@ export function UserCard({
           className="w-full sm:w-fit"
           onClick={() => setIsOpen(true)}
         >
-          <p className="whitespace-nowrap w-20 normal-case">
+          <p className="whitespace-nowrap w-24 normal-case overflow-hidden text-ellipsis">
             Role: {user.role}
           </p>
         </Button>

@@ -86,7 +86,7 @@ export default function Warehouse() {
               disabled={warehouse.role !== WarehouseRole.ADMIN}
               onClick={() => setOpenModal('add')}
             >
-              Add people
+              Add User
             </Button>
           </div>
         )}
