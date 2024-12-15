@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 import { useSignIn } from '@/modules/sign-in/hooks/signIn';
 import { Button, Divider, TextField } from '@mui/material';
@@ -12,6 +13,7 @@ export default function SignInCard() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isShowPassword, setIsShowPassword] = useState(false);
+
   return (
     <>
       <LoadingScreen isLoading={isSigningIn} />
@@ -96,12 +98,12 @@ export default function SignInCard() {
             </div>
           </Button>
         </div>
-        <a
+        <Link
           href="/sign-up"
           className="text-right text-blue-600 text-sm underline"
         >
           Sign Up
-        </a>
+        </Link>
       </div>
     </>
   );
