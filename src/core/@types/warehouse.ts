@@ -16,6 +16,27 @@ export interface Locker {
   lockerName: string;
 }
 
+export interface FilterWarehouseDetail {
+  limit: number;
+  page: number;
+  search?: string;
+}
+
+export interface WarehouseDetail {
+  warehouseID: string;
+  warehouseName: string;
+  role: WarehouseRole;
+  lockerDetails: LockerDetail[];
+  totalMedicine: number;
+  totalLocker: number;
+}
+
+export interface LockerDetail {
+  lockerID: string;
+  lockerName: string;
+  totalMedicine: number;
+}
+
 export interface WarehouseUser {
   userID: string;
   email: string;
