@@ -4,16 +4,9 @@ import { HttpStatusCode } from 'axios';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useContext, useEffect, useState } from 'react';
-import {
-  CircularProgress,
-  Fab,
-  MenuItem,
-  Select,
-  TextField,
-} from '@mui/material';
-import { Add, Close, Search } from '@mui/icons-material';
+import { Fab, MenuItem, Select } from '@mui/material';
+import { Add } from '@mui/icons-material';
 import { Medicine, WarehouseRole } from '@/core/@types';
-import { useDebounceSearchTerm } from '@/core/hooks';
 import { GlobalContext } from '@/core/context';
 import { useMedicine } from '@/modules/home/hooks/medicine';
 import {
@@ -25,15 +18,12 @@ import { DeleteMedicineModal } from './DeleteMedicineModal';
 import { MedicineModal } from './MedicineModal';
 import { MedicineCard } from './MedicineCard';
 import { ViewMedicineModal } from './ViewMedicineModal';
+import { DelaySearchBox } from '@/components/ui';
 
 export default function Home() {
   const { alert } = useContext(GlobalContext);
   const searchParam = useSearchParams();
   const [search, setSearch] = useState(searchParam.get('search') || '');
-  const { debouncedSearchTerm, setDebouncedSearchTerm } = useDebounceSearchTerm(
-    search,
-    searchParam.get('search') ?? '',
-  );
   const { warehouses, medicines, fetchMedicine, warehouse, setWarehouse } =
     useMedicine(searchParam.get('warehouseID'));
   const [selectedMedicine, setSelectedMedicine] = useState<Medicine>();
@@ -57,7 +47,7 @@ export default function Home() {
     if (warehouse?.warehouseID && warehouses.length) {
       fetchData();
     }
-  }, [warehouses, warehouse, debouncedSearchTerm]);
+  }, [warehouses, warehouse, search]);
 
   const fetchData = useCallback(async () => {
     if (!warehouse) {
@@ -67,9 +57,9 @@ export default function Home() {
       limit: 999,
       page: 1,
       warehouseID: warehouse.warehouseID,
-      search: debouncedSearchTerm,
+      search,
     });
-  }, [warehouse, debouncedSearchTerm]);
+  }, [warehouse, search]);
 
   const removeMedicine = async (medicineID: string) => {
     try {
@@ -150,46 +140,7 @@ export default function Home() {
           ))}
         </Select>
 
-        {warehouse?.warehouseID && (
-          <TextField
-            placeholder="Search"
-            className="w-full"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                setDebouncedSearchTerm(search);
-              }
-            }}
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <div
-                    className="mr-2 cursor-pointer"
-                    onClick={() => setDebouncedSearchTerm(search)}
-                  >
-                    <Search />
-                  </div>
-                ),
-                endAdornment:
-                  search !== debouncedSearchTerm ? (
-                    <div className="ml-2 mt-2 cursor-pointer">
-                      <CircularProgress color="primary" size={24} />
-                    </div>
-                  ) : search ? (
-                    <div className="ml-2 cursor-pointer">
-                      <Close
-                        onClick={() => {
-                          setSearch('');
-                          setDebouncedSearchTerm('');
-                        }}
-                      />
-                    </div>
-                  ) : undefined,
-              },
-            }}
-          />
-        )}
+        {warehouse?.warehouseID && <DelaySearchBox onSearch={setSearch} />}
 
         {warehouse?.warehouseID && !medicines.length && (
           <div className="w-full flex flex-col items-center justify-center">
