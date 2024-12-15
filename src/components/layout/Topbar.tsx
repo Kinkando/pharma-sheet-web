@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { User } from '@/core/@types';
@@ -7,6 +6,7 @@ import { Divider, Drawer, IconButton } from '@mui/material';
 import { Logout, Menu as MenuIcon } from '@mui/icons-material';
 import { useScreen } from '@/core/hooks';
 import { useClickOutside } from '@/core/hooks';
+import { UserAvatar } from '@/components/ui';
 
 export type TopbarProps = {
   pathname: string;
@@ -73,15 +73,7 @@ export default function Topbar({
           size="small"
           onClick={() => setIsOpen((open) => !open)}
         >
-          <Image
-            src={user.imageURL}
-            loader={() => user.imageURL}
-            alt="Avatar"
-            width={36}
-            height={36}
-            unoptimized
-            className="rounded-full"
-          />
+          <UserAvatar size="medium" imageURL={user.imageURL} />
         </IconButton>
 
         <div
@@ -93,16 +85,7 @@ export default function Topbar({
           ref={userPanel}
         >
           <div className="p-4 flex items-center gap-2 w-full overflow-hidden h-[60px] max-w-[400px]">
-            <Image
-              src={user.imageURL}
-              loader={() => user.imageURL}
-              alt="Avatar"
-              width={36}
-              height={36}
-              objectFit="cover"
-              className="rounded-full"
-              unoptimized
-            />
+            <UserAvatar size="medium" imageURL={user.imageURL} />
             <div className="overflow-hidden text-ellipsis whitespace-nowrap">
               <div className="text-black text-sm font-bold overflow-hidden text-ellipsis whitespace-nowrap">
                 {user.displayName}
@@ -137,15 +120,7 @@ export default function Topbar({
           }}
         >
           <div className="p-4 flex items-center gap-4 w-full overflow-hidden">
-            <Image
-              src={user.imageURL}
-              loader={() => user.imageURL}
-              alt="Avatar"
-              width={52}
-              height={52}
-              className="rounded-full"
-              unoptimized
-            />
+            <UserAvatar size="large" imageURL={user.imageURL} />
             <div className="overflow-hidden text-ellipsis whitespace-nowrap">
               <div className="font-bold overflow-hidden text-ellipsis whitespace-nowrap">
                 {user.displayName}

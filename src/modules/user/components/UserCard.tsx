@@ -1,9 +1,9 @@
 import { WarehouseUser } from '@/core/@types';
 import { Delete } from '@mui/icons-material';
-import { Avatar, Button } from '@mui/material';
-import Image from 'next/image';
+import { Button } from '@mui/material';
 import { useState } from 'react';
 import { RoleMenu } from './RoleMenu';
+import { UserAvatar } from '@/components/ui';
 
 export type UserCardProps = {
   user: WarehouseUser;
@@ -24,19 +24,7 @@ export function UserCard({
   return (
     <div className="px-4 py-2 sm:flex sm:items-center sm:justify-between sm:gap-4 space-y-4 sm:space-y-0">
       <div className="flex items-center gap-4 w-full overflow-hidden">
-        {user.imageURL ? (
-          <Image
-            src={user.imageURL}
-            loader={() => user.imageURL!}
-            alt="Avatar"
-            width={52}
-            height={52}
-            className="rounded-full"
-            unoptimized
-          />
-        ) : (
-          <Avatar sx={{ width: 52, height: 52 }} />
-        )}
+        <UserAvatar size="large" imageURL={user.imageURL} />
 
         <div className="overflow-hidden text-ellipsis whitespace-nowrap">
           <div className="font-bold overflow-hidden text-ellipsis whitespace-nowrap">
