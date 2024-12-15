@@ -12,6 +12,9 @@ export function useSignIn() {
     setIsSigningIn(true);
     try {
       const firebaseUser = await signInWithGoogle();
+      if (!firebaseUser) {
+        throw Error('Sign in failed, please try again!');
+      }
       const idToken = await firebaseUser.getIdToken();
       const { accessToken, refreshToken } = await verifyToken(idToken);
       localStorage.setItem('accessToken', accessToken);
