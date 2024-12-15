@@ -1,7 +1,7 @@
 import { GlobalContext } from '@/core/context';
 import React, { JSX, useContext, useMemo, useState } from 'react';
 import { Backdrop } from '@mui/material';
-import { Home } from '@mui/icons-material';
+import { Home, Warehouse } from '@mui/icons-material';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
 
@@ -21,11 +21,12 @@ export const routers: Router[] = [
     name: 'Home',
     path: '/',
   },
-  //   {
-  //     icon: <Warehouse />,
-  //     name: 'Warehouse',
-  //     path: '/warehouse',
-  //   },
+  {
+    title: 'Warehouse | PHARMA SHEET',
+    icon: <Warehouse />,
+    name: 'Warehouse',
+    path: '/warehouse',
+  },
   //   {
   //     icon: <Group />,
   //     name: 'User',
