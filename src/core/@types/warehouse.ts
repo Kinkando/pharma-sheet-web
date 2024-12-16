@@ -4,6 +4,11 @@ export enum WarehouseRole {
   VIEWER = 'VIEWER',
 }
 
+export enum WarehouseUserStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+}
+
 export interface Warehouse {
   warehouseID: string;
   warehouseName: string;
@@ -20,6 +25,14 @@ export interface FilterWarehouseDetail {
   limit: number;
   page: number;
   search?: string;
+}
+
+export interface FilterWarehouseUser {
+  limit: number;
+  page: number;
+  search?: string;
+  role?: WarehouseRole;
+  status?: WarehouseUserStatus;
 }
 
 export interface WarehouseDetail {

@@ -4,6 +4,7 @@ import {
   Data,
   DeleteWarehouseUser,
   FilterWarehouseDetail,
+  FilterWarehouseUser,
   UpdateWarehouseUser,
   Warehouse,
   WarehouseDetail,
@@ -34,10 +35,14 @@ export async function getWarehouseDetails(filter: FilterWarehouseDetail) {
   throw Error(error);
 }
 
-export async function getWarehouseUsers(warehouseID: string) {
-  const { data, status, error } = await client<WarehouseUser[]>({
+export async function getWarehouseUsers(
+  warehouseID: string,
+  filter: FilterWarehouseUser,
+) {
+  const { data, status, error } = await client<Data<WarehouseUser>>({
     url: `/warehouse/${warehouseID}/user`,
     method: 'GET',
+    params: filter,
   });
   if (status === HttpStatusCode.Ok) {
     return data;

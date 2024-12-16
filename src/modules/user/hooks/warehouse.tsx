@@ -45,7 +45,10 @@ export function useWarehouse(warehouseID: string) {
   const fetchWarehouseUsers = async (warehouseID: string) => {
     setIsLoading(true);
     try {
-      const data = await getWarehouseUsers(warehouseID);
+      const { data } = await getWarehouseUsers(warehouseID, {
+        page: 1,
+        limit: 999,
+      });
       setWarehouseUsers(data ?? []);
     } catch (error) {
       alert({ message: `${error}`, severity: 'error' });
