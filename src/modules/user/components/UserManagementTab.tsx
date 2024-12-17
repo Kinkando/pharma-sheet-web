@@ -4,7 +4,7 @@ import { WarehouseRole, WarehouseUser } from '@/core/@types';
 import { useUserManagement } from '@/modules/user/hooks/userManagement';
 import { AddUserModal } from './AddUserModal';
 import { DeleteUserModal } from './DeleteUserModal';
-import { UserCard } from './UserCard';
+import { UserManagementCard } from './UserManagementCard';
 import { UserTabProps } from './User';
 
 export function UserManagementTab({
@@ -52,7 +52,7 @@ export function UserManagementTab({
         <Divider />
         {warehouseUsers.map((warehouseUser) => (
           <Fragment key={warehouseUser.userID}>
-            <UserCard
+            <UserManagementCard
               user={warehouseUser}
               editable={
                 warehouse.role === WarehouseRole.ADMIN &&

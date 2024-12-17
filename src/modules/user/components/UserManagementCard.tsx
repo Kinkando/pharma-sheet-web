@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { RoleMenu } from './RoleMenu';
 import { UserAvatar } from '@/components/ui';
 
-export type UserCardProps = {
+export type UserManagementCardProps = {
   user: WarehouseUser;
   editable?: boolean;
   deletable?: boolean;
@@ -13,13 +13,13 @@ export type UserCardProps = {
   onEdit: (user: WarehouseUser) => void;
 };
 
-export function UserCard({
+export function UserManagementCard({
   user,
   editable,
   deletable,
   onDelete,
   onEdit,
-}: UserCardProps) {
+}: UserManagementCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="px-4 py-2 sm:flex sm:items-center sm:justify-between sm:gap-4 space-y-4 sm:space-y-0">
