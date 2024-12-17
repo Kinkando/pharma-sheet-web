@@ -133,3 +133,24 @@ export async function deleteWarehouseUser(req: DeleteWarehouseUser) {
     method: 'DELETE',
   });
 }
+
+export async function joinWarehouse(warehouseID: string) {
+  return await client({
+    url: `/warehouse/${warehouseID}/user/join`,
+    method: 'POST',
+  });
+}
+
+export async function approveUser(warehouseID: string, userID: string) {
+  return await client({
+    url: `/warehouse/${warehouseID}/user/${userID}/approve`,
+    method: 'PATCH',
+  });
+}
+
+export async function rejectUser(warehouseID: string, userID: string) {
+  return await client({
+    url: `/warehouse/${warehouseID}/user/${userID}/reject`,
+    method: 'PATCH',
+  });
+}
