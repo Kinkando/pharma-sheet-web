@@ -4,6 +4,7 @@ import {
   DeleteWarehouseUser,
   UpdateWarehouseUser,
   WarehouseUser,
+  WarehouseUserStatus,
 } from '@/core/@types';
 import { GlobalContext } from '@/core/context';
 import {
@@ -14,7 +15,7 @@ import {
 } from '@/core/repository';
 import { HttpStatusCode } from 'axios';
 
-export function useWarehouse(warehouseID: string) {
+export function useUserManagement(warehouseID: string) {
   const { alert } = useContext(GlobalContext);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +33,7 @@ export function useWarehouse(warehouseID: string) {
       const { data } = await getWarehouseUsers(warehouseID, {
         page: 1,
         limit: 999,
+        status: WarehouseUserStatus.APPROVED,
       });
       setWarehouseUsers(data ?? []);
     } catch (error) {

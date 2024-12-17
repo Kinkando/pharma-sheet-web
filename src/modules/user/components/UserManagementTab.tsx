@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
 import { Button, Divider } from '@mui/material';
 import { WarehouseRole, WarehouseUser } from '@/core/@types';
-import { useWarehouse } from '@/modules/user/hooks/warehouse';
+import { useUserManagement } from '@/modules/user/hooks/userManagement';
 import { AddUserModal } from './AddUserModal';
 import { DeleteUserModal } from './DeleteUserModal';
 import { UserCard } from './UserCard';
@@ -18,7 +18,7 @@ export function UserManagementTab({
     addWarehouseUser,
     editWarehouseUser,
     removeWarehouseUser,
-  } = useWarehouse(warehouse.warehouseID);
+  } = useUserManagement(warehouse.warehouseID);
 
   useEffect(() => {
     onLoading(isLoading);
