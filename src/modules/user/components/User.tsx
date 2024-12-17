@@ -1,8 +1,10 @@
 'use client';
 
 import { useCallback, useState, useContext, useEffect } from 'react';
-import { MenuItem, Select } from '@mui/material';
+import { Box, MenuItem, Select, Tab, Tabs } from '@mui/material';
+import { LoadingScreen } from '@/components/ui';
 import {
+  User as UserModel,
   Warehouse,
   Warehouse as WarehouseModel,
   WarehouseRole,
@@ -10,7 +12,24 @@ import {
 import { GlobalContext } from '@/core/context';
 import { getWarehouses } from '@/core/repository';
 import { UserManagementTab } from './UserManagementTab';
-import { LoadingScreen } from '@/components/ui';
+
+export type UserTabProps = {
+  warehouse: Warehouse;
+  user: UserModel;
+  onLoading: (isLoading: boolean) => void;
+};
+
+const label = {
+  id: 'user-tab',
+  'aria-controls': 'user-tabpanel',
+};
+
+const tabs = [
+  {
+    label: 'สมาชิก',
+    component: (props: UserTabProps) => <UserManagementTab {...props} />,
+  },
+];
 
 export default function User() {
   const [warehouse, setWarehouse] = useState<WarehouseModel>({
@@ -48,6 +67,10 @@ export default function User() {
     [warehouses],
   );
 
+  const [currentTab, setCurrentTab] = useState(0);
+  const handleChange = (event: React.SyntheticEvent, newTab: number) =>
+    setCurrentTab(newTab);
+
   return (
     <>
       <LoadingScreen isLoading={isLoading} />
@@ -69,12 +92,40 @@ export default function User() {
           ))}
         </Select>
 
-        {user && warehouse.warehouseID && (
-          <UserManagementTab
-            user={user}
-            warehouse={warehouse}
-            onLoading={setIsLoading}
-          />
+        {warehouse.warehouseID && (
+          <Box sx={{ width: '100%' }}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <Tabs
+                value={currentTab}
+                onChange={handleChange}
+                aria-label="user tabs"
+              >
+                {tabs.map((tab, index) => (
+                  <Tab
+                    key={tab.label}
+                    id={`${label.id}-${index}`}
+                    aria-controls={`${label['aria-controls']}-${index}`}
+                    label={tab.label}
+                    className="!normal-case"
+                  />
+                ))}
+              </Tabs>
+            </Box>
+
+            {user &&
+              tabs.map((tab, index) => (
+                <div
+                  key={tab.label}
+                  role="tabpanel"
+                  hidden={currentTab !== index}
+                  id={`${label['aria-controls']}-${index}`}
+                  aria-labelledby={`${label.id}-${index}`}
+                  className="space-y-4 py-4"
+                >
+                  {tab.component({ user, warehouse, onLoading: setIsLoading })}
+                </div>
+              ))}
+          </Box>
         )}
       </main>
     </>

@@ -1,22 +1,17 @@
 import { Fragment, useEffect, useState } from 'react';
 import { Button, Divider } from '@mui/material';
-import { User, Warehouse, WarehouseRole, WarehouseUser } from '@/core/@types';
+import { WarehouseRole, WarehouseUser } from '@/core/@types';
 import { useWarehouse } from '@/modules/user/hooks/warehouse';
 import { AddUserModal } from './AddUserModal';
 import { DeleteUserModal } from './DeleteUserModal';
 import { UserCard } from './UserCard';
-
-export type UserManagementTabProps = {
-  warehouse: Warehouse;
-  user: User;
-  onLoading: (isLoading: boolean) => void;
-};
+import { UserTabProps } from './User';
 
 export function UserManagementTab({
   warehouse,
   user,
   onLoading,
-}: UserManagementTabProps) {
+}: UserTabProps) {
   const {
     isLoading,
     warehouseUsers,
@@ -42,15 +37,14 @@ export function UserManagementTab({
 
   return (
     <>
-      <div className="flex items-center justify-between gap-4">
-        <h1>Manage Access</h1>
+      <div className="flex items-center justify-end gap-4">
         <Button
           variant="contained"
           color="success"
           disabled={warehouse.role !== WarehouseRole.ADMIN}
           onClick={() => setOpenModal('add')}
         >
-          Add User
+          เพิ่มสมาชิก
         </Button>
       </div>
 
