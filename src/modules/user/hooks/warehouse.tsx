@@ -3,14 +3,12 @@ import {
   CreateWarehouseUser,
   DeleteWarehouseUser,
   UpdateWarehouseUser,
-  Warehouse,
   WarehouseUser,
 } from '@/core/@types';
 import { GlobalContext } from '@/core/context';
 import {
   createWarehouseUser,
   deleteWarehouseUser,
-  getWarehouses,
   getWarehouseUsers,
   updateWarehouseUser,
 } from '@/core/repository';
@@ -20,27 +18,13 @@ export function useWarehouse(warehouseID: string) {
   const { alert } = useContext(GlobalContext);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
   const [warehouseUsers, setWarehouseUsers] = useState<WarehouseUser[]>([]);
-
-  useEffect(() => {
-    fetchWarehouses();
-  }, []);
 
   useEffect(() => {
     if (warehouseID) {
       fetchWarehouseUsers(warehouseID);
     }
   }, [warehouseID]);
-
-  const fetchWarehouses = async () => {
-    try {
-      const data = await getWarehouses();
-      setWarehouses(data ?? []);
-    } catch (error) {
-      alert({ message: `${error}`, severity: 'error' });
-    }
-  };
 
   const fetchWarehouseUsers = async (warehouseID: string) => {
     setIsLoading(true);
@@ -109,7 +93,6 @@ export function useWarehouse(warehouseID: string) {
 
   return {
     isLoading,
-    warehouses,
     warehouseUsers,
     addWarehouseUser,
     editWarehouseUser,

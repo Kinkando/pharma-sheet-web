@@ -1,18 +1,16 @@
 'use client';
 
-import { useCallback, useState, Fragment, useContext } from 'react';
-import { Button, Divider, MenuItem, Select } from '@mui/material';
-import { useWarehouse } from '@/modules/user/hooks/warehouse';
+import { useCallback, useState, useContext, useEffect } from 'react';
+import { MenuItem, Select } from '@mui/material';
 import {
+  Warehouse,
   Warehouse as WarehouseModel,
   WarehouseRole,
-  WarehouseUser,
 } from '@/core/@types';
-import { LoadingScreen } from '@/components/ui';
-import { DeleteUserModal } from './DeleteUserModal';
-import { AddUserModal } from './AddUserModal';
-import { UserCard } from './UserCard';
 import { GlobalContext } from '@/core/context';
+import { getWarehouses } from '@/core/repository';
+import { UserManagementTab } from './UserManagementTab';
+import { LoadingScreen } from '@/components/ui';
 
 export default function User() {
   const [warehouse, setWarehouse] = useState<WarehouseModel>({
@@ -21,23 +19,22 @@ export default function User() {
     role: WarehouseRole.VIEWER,
     lockers: [],
   });
-
   const { user } = useContext(GlobalContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
 
-  const {
-    isLoading,
-    warehouses,
-    warehouseUsers,
-    addWarehouseUser,
-    editWarehouseUser,
-    removeWarehouseUser,
-  } = useWarehouse(warehouse.warehouseID);
+  useEffect(() => {
+    fetchWarehouses();
+  }, []);
 
-  const [openModal, setOpenModal] = useState<'closed' | 'add' | 'delete'>(
-    'closed',
-  );
-  const [selectedWarehouseUser, setSelectedWarehouseUser] =
-    useState<WarehouseUser>();
+  const fetchWarehouses = async () => {
+    try {
+      const data = await getWarehouses();
+      setWarehouses(data ?? []);
+    } catch (error) {
+      alert({ message: `${error}`, severity: 'error' });
+    }
+  };
 
   const changeWarehouse = useCallback(
     (warehouseID: string) => {
@@ -50,11 +47,6 @@ export default function User() {
     },
     [warehouses],
   );
-
-  const selectUser = (warehouseUser: WarehouseUser, event: 'delete') => {
-    setSelectedWarehouseUser({ ...warehouseUser });
-    setOpenModal(event);
-  };
 
   return (
     <>
@@ -77,76 +69,14 @@ export default function User() {
           ))}
         </Select>
 
-        {warehouse.warehouseID && (
-          <div className="flex items-center justify-between gap-4">
-            <h1>Manage Access</h1>
-            <Button
-              variant="contained"
-              color="success"
-              disabled={warehouse.role !== WarehouseRole.ADMIN}
-              onClick={() => setOpenModal('add')}
-            >
-              Add User
-            </Button>
-          </div>
-        )}
-
-        {warehouse.warehouseID && (
-          <div>
-            <Divider />
-            {warehouseUsers.map((warehouseUser) => (
-              <Fragment key={warehouseUser.userID}>
-                <UserCard
-                  user={warehouseUser}
-                  editable={
-                    warehouse.role === WarehouseRole.ADMIN &&
-                    warehouseUser.userID !== user?.userID
-                  }
-                  deletable={
-                    warehouse.role === WarehouseRole.ADMIN &&
-                    warehouseUser.userID !== user?.userID
-                  }
-                  onDelete={() => selectUser(warehouseUser, 'delete')}
-                  onEdit={(warehouseUser) =>
-                    editWarehouseUser({
-                      userID: warehouseUser.userID,
-                      role: warehouseUser.role,
-                      warehouseID: warehouse.warehouseID,
-                    })
-                  }
-                />
-                <Divider />
-              </Fragment>
-            ))}
-          </div>
+        {user && warehouse.warehouseID && (
+          <UserManagementTab
+            user={user}
+            warehouse={warehouse}
+            onLoading={setIsLoading}
+          />
         )}
       </main>
-
-      <AddUserModal
-        isOpen={openModal === 'add'}
-        onClose={() => setOpenModal('closed')}
-        onCreate={async (email, role) =>
-          await addWarehouseUser({
-            warehouseID: warehouse.warehouseID,
-            email,
-            role,
-          })
-        }
-      />
-
-      {selectedWarehouseUser && (
-        <DeleteUserModal
-          isOpen={openModal === 'delete'}
-          onClose={() => setOpenModal('closed')}
-          onDelete={async () =>
-            await removeWarehouseUser({
-              userID: selectedWarehouseUser.userID,
-              warehouseID: warehouse.warehouseID,
-            })
-          }
-          warehouseUser={selectedWarehouseUser}
-        />
-      )}
     </>
   );
 }
