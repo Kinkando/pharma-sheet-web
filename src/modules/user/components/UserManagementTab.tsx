@@ -1,11 +1,12 @@
 import { Fragment, useEffect, useState } from 'react';
-import { Button, Divider } from '@mui/material';
+import { Divider, Fab } from '@mui/material';
 import { WarehouseRole, WarehouseUser } from '@/core/@types';
 import { useUserManagement } from '@/modules/user/hooks/userManagement';
 import { AddUserModal } from './AddUserModal';
 import { DeleteUserModal } from './DeleteUserModal';
 import { UserManagementCard } from './UserManagementCard';
 import { UserTabProps } from './User';
+import { Add } from '@mui/icons-material';
 
 export function UserManagementTab({
   warehouse,
@@ -37,17 +38,6 @@ export function UserManagementTab({
 
   return (
     <>
-      <div className="flex items-center justify-end gap-4">
-        <Button
-          variant="contained"
-          color="success"
-          disabled={warehouse.role !== WarehouseRole.ADMIN}
-          onClick={() => setOpenModal('add')}
-        >
-          เพิ่มสมาชิก
-        </Button>
-      </div>
-
       <div>
         <Divider />
         {warehouseUsers.map((warehouseUser) => (
@@ -101,6 +91,18 @@ export function UserManagementTab({
           warehouseUser={selectedWarehouseUser}
         />
       )}
+
+      <div className="absolute bottom-4 lg:bottom-10 right-4 lg:right-10">
+        <Fab
+          color="primary"
+          aria-label="add"
+          size="small"
+          disabled={warehouse.role !== WarehouseRole.ADMIN}
+          onClick={() => setOpenModal('add')}
+        >
+          <Add />
+        </Fab>
+      </div>
     </>
   );
 }

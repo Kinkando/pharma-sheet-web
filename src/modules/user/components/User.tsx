@@ -12,6 +12,7 @@ import {
 import { GlobalContext } from '@/core/context';
 import { getWarehouses } from '@/core/repository';
 import { UserManagementTab } from './UserManagementTab';
+import { JoinRequestTab } from './JoinRequestTab';
 
 export type UserTabProps = {
   warehouse: Warehouse;
@@ -28,6 +29,10 @@ const tabs = [
   {
     label: 'สมาชิก',
     component: (props: UserTabProps) => <UserManagementTab {...props} />,
+  },
+  {
+    label: 'คำขอเข้าร่วม',
+    component: (props: UserTabProps) => <JoinRequestTab {...props} />,
   },
 ];
 
@@ -122,7 +127,8 @@ export default function User() {
                   aria-labelledby={`${label.id}-${index}`}
                   className="space-y-4 py-4"
                 >
-                  {tab.component({ user, warehouse, onLoading: setIsLoading })}
+                  {index === currentTab &&
+                    tab.component({ user, warehouse, onLoading: setIsLoading })}
                 </div>
               ))}
           </Box>
