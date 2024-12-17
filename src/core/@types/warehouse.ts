@@ -25,6 +25,7 @@ export interface FilterWarehouseDetail {
   limit: number;
   page: number;
   search?: string;
+  myWarehouse: boolean;
 }
 
 export interface FilterWarehouseUser {

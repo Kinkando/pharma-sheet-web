@@ -25,7 +25,12 @@ export function useWarehouseDetail(search?: string) {
 
   const fetchWarehouseDetails = useCallback(async () => {
     try {
-      const data = await getWarehouseDetails({ limit: 999, page: 1, search });
+      const data = await getWarehouseDetails({
+        limit: 999,
+        page: 1,
+        search,
+        myWarehouse: true,
+      });
       setWarehouseDetails(data?.data ?? []);
     } catch (error) {
       alert({ message: `${error}`, severity: 'error' });
