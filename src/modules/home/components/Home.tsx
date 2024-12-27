@@ -57,7 +57,7 @@ export default function Home() {
       limit: 999,
       page: 1,
       warehouseID: warehouse.warehouseID,
-      search,
+      search: search || undefined,
     });
   }, [warehouse, search]);
 
