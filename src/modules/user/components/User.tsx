@@ -43,7 +43,7 @@ export default function User() {
     role: WarehouseRole.VIEWER,
     lockers: [],
   });
-  const { user } = useContext(GlobalContext);
+  const { user, alert } = useContext(GlobalContext);
   const [isLoading, setIsLoading] = useState(false);
   const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
 

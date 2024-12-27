@@ -65,10 +65,17 @@ instance.interceptors.response.use(
       if (!token) {
         return Promise.reject(error);
       }
-      const jwt = await refreshToken(token);
-      localStorage.setItem('accessToken', jwt.accessToken);
-      localStorage.setItem('refreshToken', jwt.refreshToken);
-      return instance.request(config);
+      try {
+        const jwt = await refreshToken(token);
+        localStorage.setItem('accessToken', jwt.accessToken);
+        localStorage.setItem('refreshToken', jwt.refreshToken);
+        return instance.request(config);
+      } catch (error) {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        window.location.href = `/sign-in?redirect=${window.location.pathname}`;
+        return Promise.reject(error);
+      }
     }
 
     return Promise.reject(error);
