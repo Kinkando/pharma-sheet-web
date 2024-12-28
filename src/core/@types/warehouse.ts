@@ -14,6 +14,8 @@ export interface Warehouse {
   warehouseName: string;
   role: WarehouseRole;
   lockers: Locker[];
+  sheetURL?: string;
+  latestSyncedAt?: Date;
 }
 
 export interface Locker {

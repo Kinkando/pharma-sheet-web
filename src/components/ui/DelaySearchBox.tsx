@@ -1,14 +1,15 @@
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Close, Search } from '@mui/icons-material';
-import { CircularProgress, TextField } from '@mui/material';
+import { CircularProgress, TextField, TextFieldProps } from '@mui/material';
 import { useDebounceSearchTerm } from '@/core/hooks';
 
 export type DelaySearchBoxProps = {
   onSearch: (search: string) => void;
+  props?: TextFieldProps;
 };
 
-export function DelaySearchBox({ onSearch }: DelaySearchBoxProps) {
+export function DelaySearchBox({ onSearch, ...props }: DelaySearchBoxProps) {
   const searchParam = useSearchParams();
   const [search, setSearch] = useState(searchParam.get('search') || '');
   const { debouncedSearchTerm, setDebouncedSearchTerm } = useDebounceSearchTerm(
@@ -57,6 +58,7 @@ export function DelaySearchBox({ onSearch }: DelaySearchBoxProps) {
             ) : undefined,
         },
       }}
+      {...props}
     />
   );
 }

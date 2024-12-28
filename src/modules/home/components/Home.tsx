@@ -1,229 +1,126 @@
 'use client';
 
-import { HttpStatusCode } from 'axios';
-import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-import { useCallback, useContext, useEffect, useState } from 'react';
-import { Fab, MenuItem, Select } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useWarehouseDetail } from '@/modules/home/hooks/warehouseDetail';
+import { WarehouseCard } from './WarehouseCard';
+import { DelaySearchBox, LoadingScreen } from '@/components/ui';
+import { Fab } from '@mui/material';
 import { Add } from '@mui/icons-material';
-import { Medicine, WarehouseRole } from '@/core/@types';
-import { GlobalContext } from '@/core/context';
-import { useMedicine } from '@/modules/home/hooks/medicine';
-import {
-  createMedicine,
-  deleteMedicine,
-  updateMedicine,
-} from '@/core/repository';
-import { DeleteMedicineModal } from './DeleteMedicineModal';
-import { MedicineModal } from './MedicineModal';
-import { MedicineCard } from './MedicineCard';
-import { ViewMedicineModal } from './ViewMedicineModal';
-import { DelaySearchBox } from '@/components/ui';
+import { WarehouseDetail, WarehouseRole } from '@/core/@types';
+import { ViewWarehouseModal } from './ViewWarehouseModal';
+import { DeleteWarehouseModal } from './DeleteWarehouseModal';
+import { AddWarehouseModal } from './AddWarehouseModal';
+import { EditWarehouseModal } from './EditWarehouseModal';
 
 export default function Home() {
-  const { alert } = useContext(GlobalContext);
   const searchParam = useSearchParams();
   const [search, setSearch] = useState(searchParam.get('search') || '');
-  const { warehouses, medicines, fetchMedicine, warehouse, setWarehouse } =
-    useMedicine(searchParam.get('warehouseID'));
-  const [selectedMedicine, setSelectedMedicine] = useState<Medicine>();
+  const {
+    isLoading,
+    warehouseDetails,
+    addWarehouse,
+    editWarehouse,
+    removeWarehouse,
+    addLocker,
+    editLocker,
+    removeLocker,
+  } = useWarehouseDetail(search);
+  const [selectedWarehouseDetail, setSelectedWarehouseDetail] =
+    useState<WarehouseDetail>();
+
   const [openModal, setOpenModal] = useState<
-    'closed' | 'view' | 'edit' | 'delete' | 'create'
+    'closed' | 'add' | 'edit' | 'remove' | 'view'
   >('closed');
 
-  const selectWarehouse = useCallback(
-    (warehouseID: string) => {
-      const warehouse = warehouses.find(
-        (warehouse) => warehouse.warehouseID === warehouseID,
-      );
-      if (warehouse) {
-        setWarehouse(warehouse);
-      }
-    },
-    [setWarehouse, warehouses],
-  );
+  const setModal = (
+    warehouseDetail: WarehouseDetail,
+    event: 'view' | 'edit' | 'remove',
+  ) => {
+    setSelectedWarehouseDetail(warehouseDetail);
+    setOpenModal(event);
+  };
 
   useEffect(() => {
-    if (warehouse?.warehouseID && warehouses.length) {
-      fetchData();
-    }
-  }, [warehouses, warehouse, search]);
-
-  const fetchData = useCallback(async () => {
-    if (!warehouse) {
-      return;
-    }
-    await fetchMedicine({
-      limit: 999,
-      page: 1,
-      warehouseID: warehouse.warehouseID,
-      search: search || undefined,
-    });
-  }, [warehouse, search]);
-
-  const removeMedicine = async (medicineID: string) => {
-    try {
-      await deleteMedicine(medicineID);
-      setSelectedMedicine(undefined);
-      await fetchData();
-    } catch (error) {
-      alert({ message: `${error}`, severity: 'error' });
-    }
-  };
-
-  const addMedicine = async (
-    warehouseID: string,
-    medicine: Medicine,
-    file?: File,
-  ) => {
-    try {
-      const { status, error } = await createMedicine(
-        warehouseID,
-        medicine,
-        file,
+    if (selectedWarehouseDetail && warehouseDetails) {
+      setSelectedWarehouseDetail(
+        warehouseDetails.find(
+          (warehouse) =>
+            warehouse.warehouseID === selectedWarehouseDetail.warehouseID,
+        ),
       );
-      if (status !== HttpStatusCode.Ok) {
-        throw error;
-      }
-      await fetchData();
-    } catch (error) {
-      let err = `${error}`;
-      if (JSON.parse(err)?.error) {
-        err = `${JSON.parse(err).error}`;
-      }
-      alert({ message: err, severity: 'error' });
-      throw error;
     }
-  };
-
-  const editMedicine = useCallback(
-    async (medicineID: string, medicine: Medicine, file?: File) => {
-      try {
-        const { status, error } = await updateMedicine(
-          medicineID,
-          medicine,
-          file,
-          !!selectedMedicine?.imageURL && !file,
-        );
-        if (status !== HttpStatusCode.NoContent) {
-          throw error;
-        }
-        await fetchData();
-      } catch (error) {
-        let err = `${error}`;
-        if (JSON.parse(err)?.error) {
-          err = `${JSON.parse(err).error}`;
-        }
-        alert({ message: err, severity: 'error' });
-        throw error;
-      }
-    },
-    [selectedMedicine],
-  );
+  }, [warehouseDetails, selectedWarehouseDetail]);
 
   return (
     <>
+      <LoadingScreen isLoading={isLoading} />
+
       <main className="space-y-4 lg:p-6 p-4">
-        <Select
-          value={warehouse?.warehouseID ?? ''}
-          displayEmpty
-          onChange={(e) => selectWarehouse(e.target.value)}
-          className="w-full"
-        >
-          <MenuItem value="" disabled>
-            <p className="w-full">กรุณาเลือกศูนย์สุขภาพชุมชน</p>
-          </MenuItem>
-          {warehouses.map((warehouse) => (
-            <MenuItem key={warehouse.warehouseID} value={warehouse.warehouseID}>
-              {warehouse.warehouseName}
-            </MenuItem>
-          ))}
-        </Select>
+        <DelaySearchBox onSearch={setSearch} />
 
-        {warehouse?.warehouseID && <DelaySearchBox onSearch={setSearch} />}
-
-        {warehouse?.warehouseID && !medicines.length && (
-          <div className="w-full flex flex-col items-center justify-center">
-            <Image
-              src="/images/empty.png"
-              width={200}
-              height={200}
-              alt="Empty Box"
-              unoptimized
-            />
-            <p>Medicine not found</p>
+        {warehouseDetails && (
+          <div className="grid grid-cols-[repeat(auto-fill,_minmax(15rem,_1fr))] gap-4">
+            {warehouseDetails.map((warehouseDetail) => (
+              <WarehouseCard
+                key={warehouseDetail.warehouseID}
+                warehouseDetail={warehouseDetail}
+                deletable={warehouseDetail.role === WarehouseRole.ADMIN}
+                editable={warehouseDetail.role !== WarehouseRole.VIEWER}
+                onView={(warehouseDetail) => setModal(warehouseDetail, 'view')}
+                onDelete={(warehouseDetail) =>
+                  setModal(warehouseDetail, 'remove')
+                }
+                onEdit={(warehouseDetail) => setModal(warehouseDetail, 'edit')}
+              />
+            ))}
           </div>
         )}
 
-        {warehouse?.warehouseID &&
-          medicines.map((medicine) => (
-            <MedicineCard
-              key={medicine.medicineID}
-              medicine={medicine}
-              editable={[WarehouseRole.ADMIN, WarehouseRole.EDITOR].includes(
-                warehouse?.role,
-              )}
-              deletable={[WarehouseRole.ADMIN, WarehouseRole.EDITOR].includes(
-                warehouse?.role,
-              )}
-              selectMedicine={(medicine, mode) => {
-                setSelectedMedicine(medicine);
-                setOpenModal(mode);
-              }}
-            />
-          ))}
-      </main>
-
-      {warehouse && (
         <div className="absolute bottom-4 lg:bottom-10 right-4 lg:right-10">
           <Fab
             color="primary"
             aria-label="add"
             size="small"
-            onClick={() => setOpenModal('create')}
+            onClick={() => setOpenModal('add')}
           >
             <Add />
           </Fab>
         </div>
-      )}
 
-      {warehouse && (
-        <MedicineModal
-          lockers={warehouse.lockers}
-          isOpen={openModal === 'create'}
+        <AddWarehouseModal
+          isOpen={openModal === 'add'}
           onClose={() => setOpenModal('closed')}
-          onSubmit={async (medicine, file) =>
-            await addMedicine(warehouse.warehouseID, medicine, file)
-          }
+          onCreate={addWarehouse}
         />
-      )}
 
-      {selectedMedicine && warehouse && (
-        <>
-          <ViewMedicineModal
-            isOpen={openModal === 'view'}
-            onClose={() => setOpenModal('closed')}
-            medicine={selectedMedicine}
-          />
-          <MedicineModal
-            medicine={selectedMedicine}
-            lockers={warehouse.lockers}
-            isOpen={openModal === 'edit'}
-            onClose={() => setOpenModal('closed')}
-            onSubmit={async (medicine, file) =>
-              await editMedicine(medicine.medicineID, medicine, file)
-            }
-          />
-          <DeleteMedicineModal
-            isOpen={openModal === 'delete'}
-            onClose={() => setOpenModal('closed')}
-            medicine={selectedMedicine}
-            onDelete={async () =>
-              await removeMedicine(selectedMedicine.medicineID)
-            }
-          />
-        </>
-      )}
+        {selectedWarehouseDetail && (
+          <>
+            <ViewWarehouseModal
+              isOpen={openModal === 'view'}
+              onClose={() => setOpenModal('closed')}
+              warehouseDetail={selectedWarehouseDetail}
+            />
+            <EditWarehouseModal
+              isOpen={openModal === 'edit'}
+              onClose={() => setOpenModal('closed')}
+              warehouseDetail={selectedWarehouseDetail}
+              onEditWarehouse={editWarehouse}
+              onAddLocker={addLocker}
+              onEditLocker={editLocker}
+              onDeleteLocker={removeLocker}
+            />
+            <DeleteWarehouseModal
+              isOpen={openModal === 'remove'}
+              onClose={() => setOpenModal('closed')}
+              warehouseDetail={selectedWarehouseDetail}
+              onDelete={async (warehouseDetail) =>
+                await removeWarehouse(warehouseDetail.warehouseID)
+              }
+            />
+          </>
+        )}
+      </main>
     </>
   );
 }
