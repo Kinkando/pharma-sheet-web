@@ -1,6 +1,11 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { FilterMedicine, Medicine, Warehouse } from '@/core/@types';
+import {
+  FilterMedicine,
+  Medicine,
+  OrderSequence,
+  Warehouse,
+} from '@/core/@types';
 import { GlobalContext } from '@/core/context';
 import { getMedicines, getWarehouses } from '@/core/repository';
 
@@ -38,19 +43,28 @@ export function useMedicine(warehouseID: string | null) {
     try {
       const { data } = await getMedicines(filter);
       setMedicines(data ?? []);
-      replaceQueryParams(filter.warehouseID, filter.search);
+      replaceQueryParams(filter);
     } catch (error) {
       alert({ message: `${error}`, severity: 'error' });
     }
   };
 
-  const replaceQueryParams = async (warehouseID: string, search?: string) => {
+  const replaceQueryParams = async ({
+    warehouseID,
+    search,
+    sort,
+  }: FilterMedicine) => {
     const params = new URLSearchParams();
     params.set('warehouseID', warehouseID);
     if (search?.trim()) {
       params.set('search', search.trim());
     } else {
       params.delete('search');
+    }
+    if (sort) {
+      const [sortBy, order] = sort.split(' ');
+      params.set('sortBy', sortBy);
+      params.set('order', order as OrderSequence);
     }
     replace(`?${params.toString()}`);
   };

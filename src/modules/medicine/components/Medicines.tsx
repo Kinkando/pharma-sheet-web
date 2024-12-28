@@ -4,10 +4,17 @@ import { HttpStatusCode } from 'axios';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { Fab, MenuItem, Select } from '@mui/material';
-import { Add } from '@mui/icons-material';
-import { Medicine, WarehouseRole } from '@/core/@types';
+import { Button, MenuItem, Select } from '@mui/material';
+import { DelaySearchBox, SortDropdown } from '@/components/ui';
+import {
+  Medicine,
+  OrderOption,
+  OrderSequence,
+  SortOption,
+  WarehouseRole,
+} from '@/core/@types';
 import { GlobalContext } from '@/core/context';
+import { useValidState } from '@/core/hooks';
 import { useMedicine } from '@/modules/medicine/hooks/medicine';
 import {
   createMedicine,
@@ -15,10 +22,22 @@ import {
   updateMedicine,
 } from '@/core/repository';
 import { DeleteMedicineModal } from './DeleteMedicineModal';
-import { MedicineModal } from './MedicineModal';
 import { MedicineCard } from './MedicineCard';
+import { MedicineModal } from './MedicineModal';
 import { ViewMedicineModal } from './ViewMedicineModal';
-import { DelaySearchBox } from '@/components/ui';
+import { Add } from '@mui/icons-material';
+
+const sortOptions: SortOption[] = [
+  { value: 'description', label: 'ชื่อสามัญทางยา' },
+  { value: 'medicalName', label: 'ชื่อการค้า' },
+  { value: 'address', label: 'บ้านเลขที่ยา' },
+  { value: 'label', label: 'Label ตะกร้า' },
+];
+
+const orderOptions: OrderOption[] = [
+  { label: () => 'เรียงลำดับจากน้อยไปมาก', value: 'ASC' },
+  { label: () => 'เรียงลำดับจากมากไปน้อย', value: 'DESC' },
+];
 
 export default function Medicines() {
   const { alert } = useContext(GlobalContext);
@@ -30,6 +49,18 @@ export default function Medicines() {
   const [openModal, setOpenModal] = useState<
     'closed' | 'view' | 'edit' | 'delete' | 'create'
   >('closed');
+
+  const [sortBy, setSortBy] = useValidState<string>(
+    searchParam.get('sortBy'),
+    'description',
+    ...sortOptions.map((option) => option.value),
+  );
+  const [order, setOrder] = useValidState<OrderSequence>(
+    searchParam.get('order') as OrderSequence,
+    'ASC',
+    'ASC',
+    'DESC',
+  );
 
   const selectWarehouse = useCallback(
     (warehouseID: string) => {
@@ -47,7 +78,7 @@ export default function Medicines() {
     if (warehouse?.warehouseID && warehouses.length) {
       fetchData();
     }
-  }, [warehouses, warehouse, search]);
+  }, [warehouses, warehouse, search, sortBy, order]);
 
   const fetchData = useCallback(async () => {
     if (!warehouse) {
@@ -58,8 +89,9 @@ export default function Medicines() {
       page: 1,
       warehouseID: warehouse.warehouseID,
       search: search || undefined,
+      sort: `${sortBy} ${order}`,
     });
-  }, [warehouse, search]);
+  }, [warehouse, search, sortBy, order]);
 
   const removeMedicine = async (medicineID: string) => {
     try {
@@ -140,6 +172,37 @@ export default function Medicines() {
           ))}
         </Select>
 
+        {warehouse?.warehouseID && (
+          <div className="relative">
+            <SortDropdown
+              options={sortOptions}
+              orders={orderOptions}
+              sortBy={sortBy}
+              order={order}
+              onChange={(sortBy, order) => {
+                setSortBy(sortBy);
+                setOrder(order);
+              }}
+              buttonProps={{
+                className: 'w-fit !px-2 max-[300px]:w-full',
+              }}
+            />
+            <div className="absolute right-0 top-0 max-[300px]:relative max-[300px]:mt-4">
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                disabled={warehouse.role === WarehouseRole.VIEWER}
+                onClick={() => setOpenModal('create')}
+                className="w-fit whitespace-nowrap max-[300px]:w-full"
+              >
+                <Add />
+                เพิ่มข้อมูล
+              </Button>
+            </div>
+          </div>
+        )}
+
         {warehouse?.warehouseID && <DelaySearchBox onSearch={setSearch} />}
 
         {warehouse?.warehouseID && !medicines.length && (
@@ -173,19 +236,6 @@ export default function Medicines() {
             />
           ))}
       </main>
-
-      {warehouse && (
-        <div className="absolute bottom-4 lg:bottom-10 right-4 lg:right-10">
-          <Fab
-            color="primary"
-            aria-label="add"
-            size="small"
-            onClick={() => setOpenModal('create')}
-          >
-            <Add />
-          </Fab>
-        </div>
-      )}
 
       {warehouse && (
         <MedicineModal

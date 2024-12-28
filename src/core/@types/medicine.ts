@@ -16,4 +16,5 @@ export interface FilterMedicine {
   page: number;
   warehouseID: string;
   search?: string;
+  sort?: string;
 }
