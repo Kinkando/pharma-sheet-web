@@ -7,7 +7,8 @@ import {
   Warehouse,
 } from '@/core/@types';
 import { GlobalContext } from '@/core/context';
-import { getMedicines, getWarehouses } from '@/core/repository';
+import { getMedicines, getWarehouses, syncMedicine } from '@/core/repository';
+import { HttpStatusCode } from 'axios';
 
 export function useMedicine(warehouseID: string | null) {
   const { alert } = useContext(GlobalContext);
@@ -49,6 +50,19 @@ export function useMedicine(warehouseID: string | null) {
     }
   };
 
+  const syncGoogleSheet = async (warehouseID: string, link: string) => {
+    try {
+      const { status } = await syncMedicine(warehouseID, link);
+      if (status !== HttpStatusCode.NoContent) {
+        throw new Error('ซิงค์ข้อมูลยาไม่สำเร็จ');
+      }
+      alert({ message: 'ซิงค์ข้อมูลยาสำเร็จ', severity: 'success' });
+    } catch (error) {
+      alert({ message: `${error}`, severity: 'error' });
+      throw error;
+    }
+  };
+
   const replaceQueryParams = async ({
     warehouseID,
     search,
@@ -71,9 +85,11 @@ export function useMedicine(warehouseID: string | null) {
 
   return {
     warehouses,
+    setWarehouses,
     medicines,
     fetchMedicine,
     warehouse,
     setWarehouse,
+    syncGoogleSheet,
   };
 }

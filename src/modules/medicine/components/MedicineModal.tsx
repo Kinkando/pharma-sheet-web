@@ -168,7 +168,7 @@ export function MedicineModal({
       <DialogTitle>
         <div className="flex items-center justify-between gap-4 overflow-hidden w-full">
           <div className="text-ellipsis whitespace-nowrap overflow-hidden w-full">
-            {medicine.medicineID ? 'Edit' : 'Create'} Medicine
+            {medicine.medicineID ? 'แก้ไข' : 'เพิ่ม'}ข้อมูลยา
           </div>
           <IconButton
             aria-label="close"

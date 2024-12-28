@@ -47,18 +47,18 @@ export function Toolbar({
         order={order}
         onChange={onSortChange}
         buttonProps={{
-          className: 'w-fit !px-2 max-[300px]:w-full',
+          className: 'w-fit !px-2 max-[440px]:w-full',
         }}
       />
-      <div className="absolute right-0 top-0 max-[300px]:relative max-[300px]:mt-4">
+      <div className="absolute right-0 top-0 max-[440px]:relative max-[440px]:mt-4">
         <div className="flex items-center gap-4">
           <Button
             variant="contained"
-            color="primary"
+            color="warning"
             size="large"
             disabled={warehouse.role === WarehouseRole.VIEWER}
             onClick={onSyncMedicine}
-            className="w-fit whitespace-nowrap max-[300px]:w-full"
+            className="w-fit whitespace-nowrap max-[440px]:w-full"
           >
             <Sync />
             ซิงค์ข้อมูล
@@ -69,7 +69,7 @@ export function Toolbar({
             size="large"
             disabled={warehouse.role === WarehouseRole.VIEWER}
             onClick={onAddMedicine}
-            className="w-fit whitespace-nowrap max-[300px]:w-full"
+            className="w-fit whitespace-nowrap max-[440px]:w-full"
           >
             <Add />
             เพิ่มข้อมูล

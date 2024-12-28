@@ -20,13 +20,21 @@ import { MedicineCard } from './MedicineCard';
 import { MedicineModal } from './MedicineModal';
 import { ViewMedicineModal } from './ViewMedicineModal';
 import { sortOptions, Toolbar } from './Toolbar';
+import { SyncMedicineModal } from './SyncMedicineModal';
 
 export default function Medicines() {
   const { alert } = useContext(GlobalContext);
   const searchParam = useSearchParams();
   const [search, setSearch] = useState(searchParam.get('search') || '');
-  const { warehouses, medicines, fetchMedicine, warehouse, setWarehouse } =
-    useMedicine(searchParam.get('warehouseID'));
+  const {
+    warehouses,
+    setWarehouses,
+    medicines,
+    fetchMedicine,
+    warehouse,
+    setWarehouse,
+    syncGoogleSheet,
+  } = useMedicine(searchParam.get('warehouseID'));
   const [selectedMedicine, setSelectedMedicine] = useState<Medicine>();
   const [openModal, setOpenModal] = useState<
     'closed' | 'view' | 'edit' | 'delete' | 'create' | 'sync'
@@ -135,6 +143,33 @@ export default function Medicines() {
     [selectedMedicine],
   );
 
+  const syncMedicine = useCallback(
+    async (sheetURL: string) => {
+      if (!warehouse) {
+        return;
+      }
+      try {
+        setWarehouse(
+          (warehouse) =>
+            warehouse && { ...warehouse, sheetURL, latestSyncedAt: new Date() },
+        );
+        await syncGoogleSheet(warehouse.warehouseID, sheetURL);
+        await fetchData();
+        setWarehouses((warehouses) =>
+          warehouses.map((w) =>
+            w.warehouseID === warehouse.warehouseID
+              ? { ...w, sheetURL, latestSyncedAt: new Date() }
+              : w,
+          ),
+        );
+        setOpenModal('closed');
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [warehouse],
+  );
+
   return (
     <>
       <main className="space-y-4 lg:p-6 p-4">
@@ -210,6 +245,16 @@ export default function Medicines() {
           onSubmit={async (medicine, file) =>
             await addMedicine(warehouse.warehouseID, medicine, file)
           }
+        />
+      )}
+
+      {warehouse && (
+        <SyncMedicineModal
+          isOpen={openModal === 'sync'}
+          onClose={() => setOpenModal('closed')}
+          link={warehouse.sheetURL ?? ''}
+          lastSync={warehouse.latestSyncedAt?.toLocaleString() ?? ''}
+          onSync={syncMedicine}
         />
       )}
 

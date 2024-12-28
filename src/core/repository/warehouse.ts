@@ -154,3 +154,11 @@ export async function rejectUser(warehouseID: string, userID: string) {
     method: 'PATCH',
   });
 }
+
+export async function syncMedicine(warehouseID: string, url: string) {
+  return await client({
+    url: `/warehouse/${warehouseID}/sync/medicine`,
+    method: 'PUT',
+    data: { url },
+  });
+}
