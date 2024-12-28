@@ -68,7 +68,16 @@ export default function Medicines() {
     if (warehouse?.warehouseID && warehouses.length) {
       fetchData();
     }
-  }, [warehouses, warehouse, search, sortBy, order]);
+  }, [
+    warehouses,
+    warehouse?.lockers,
+    warehouse?.role,
+    warehouse?.warehouseID,
+    warehouse?.warehouseName,
+    search,
+    sortBy,
+    order,
+  ]);
 
   const fetchData = useCallback(async () => {
     if (!warehouse) {
@@ -149,18 +158,20 @@ export default function Medicines() {
         return;
       }
       try {
+        await syncGoogleSheet(warehouse.warehouseID, sheetURL);
         setWarehouse(
           (warehouse) =>
             warehouse && { ...warehouse, sheetURL, latestSyncedAt: new Date() },
         );
-        await syncGoogleSheet(warehouse.warehouseID, sheetURL);
         await Promise.all([
           fetchWarehouses(warehouse.warehouseID),
           fetchData(),
         ]);
         setOpenModal('closed');
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        console.error(error);
+        setWarehouse((warehouse) => warehouse && { ...warehouse, sheetURL });
       }
     },
     [warehouse],
