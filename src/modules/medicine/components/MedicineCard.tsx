@@ -28,7 +28,7 @@ export function MedicineCard({
         บ้านเลขที่ยา: <b className="">{medicine.address}</b>
       </p>
       <p className="text-sm">
-        Label ตะกร้า: <b className="">{medicine.label}</b>
+        Label ตะกร้า: <b className="">{medicine.label || '-'}</b>
       </p>
       {(deletable || editable) && (
         <div className="flex items-center justify-end">
