@@ -4,15 +4,9 @@ import { HttpStatusCode } from 'axios';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { Button, MenuItem, Select } from '@mui/material';
-import { DelaySearchBox, SortDropdown } from '@/components/ui';
-import {
-  Medicine,
-  OrderOption,
-  OrderSequence,
-  SortOption,
-  WarehouseRole,
-} from '@/core/@types';
+import { MenuItem, Select } from '@mui/material';
+import { DelaySearchBox } from '@/components/ui';
+import { Medicine, OrderSequence, WarehouseRole } from '@/core/@types';
 import { GlobalContext } from '@/core/context';
 import { useValidState } from '@/core/hooks';
 import { useMedicine } from '@/modules/medicine/hooks/medicine';
@@ -25,19 +19,7 @@ import { DeleteMedicineModal } from './DeleteMedicineModal';
 import { MedicineCard } from './MedicineCard';
 import { MedicineModal } from './MedicineModal';
 import { ViewMedicineModal } from './ViewMedicineModal';
-import { Add } from '@mui/icons-material';
-
-const sortOptions: SortOption[] = [
-  { value: 'description', label: 'ชื่อสามัญทางยา' },
-  { value: 'medicalName', label: 'ชื่อการค้า' },
-  { value: 'address', label: 'บ้านเลขที่ยา' },
-  { value: 'label', label: 'Label ตะกร้า' },
-];
-
-const orderOptions: OrderOption[] = [
-  { label: () => 'เรียงลำดับจากน้อยไปมาก', value: 'ASC' },
-  { label: () => 'เรียงลำดับจากมากไปน้อย', value: 'DESC' },
-];
+import { sortOptions, Toolbar } from './Toolbar';
 
 export default function Medicines() {
   const { alert } = useContext(GlobalContext);
@@ -47,7 +29,7 @@ export default function Medicines() {
     useMedicine(searchParam.get('warehouseID'));
   const [selectedMedicine, setSelectedMedicine] = useState<Medicine>();
   const [openModal, setOpenModal] = useState<
-    'closed' | 'view' | 'edit' | 'delete' | 'create'
+    'closed' | 'view' | 'edit' | 'delete' | 'create' | 'sync'
   >('closed');
 
   const [sortBy, setSortBy] = useValidState<string>(
@@ -173,34 +155,17 @@ export default function Medicines() {
         </Select>
 
         {warehouse?.warehouseID && (
-          <div className="relative">
-            <SortDropdown
-              options={sortOptions}
-              orders={orderOptions}
-              sortBy={sortBy}
-              order={order}
-              onChange={(sortBy, order) => {
-                setSortBy(sortBy);
-                setOrder(order);
-              }}
-              buttonProps={{
-                className: 'w-fit !px-2 max-[300px]:w-full',
-              }}
-            />
-            <div className="absolute right-0 top-0 max-[300px]:relative max-[300px]:mt-4">
-              <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                disabled={warehouse.role === WarehouseRole.VIEWER}
-                onClick={() => setOpenModal('create')}
-                className="w-fit whitespace-nowrap max-[300px]:w-full"
-              >
-                <Add />
-                เพิ่มข้อมูล
-              </Button>
-            </div>
-          </div>
+          <Toolbar
+            warehouse={warehouse}
+            order={order}
+            sortBy={sortBy}
+            onSortChange={(sortBy, order) => {
+              setSortBy(sortBy);
+              setOrder(order);
+            }}
+            onAddMedicine={() => setOpenModal('create')}
+            onSyncMedicine={() => setOpenModal('sync')}
+          />
         )}
 
         {warehouse?.warehouseID && <DelaySearchBox onSearch={setSearch} />}
