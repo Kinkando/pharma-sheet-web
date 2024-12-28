@@ -28,7 +28,7 @@ export default function Medicines() {
   const [search, setSearch] = useState(searchParam.get('search') || '');
   const {
     warehouses,
-    setWarehouses,
+    fetchWarehouses,
     medicines,
     fetchMedicine,
     warehouse,
@@ -154,14 +154,10 @@ export default function Medicines() {
             warehouse && { ...warehouse, sheetURL, latestSyncedAt: new Date() },
         );
         await syncGoogleSheet(warehouse.warehouseID, sheetURL);
-        await fetchData();
-        setWarehouses((warehouses) =>
-          warehouses.map((w) =>
-            w.warehouseID === warehouse.warehouseID
-              ? { ...w, sheetURL, latestSyncedAt: new Date() }
-              : w,
-          ),
-        );
+        await Promise.all([
+          fetchWarehouses(warehouse.warehouseID),
+          fetchData(),
+        ]);
         setOpenModal('closed');
       } catch (error) {
         console.error(error);

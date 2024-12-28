@@ -87,24 +87,29 @@ export function MedicineModal({
 
   const isValid = useMemo(() => {
     return [
-      !!medicine.address,
-      !!medicine.description.trim(),
+      !!medicine.lockerID,
       medicine.floor >= 0,
       medicine.no >= 0,
-      !!medicine.label,
-      !!medicine.lockerID,
-      !!medicine.medicalName,
+      !!medicine.address,
+      !!medicine.description.trim(),
+      // !!medicine.medicalName,
+      // !!medicine.label,
     ].every((pass) => pass);
   }, [medicine]);
 
-  const setText = (key: string) => {
-    return (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-      setMedicine((value) => ({ ...value, [key]: e.target.value }));
+  const setText = (key: string, isNumber?: boolean) => {
+    return (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      let text = e.target.value;
+      if (isNumber) {
+        text = (+e.target.value).toString();
+      }
+      setMedicine((value) => ({ ...value, [key]: text }));
+    };
   };
 
   useEffect(() => {
     let address = '';
-    if (medicine.floor >= 0 && medicine.no >= 0 && medicine.lockerID) {
+    if (medicine.floor > 0 && medicine.no > 0 && medicine.lockerID) {
       address = `${lockers.find((locker) => locker.lockerID === medicine.lockerID)!.lockerName}-${medicine.floor}-${medicine.no}`;
     }
     setMedicine((value) => ({ ...value, address }));
@@ -125,13 +130,13 @@ export function MedicineModal({
       {
         label: 'ชั้น',
         value: medicine.floor,
-        onChange: setText('floor'),
+        onChange: setText('floor', true),
         type: 'number',
       },
       {
         label: 'ลำดับที่',
         value: medicine.no,
-        onChange: setText('no'),
+        onChange: setText('no', true),
         type: 'number',
       },
       {

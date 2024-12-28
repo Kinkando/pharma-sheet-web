@@ -22,23 +22,29 @@ export function useMedicine(warehouseID: string | null) {
     fetchWarehouses();
   }, []);
 
-  const fetchWarehouses = useCallback(async () => {
-    try {
-      const data = await getWarehouses();
-      setWarehouses(data ?? []);
-      if (!data || !data.length) {
-        return;
+  const fetchWarehouses = useCallback(
+    async (currentWarehouseID?: string) => {
+      try {
+        const data = await getWarehouses();
+        setWarehouses(data ?? []);
+        if (!data || !data.length) {
+          return;
+        }
+        setWarehouse(
+          warehouseID || currentWarehouseID
+            ? (data.find((warehouse) =>
+                currentWarehouseID
+                  ? warehouse.warehouseID === currentWarehouseID
+                  : warehouse.warehouseID === warehouseID,
+              ) ?? data[0])
+            : data[0],
+        );
+      } catch (error) {
+        alert({ message: `${error}`, severity: 'error' });
       }
-      setWarehouse(
-        warehouseID
-          ? (data.find((warehouse) => warehouse.warehouseID === warehouseID) ??
-              data[0])
-          : data[0],
-      );
-    } catch (error) {
-      alert({ message: `${error}`, severity: 'error' });
-    }
-  }, [warehouseID]);
+    },
+    [warehouseID],
+  );
 
   const fetchMedicine = async (filter: FilterMedicine) => {
     try {
@@ -85,7 +91,7 @@ export function useMedicine(warehouseID: string | null) {
 
   return {
     warehouses,
-    setWarehouses,
+    fetchWarehouses,
     medicines,
     fetchMedicine,
     warehouse,
