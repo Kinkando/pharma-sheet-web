@@ -24,7 +24,7 @@ export function ViewWarehouseModal({
       <DialogTitle>
         <div className="flex items-center justify-between gap-4 overflow-hidden w-full">
           <div className="text-ellipsis whitespace-nowrap overflow-hidden w-full">
-            ดูข้อมูลศูนย์สุขภาพชุมชน
+            ข้อมูลศูนย์สุขภาพชุมชน
           </div>
           <IconButton
             aria-label="close"

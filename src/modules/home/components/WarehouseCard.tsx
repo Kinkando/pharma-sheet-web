@@ -1,5 +1,6 @@
+import { useRouter } from 'next/navigation';
 import { WarehouseDetail } from '@/core/@types';
-import { Delete, Edit } from '@mui/icons-material';
+import { Delete, Edit, Visibility } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 
 export type WarehouseCardProps = {
@@ -19,10 +20,13 @@ export function WarehouseCard({
   onEdit,
   onDelete,
 }: WarehouseCardProps) {
+  const { push } = useRouter();
   return (
     <div
       className="rounded-lg bg-white text-black px-4 py-2 border cursor-pointer hover:bg-gray-50 ease-in duration-75 transition-colors min-h-40 flex flex-col justify-between"
-      onClick={() => onView(warehouseDetail)}
+      onClick={() =>
+        push(`/medicine?warehouseID=${warehouseDetail.warehouseID}`)
+      }
     >
       <h1 className="font-bold line-clamp-3 text-lg mb-1">
         {warehouseDetail.warehouseName}
@@ -43,6 +47,15 @@ export function WarehouseCard({
 
         {(deletable || editable) && (
           <div className="flex items-center justify-end">
+            <IconButton
+              onClick={(e) => {
+                e.stopPropagation();
+                onView(warehouseDetail);
+              }}
+            >
+              <Visibility />
+            </IconButton>
+
             {deletable && (
               <IconButton
                 onClick={(e) => {
@@ -53,6 +66,7 @@ export function WarehouseCard({
                 <Delete />
               </IconButton>
             )}
+
             {editable && (
               <IconButton
                 onClick={(e) => {

@@ -22,7 +22,7 @@ export function DelaySearchBox({ onSearch, ...props }: DelaySearchBoxProps) {
 
   return (
     <TextField
-      placeholder="Search"
+      placeholder="ค้นหา"
       className="w-full"
       value={search}
       onChange={(e) => setSearch(e.target.value)}

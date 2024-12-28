@@ -151,7 +151,7 @@ export default function Medicines() {
               alt="Empty Box"
               unoptimized
             />
-            <p>Medicine not found</p>
+            <p>ไม่พบข้อมูลยา</p>
           </div>
         )}
 
