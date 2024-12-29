@@ -69,7 +69,19 @@ export function useMedicine(warehouseID: string | null) {
     url: string,
   ) => {
     try {
-      const data = await getSyncMedicineMetadata(warehouseID, url);
+      const { data, status } = await getSyncMedicineMetadata(warehouseID, url);
+      switch (status) {
+        case HttpStatusCode.NotFound:
+          throw new Error('ไม่พบข้อมูลใน Google Sheet');
+        case HttpStatusCode.BadRequest:
+          throw new Error(
+            'ลิงก์ไม่ถูกต้อง กรุณาเปลี่ยนลิงก์แล้วลองใหม่อีกครั้ง',
+          );
+        case HttpStatusCode.InternalServerError:
+          throw new Error('เกิดข้อผิดพลาดในการซิงค์ข้อมูล');
+        case HttpStatusCode.Conflict:
+          throw new Error('ลิงก์นี้มีผู้ใช้งานแล้ว');
+      }
       setSyncMedicineMetadata(data);
     } catch (error) {
       alert({ message: `${error}`, severity: 'error' });
@@ -83,11 +95,13 @@ export function useMedicine(warehouseID: string | null) {
         case HttpStatusCode.NotFound:
           throw new Error('ไม่พบข้อมูลใน Google Sheet');
         case HttpStatusCode.BadRequest:
-          throw new Error('ข้อมูลใน Google Sheet ไม่ถูกต้อง');
+          throw new Error(
+            'ลิงก์ไม่ถูกต้อง กรุณาเปลี่ยนลิงก์แล้วลองใหม่อีกครั้ง',
+          );
         case HttpStatusCode.InternalServerError:
           throw new Error('เกิดข้อผิดพลาดในการซิงค์ข้อมูล');
         case HttpStatusCode.Conflict:
-          throw new Error('มีข้อมูลที่ซิงค์ซ้ำกัน');
+          throw new Error('ลิงก์นี้มีผู้ใช้งานแล้ว');
       }
       alert({ message: 'ซิงค์ข้อมูลยาสำเร็จ', severity: 'success' });
     } catch (error) {

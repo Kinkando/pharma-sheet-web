@@ -160,15 +160,11 @@ export async function getSyncMedicineMetadata(
   warehouseID: string,
   url: string,
 ) {
-  const { data, status, error } = await client<SyncMedicineMetadata>({
+  return await client<SyncMedicineMetadata>({
     url: `/warehouse/${warehouseID}/sync/medicine`,
     method: 'GET',
     params: { url },
   });
-  if (status === HttpStatusCode.Ok) {
-    return data;
-  }
-  throw Error(error);
 }
 
 export async function syncMedicine(warehouseID: string, url: string) {

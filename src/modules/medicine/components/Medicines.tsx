@@ -93,6 +93,7 @@ export default function Medicines() {
       search: search || undefined,
       sort: `${sortBy} ${order}`,
     });
+    setSyncMedicineMetadata(undefined);
   }, [warehouse, search, sortBy, order]);
 
   const removeMedicine = async (medicineID: string) => {
@@ -171,7 +172,6 @@ export default function Medicines() {
           fetchData(),
         ]);
         setOpenModal('closed');
-        setSyncMedicineMetadata(undefined);
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
