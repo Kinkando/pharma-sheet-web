@@ -12,9 +12,9 @@ export type Router = {
   path: string;
 };
 
-const skipBaseLayoutPaths = ['/sign-in', '/sign-up'];
+const skipBaseLayoutPaths = ['/sign-in', '/sign-up', '/forgot-password'];
 
-export const unauthorizedPaths = ['/sign-in', '/sign-up'];
+export const unauthorizedPaths = ['/sign-in', '/sign-up', '/forgot-password'];
 
 export const routers: Router[] = [
   {

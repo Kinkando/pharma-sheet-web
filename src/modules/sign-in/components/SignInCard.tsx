@@ -19,9 +19,9 @@ export default function SignInCard() {
       <div className="flex flex-col gap-4 max-w-96 rounded-lg p-4 bg-white w-full">
         <h1 className="text-2xl font-semibold text-center mb-2">Sign In</h1>
         <div className="flex flex-col gap-1">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">อีเมล</label>
           <TextField
-            placeholder="Enter your email"
+            placeholder="กรุณาใส่อีเมลของคุณ"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             onKeyDown={(e) =>
@@ -31,10 +31,10 @@ export default function SignInCard() {
           />
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">รหัสผ่าน</label>
           <TextField
             type={isShowPassword ? 'text' : 'password'}
-            placeholder="Enter your password"
+            placeholder="กรุณาใส่รหัสผ่านของคุณ"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             onKeyDown={(e) =>
@@ -66,14 +66,23 @@ export default function SignInCard() {
           disabled={!email || !password || isSigningIn}
           onClick={() => signInEmailPassword(email, password)}
         >
-          Sign In
+          เข้าสู่ระบบ
         </Button>
-        <Link
-          href="/sign-up"
-          className="text-right text-blue-600 text-sm underline"
-        >
-          Sign Up
-        </Link>
+
+        <div className="flex items-center justify-between gap-4">
+          <Link
+            href="/forgot-password"
+            className="text-right text-blue-600 text-sm underline"
+          >
+            ลืมรหัสผ่าน
+          </Link>
+          <Link
+            href="/sign-up"
+            className="text-right text-blue-600 text-sm underline"
+          >
+            สมัครสมาชิก
+          </Link>
+        </div>
       </div>
     </>
   );

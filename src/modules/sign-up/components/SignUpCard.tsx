@@ -21,9 +21,9 @@ export default function SignUpCard() {
       <div className="flex flex-col gap-4 max-w-96 rounded-lg p-4 bg-white w-full">
         <h1 className="text-2xl font-semibold text-center mb-2">Sign Up</h1>
         <div className="flex flex-col gap-1">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">อีเมล</label>
           <TextField
-            placeholder="Enter your email"
+            placeholder="กรุณาใส่อีเมลของคุณ"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             onKeyDown={(e) =>
@@ -35,10 +35,10 @@ export default function SignUpCard() {
           />
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">รหัสผ่าน</label>
           <TextField
             type={isShowPassword ? 'text' : 'password'}
-            placeholder="Enter your password"
+            placeholder="กรุณาใส่รหัสผ่านของคุณ"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             onKeyDown={(e) =>
@@ -65,10 +65,10 @@ export default function SignUpCard() {
           />
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="confirm-password">Confirm Password</label>
+          <label htmlFor="confirm-password">ยืนยันรหัสผ่าน</label>
           <TextField
             type={isShowConfirmPassword ? 'text' : 'password'}
-            placeholder="Enter your password again"
+            placeholder="กรุณาใส่รหัสผ่านอีกครั้ง"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             onKeyDown={(e) =>
@@ -108,15 +108,23 @@ export default function SignUpCard() {
           }
           onClick={() => signUp(email, password)}
         >
-          Sign Up
+          สมัครสมาชิก
         </Button>
 
-        <Link
-          href="/sign-in"
-          className="text-right text-blue-600 text-sm underline"
-        >
-          Sign In
-        </Link>
+        <div className="flex items-center justify-between gap-4">
+          <Link
+            href="/forgot-password"
+            className="text-right text-blue-600 text-sm underline"
+          >
+            ลืมรหัสผ่าน
+          </Link>
+          <Link
+            href="/sign-in"
+            className="text-right text-blue-600 text-sm underline"
+          >
+            เข้าสู่ระบบ
+          </Link>
+        </div>
       </div>
     </>
   );

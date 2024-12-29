@@ -4,18 +4,28 @@ import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 import { routers } from './BaseLayout';
 
+const staticRoutes = [
+  {
+    path: '/sign-in',
+    title: 'Sign In | PHARMA SHEET',
+  },
+  {
+    path: '/sign-up',
+    title: 'Sign Up | PHARMA SHEET',
+  },
+  {
+    path: '/forgot-password',
+    title: 'Forgot Password | PHARMA SHEET',
+  },
+];
+
 export function DynamicTitle() {
   const pathname = usePathname();
   const title = useMemo(() => {
-    const router = routers.find((router) => router.path === pathname);
-    return (
-      router?.title ??
-      (pathname === '/sign-in'
-        ? 'Sign In | PHARMA SHEET'
-        : pathname === '/sign-up'
-          ? 'Sign Up | PHARMA SHEET'
-          : 'Not Found | PHARMA SHEET')
+    const router = [...routers, ...staticRoutes].find(
+      (router) => router.path === pathname,
     );
+    return router?.title ?? 'Not Found | PHARMA SHEET';
   }, [pathname]);
 
   return <title>{title}</title>;

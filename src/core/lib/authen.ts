@@ -5,6 +5,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
 } from 'firebase/auth';
 import app from './firebase';
 
@@ -33,6 +34,11 @@ export async function signUpWithEmailPassword(email: string, password: string) {
 export async function signout() {
   await auth.authStateReady();
   await signOut(auth);
+}
+
+export async function forgotPassword(email: string) {
+  await auth.authStateReady();
+  await sendPasswordResetEmail(auth, email);
 }
 
 export async function getCurrentUser() {
