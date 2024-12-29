@@ -1,55 +1,51 @@
 'use client';
 
-import Link from 'next/link';
 import { useState } from 'react';
-import { useSignUp } from '@/modules/sign-up/hooks/signUp';
+import { useResetPassword } from '@/modules/reset-password/hooks/resetPassword';
 import { Button, TextField } from '@mui/material';
 import { LoadingScreen } from '@/components/ui';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-export default function SignUpCard() {
-  const { signUp, isSigningUp } = useSignUp();
-  const [email, setEmail] = useState('');
+export default function ResetPasswordCard() {
+  const { email, isResetting, confirmResetPassword } = useResetPassword();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
 
-  const enterSignUp = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const enterResetPassword = async (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
     if (
       e.key === 'Enter' &&
       password.length >= 6 &&
       confirmPassword.length >= 6 &&
       password === confirmPassword
     ) {
-      await signUp(email, password);
+      await confirmResetPassword(password);
     }
   };
 
   return (
     <>
-      <LoadingScreen isLoading={isSigningUp} />
+      <LoadingScreen isLoading={isResetting || !email} />
       <div className="flex flex-col gap-4 max-w-96 rounded-lg p-4 bg-white w-full">
-        <h1 className="text-2xl font-semibold text-center mb-2">Sign Up</h1>
+        <h1 className="text-2xl font-semibold text-center mb-2">
+          Reset Password
+        </h1>
         <div className="flex flex-col gap-1">
           <label htmlFor="email">อีเมล</label>
-          <TextField
-            placeholder="กรุณาใส่อีเมลของคุณ"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            onKeyDown={enterSignUp}
-            disabled={isSigningUp}
-          />
+          <TextField placeholder="กรุณาใส่อีเมลของคุณ" value={email} disabled />
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="password">รหัสผ่าน</label>
+          <label htmlFor="password">รหัสผ่านใหม่</label>
           <TextField
             type={isShowPassword ? 'text' : 'password'}
-            placeholder="กรุณาใส่รหัสผ่านของคุณ"
+            placeholder="กรุณาใส่รหัสผ่านใหม่ของคุณ"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            onKeyDown={enterSignUp}
-            disabled={isSigningUp}
+            onKeyDown={enterResetPassword}
+            disabled={isResetting}
             slotProps={{
               input: {
                 endAdornment: isShowPassword ? (
@@ -68,14 +64,14 @@ export default function SignUpCard() {
           />
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="confirm-password">ยืนยันรหัสผ่าน</label>
+          <label htmlFor="confirm-password">ยืนยันรหัสผ่านใหม่</label>
           <TextField
             type={isShowConfirmPassword ? 'text' : 'password'}
-            placeholder="กรุณาใส่รหัสผ่านอีกครั้ง"
+            placeholder="กรุณาใส่รหัสผ่านใหม่อีกครั้ง"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            onKeyDown={enterSignUp}
-            disabled={isSigningUp}
+            onKeyDown={enterResetPassword}
+            disabled={isResetting}
             slotProps={{
               input: {
                 endAdornment: isShowConfirmPassword ? (
@@ -100,30 +96,15 @@ export default function SignUpCard() {
           className="!normal-case"
           disabled={
             !email ||
-            password.length < 6 ||
-            confirmPassword.length < 6 ||
+            !password ||
+            !confirmPassword ||
             password !== confirmPassword ||
-            isSigningUp
+            isResetting
           }
-          onClick={() => signUp(email, password)}
+          onClick={() => confirmResetPassword(password)}
         >
-          สมัครสมาชิก
+          ยืนยัน
         </Button>
-
-        <div className="flex items-center justify-between gap-4">
-          <Link
-            href="/forgot-password"
-            className="text-right text-blue-600 text-sm underline"
-          >
-            ลืมรหัสผ่าน
-          </Link>
-          <Link
-            href="/sign-in"
-            className="text-right text-blue-600 text-sm underline"
-          >
-            เข้าสู่ระบบ
-          </Link>
-        </div>
       </div>
     </>
   );

@@ -6,6 +6,8 @@ import {
   signOut,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
+  checkActionCode,
+  confirmPasswordReset,
 } from 'firebase/auth';
 import app from './firebase';
 
@@ -39,6 +41,20 @@ export async function signout() {
 export async function forgotPassword(email: string) {
   await auth.authStateReady();
   await sendPasswordResetEmail(auth, email);
+}
+
+export async function resetPassword(oobCode: string, password: string) {
+  await auth.authStateReady();
+  await confirmPasswordReset(auth, oobCode, password);
+}
+
+export async function getEmail(oobCode: string) {
+  await auth.authStateReady();
+  const res = await checkActionCode(auth, oobCode);
+  if (res?.data?.email) {
+    return res?.data?.email;
+  }
+  throw new Error('Invalid oobCode');
 }
 
 export async function getCurrentUser() {

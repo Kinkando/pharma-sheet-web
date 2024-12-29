@@ -31,15 +31,15 @@ export function useSignUp() {
       }
       if (err.includes('invalid-email')) {
         severity = 'warning';
-        err = 'Email is invalid, please try again!';
+        err = 'อีเมลไม่ถูกต้อง กรุณาใส่อีเมลใหม่อีกครั้ง!';
       }
       if (err.includes('weak-password')) {
         severity = 'warning';
-        err = 'Password should be at least 6 characters';
+        err = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษรขึ้นไป+';
       }
       if (err.includes('email-already-in-use')) {
         severity = 'warning';
-        err = 'This email is already in use, please change your email!';
+        err = 'อีเมลนี้ถูกใช้งานแล้ว กรุณาใช้อีเมลอื่น!';
       }
       alert({ message: err, severity });
     } finally {

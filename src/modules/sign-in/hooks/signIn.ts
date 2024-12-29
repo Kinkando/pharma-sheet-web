@@ -32,11 +32,11 @@ export function useSignIn() {
       }
       if (err.includes('invalid-email')) {
         severity = 'warning';
-        err = 'Email is invalid, please try again!';
+        err = 'อีเมลไม่ถูกต้อง กรุณาใส่อีเมลใหม่อีกครั้ง!';
       }
       if (err.includes('invalid-login-credential')) {
         severity = 'warning';
-        err = 'Email or password is wrong, please try again!';
+        err = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง!';
       }
       alert({ message: err, severity });
     } finally {

@@ -17,6 +17,10 @@ const staticRoutes = [
     path: '/forgot-password',
     title: 'Forgot Password | PHARMA SHEET',
   },
+  {
+    path: '/reset-password',
+    title: 'Reset Password | PHARMA SHEET',
+  },
 ];
 
 export function DynamicTitle() {
