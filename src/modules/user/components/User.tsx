@@ -3,7 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useState, useContext, useEffect } from 'react';
 import { Box, MenuItem, Select, Tab, Tabs } from '@mui/material';
-import { LoadingScreen } from '@/components/ui';
+import { LoadingCircular } from '@/components/ui';
 import {
   GetWarehouseUsersResponse,
   User as UserModel,
@@ -104,8 +104,8 @@ export default function User() {
   );
 
   return (
-    <>
-      <LoadingScreen isLoading={isLoading} />
+    <main className="h-full relative">
+      <LoadingCircular isLoading={isLoading} blur />
 
       <main className="space-y-4 lg:p-6 p-4">
         <Select
@@ -166,6 +166,6 @@ export default function User() {
           </Box>
         )}
       </main>
-    </>
+    </main>
   );
 }
