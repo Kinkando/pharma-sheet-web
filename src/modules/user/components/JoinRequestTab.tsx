@@ -1,5 +1,5 @@
 import { Fragment, useEffect } from 'react';
-import { useJoinRequest } from '../hooks/joinRequest';
+import { useJoinRequest } from '@/modules/user/hooks/joinRequest';
 import { JoinRequestCard } from './JoinRequestCard';
 import { UserTabProps } from './User';
 import { WarehouseRole } from '@/core/@types';

@@ -23,8 +23,7 @@ export function useUserManagement(
   onFetchUsers: (result: GetWarehouseUsersResponse) => void,
 ) {
   const { alert } = useContext(GlobalContext);
-
-  const { push } = useRouter();
+  const { push, replace } = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
   const [warehouseUsers, setWarehouseUsers] = useState<WarehouseUser[]>([]);
@@ -38,6 +37,7 @@ export function useUserManagement(
   const fetchWarehouseUsers = async (warehouseID: string) => {
     setIsLoading(true);
     try {
+      repalceQueryParams();
       const result = await getWarehouseUsers(warehouseID, {
         page: 1,
         limit: 999,
@@ -116,6 +116,13 @@ export function useUserManagement(
       setIsLoading(false);
       throw error;
     }
+  };
+
+  const repalceQueryParams = () => {
+    const params = new URLSearchParams();
+    params.set('warehouseID', warehouseID);
+    params.set('tab', 'member');
+    replace(`/user?${params.toString()}`);
   };
 
   return {

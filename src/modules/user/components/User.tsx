@@ -1,5 +1,6 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import { useCallback, useState, useContext, useEffect } from 'react';
 import { Box, MenuItem, Select, Tab, Tabs } from '@mui/material';
 import { LoadingScreen } from '@/components/ui';
@@ -14,7 +15,6 @@ import { GlobalContext } from '@/core/context';
 import { getWarehouses } from '@/core/repository';
 import { UserManagementTab } from './UserManagementTab';
 import { JoinRequestTab } from './JoinRequestTab';
-import { useRouter, useSearchParams } from 'next/navigation';
 
 export type UserTabProps = {
   warehouse: Warehouse;
@@ -66,9 +66,14 @@ export default function User() {
     totalPending: 0,
   });
 
-  const { replace } = useRouter();
   const searchParam = useSearchParams();
   const warehouseID = searchParam.get('warehouseID');
+
+  const [currentTab, setCurrentTab] = useState(
+    searchParam.get('tab') === 'join-request' ? 1 : 0,
+  );
+  const handleChange = (_: React.SyntheticEvent, newTab: number) =>
+    setCurrentTab(newTab);
 
   useEffect(() => {
     fetchWarehouses();
@@ -93,17 +98,10 @@ export default function User() {
       );
       if (item) {
         setWarehouse({ ...item });
-        const params = new URLSearchParams();
-        params.set('warehouseID', warehouseID);
-        replace(`/user?${params.toString()}`);
       }
     },
-    [warehouses],
+    [warehouses, currentTab],
   );
-
-  const [currentTab, setCurrentTab] = useState(0);
-  const handleChange = (event: React.SyntheticEvent, newTab: number) =>
-    setCurrentTab(newTab);
 
   return (
     <>

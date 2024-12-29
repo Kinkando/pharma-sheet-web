@@ -1,3 +1,6 @@
+import { HttpStatusCode } from 'axios';
+import { useRouter } from 'next/navigation';
+import { useContext, useEffect, useState } from 'react';
 import {
   GetWarehouseUsersResponse,
   WarehouseUser,
@@ -5,14 +8,13 @@ import {
 } from '@/core/@types';
 import { GlobalContext } from '@/core/context';
 import { approveUser, getWarehouseUsers, rejectUser } from '@/core/repository';
-import { HttpStatusCode } from 'axios';
-import { useContext, useEffect, useState } from 'react';
 
 export function useJoinRequest(
   warehouseID: string,
   onFetchUsers: (result: GetWarehouseUsersResponse) => void,
 ) {
   const { alert } = useContext(GlobalContext);
+  const { replace } = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
   const [warehouseUsers, setWarehouseUsers] = useState<WarehouseUser[]>([]);
@@ -24,6 +26,7 @@ export function useJoinRequest(
   const fetchWarehouseUsers = async (warehouseID: string) => {
     setIsLoading(true);
     try {
+      repalceQueryParams();
       const result = await getWarehouseUsers(warehouseID, {
         page: 1,
         limit: 999,
@@ -72,6 +75,13 @@ export function useJoinRequest(
       setIsLoading(false);
       throw error;
     }
+  };
+
+  const repalceQueryParams = () => {
+    const params = new URLSearchParams();
+    params.set('warehouseID', warehouseID);
+    params.set('tab', 'join-request');
+    replace(`/user?${params.toString()}`);
   };
 
   return {

@@ -56,9 +56,9 @@ export function useMedicine(warehouseID: string | null) {
 
   const fetchMedicine = async (filter: FilterMedicine) => {
     try {
+      replaceQueryParams(filter);
       const { data } = await getMedicines(filter);
       setMedicines(data ?? []);
-      replaceQueryParams(filter);
     } catch (error) {
       alert({ message: `${error}`, severity: 'error' });
     }
