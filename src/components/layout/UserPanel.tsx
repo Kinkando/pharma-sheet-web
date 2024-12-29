@@ -1,4 +1,4 @@
-import { Dispatch, Fragment, SetStateAction, useRef, useState } from 'react';
+import { Fragment, useRef, useState } from 'react';
 import { Divider, IconButton } from '@mui/material';
 import {
   LockOutlined,
@@ -14,26 +14,17 @@ import { ChangePasswordModal } from './ChangePasswordModal';
 export type UserPanelProps = {
   user: User;
   width: number;
-  isOpen: boolean;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
-  openDrawer: (isOpen: boolean) => void;
   signOut: () => void;
 };
 
-export function UserPanel({
-  user,
-  width,
-  isOpen,
-  setIsOpen,
-  openDrawer,
-  signOut,
-}: UserPanelProps) {
+export function UserPanel({ user, width, signOut }: UserPanelProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
   const userPanel = useRef<HTMLDivElement>(null);
-  useClickOutside(userPanel, !isOpen || width < 1024, () => openDrawer(false), [
+  useClickOutside(userPanel, false, () => setIsOpen(false), [
     userPanel,
     isOpen,
     width,
-    openDrawer,
   ]);
 
   const [openModal, setOpenModal] = useState<
@@ -45,19 +36,28 @@ export function UserPanel({
       {
         name: 'ข้อมูลส่วนตัว',
         icon: <PersonOutline fontSize="small" />,
-        onClick: () => setOpenModal('profile'),
+        onClick: () => {
+          setOpenModal('profile');
+          setIsOpen(false);
+        },
       },
       {
         name: 'เปลี่ยนรหัสผ่าน',
         icon: <LockOutlined fontSize="small" />,
-        onClick: () => setOpenModal('change-password'),
+        onClick: () => {
+          setOpenModal('change-password');
+          setIsOpen(false);
+        },
       },
     ],
     [
       {
         name: 'ออกจากระบบ',
         icon: <LogoutOutlined fontSize="small" />,
-        onClick: signOut,
+        onClick: () => {
+          signOut();
+          setIsOpen(false);
+        },
       },
     ],
   ];
