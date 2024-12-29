@@ -7,6 +7,7 @@ import { DeleteUserModal } from './DeleteUserModal';
 import { UserManagementCard } from './UserManagementCard';
 import { UserTabProps } from './User';
 import { Add } from '@mui/icons-material';
+import { LeaveWarehouseModal } from './LeaveWarehouseModal';
 
 export function UserManagementTab({
   warehouse,
@@ -19,15 +20,16 @@ export function UserManagementTab({
     addWarehouseUser,
     editWarehouseUser,
     removeWarehouseUser,
+    leaveWarehouseUser,
   } = useUserManagement(warehouse.warehouseID);
 
   useEffect(() => {
     onLoading(isLoading);
   }, [isLoading, onLoading]);
 
-  const [openModal, setOpenModal] = useState<'closed' | 'add' | 'delete'>(
-    'closed',
-  );
+  const [openModal, setOpenModal] = useState<
+    'closed' | 'add' | 'delete' | 'leave'
+  >('closed');
   const [selectedWarehouseUser, setSelectedWarehouseUser] =
     useState<WarehouseUser>();
 
@@ -43,6 +45,7 @@ export function UserManagementTab({
         {warehouseUsers.map((warehouseUser) => (
           <Fragment key={warehouseUser.userID}>
             <UserManagementCard
+              self={warehouseUser.userID === user?.userID}
               user={warehouseUser}
               editable={
                 warehouse.role === WarehouseRole.ADMIN &&
@@ -52,6 +55,8 @@ export function UserManagementTab({
                 warehouse.role === WarehouseRole.ADMIN &&
                 warehouseUser.userID !== user?.userID
               }
+              leavable={warehouseUser.userID === user?.userID}
+              onLeave={() => setOpenModal('leave')}
               onDelete={() => selectUser(warehouseUser, 'delete')}
               onEdit={(warehouseUser) =>
                 editWarehouseUser({
@@ -91,6 +96,15 @@ export function UserManagementTab({
           warehouseUser={selectedWarehouseUser}
         />
       )}
+
+      <LeaveWarehouseModal
+        isOpen={openModal === 'leave'}
+        onClose={() => setOpenModal('closed')}
+        onLeave={() => leaveWarehouseUser(warehouse.warehouseID)}
+        user={user}
+        warehouse={warehouse}
+        warehouseUsers={warehouseUsers}
+      />
 
       <div className="absolute bottom-4 lg:bottom-10 right-4 lg:right-10">
         <Fab

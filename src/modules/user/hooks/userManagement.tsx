@@ -1,3 +1,5 @@
+import { HttpStatusCode } from 'axios';
+import { useRouter } from 'next/navigation';
 import { useContext, useEffect, useState } from 'react';
 import {
   CreateWarehouseUser,
@@ -11,12 +13,14 @@ import {
   createWarehouseUser,
   deleteWarehouseUser,
   getWarehouseUsers,
+  leaveWarehouse,
   updateWarehouseUser,
 } from '@/core/repository';
-import { HttpStatusCode } from 'axios';
 
 export function useUserManagement(warehouseID: string) {
   const { alert } = useContext(GlobalContext);
+
+  const { push } = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
   const [warehouseUsers, setWarehouseUsers] = useState<WarehouseUser[]>([]);
@@ -93,11 +97,28 @@ export function useUserManagement(warehouseID: string) {
     }
   };
 
+  const leaveWarehouseUser = async (warehouseID: string) => {
+    setIsLoading(true);
+    try {
+      const { status } = await leaveWarehouse(warehouseID);
+      if (status !== HttpStatusCode.NoContent) {
+        throw Error('Leave warehouse failed, please try again!');
+      }
+      push(`/`);
+      setIsLoading(false);
+    } catch (error) {
+      alert({ message: `${error}`, severity: 'error' });
+      setIsLoading(false);
+      throw error;
+    }
+  };
+
   return {
     isLoading,
     warehouseUsers,
     addWarehouseUser,
     editWarehouseUser,
     removeWarehouseUser,
+    leaveWarehouseUser,
   };
 }

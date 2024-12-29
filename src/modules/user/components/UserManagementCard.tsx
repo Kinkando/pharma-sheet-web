@@ -1,24 +1,30 @@
 import { WarehouseUser } from '@/core/@types';
-import { Delete } from '@mui/icons-material';
+import { Delete, ExitToApp } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import { useState } from 'react';
 import { RoleMenu } from './RoleMenu';
 import { UserAvatar } from '@/components/ui';
 
 export type UserManagementCardProps = {
+  self?: boolean;
   user: WarehouseUser;
   editable?: boolean;
   deletable?: boolean;
+  leavable?: boolean;
   onDelete: (user: WarehouseUser) => void;
   onEdit: (user: WarehouseUser) => void;
+  onLeave: () => void;
 };
 
 export function UserManagementCard({
+  self,
   user,
   editable,
   deletable,
+  leavable,
   onDelete,
   onEdit,
+  onLeave,
 }: UserManagementCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -28,10 +34,10 @@ export function UserManagementCard({
 
         <div className="overflow-hidden text-ellipsis whitespace-nowrap">
           <div className="font-bold overflow-hidden text-ellipsis whitespace-nowrap">
-            {user.displayName}
+            {user.displayName} {user.displayName && self ? '(คุณ)' : ''}
           </div>
           <div className="text-sm text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">
-            {user.email}
+            {user.email} {!user.displayName && self ? '(คุณ)' : ''}
           </div>
         </div>
       </div>
@@ -55,15 +61,26 @@ export function UserManagementCard({
           onClick={(role) => onEdit({ ...user, role })}
         />
 
-        <Button
-          variant="outlined"
-          color="error"
-          disabled={!deletable}
-          onClick={() => onDelete(user)}
-          className="w-full sm:w-fit"
-        >
-          <Delete />
-        </Button>
+        {!leavable ? (
+          <Button
+            variant="outlined"
+            color="error"
+            disabled={!deletable}
+            onClick={() => onDelete(user)}
+            className="w-full sm:w-fit"
+          >
+            <Delete />
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            color="error"
+            onClick={onLeave}
+            className="w-full sm:w-fit"
+          >
+            <ExitToApp />
+          </Button>
+        )}
       </div>
     </div>
   );

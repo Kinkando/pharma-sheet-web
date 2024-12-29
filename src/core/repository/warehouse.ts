@@ -142,6 +142,13 @@ export async function joinWarehouse(warehouseID: string) {
   });
 }
 
+export async function leaveWarehouse(warehouseID: string) {
+  return await client({
+    url: `/warehouse/${warehouseID}/user/leave`,
+    method: 'POST',
+  });
+}
+
 export async function approveUser(warehouseID: string, userID: string) {
   return await client({
     url: `/warehouse/${warehouseID}/user/${userID}/approve`,

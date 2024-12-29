@@ -9,6 +9,12 @@ export enum WarehouseUserStatus {
   APPROVED = 'APPROVED',
 }
 
+export enum WarehouseGroup {
+  MY_WAREHOUSE = 'MY_WAREHOUSE',
+  OTHER_WAREHOUSE = 'OTHER_WAREHOUSE',
+  OTHER_WAREHOUSE_PENDING = 'OTHER_WAREHOUSE_PENDING',
+}
+
 export interface Warehouse {
   warehouseID: string;
   warehouseName: string;
@@ -27,7 +33,7 @@ export interface FilterWarehouseDetail {
   limit: number;
   page: number;
   search?: string;
-  myWarehouse: boolean;
+  group?: WarehouseGroup;
 }
 
 export interface FilterWarehouseUser {
@@ -45,6 +51,7 @@ export interface WarehouseDetail {
   lockerDetails: LockerDetail[];
   totalMedicine: number;
   totalLocker: number;
+  users: WarehouseUser[];
 }
 
 export interface LockerDetail {

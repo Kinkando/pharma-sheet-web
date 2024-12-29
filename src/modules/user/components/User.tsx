@@ -13,6 +13,7 @@ import { GlobalContext } from '@/core/context';
 import { getWarehouses } from '@/core/repository';
 import { UserManagementTab } from './UserManagementTab';
 import { JoinRequestTab } from './JoinRequestTab';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export type UserTabProps = {
   warehouse: Warehouse;
@@ -47,26 +48,36 @@ export default function User() {
   const [isLoading, setIsLoading] = useState(false);
   const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
 
+  const { replace } = useRouter();
+  const searchParam = useSearchParams();
+  const warehouseID = searchParam.get('warehouseID');
+
   useEffect(() => {
     fetchWarehouses();
   }, []);
 
-  const fetchWarehouses = async () => {
+  const fetchWarehouses = useCallback(async () => {
     try {
       const data = await getWarehouses();
       setWarehouses(data ?? []);
+      if (warehouseID) {
+        changeWarehouse(warehouseID, data);
+      }
     } catch (error) {
       alert({ message: `${error}`, severity: 'error' });
     }
-  };
+  }, [warehouseID]);
 
   const changeWarehouse = useCallback(
-    (warehouseID: string) => {
-      const item = warehouses.find(
+    (warehouseID: string, _warehouses?: Warehouse[]) => {
+      const item = (_warehouses || warehouses).find(
         (warehouse) => warehouse.warehouseID === warehouseID,
       );
       if (item) {
         setWarehouse({ ...item });
+        const params = new URLSearchParams();
+        params.set('warehouseID', warehouseID);
+        replace(`/user?${params.toString()}`);
       }
     },
     [warehouses],

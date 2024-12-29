@@ -1,4 +1,4 @@
-import { WarehouseDetail } from '@/core/@types';
+import { WarehouseDetail, WarehouseGroup } from '@/core/@types';
 import { GlobalContext } from '@/core/context';
 import {
   createWarehouse,
@@ -29,7 +29,7 @@ export function useWarehouseDetail(search?: string) {
         limit: 999,
         page: 1,
         search: search || undefined,
-        myWarehouse: true,
+        group: WarehouseGroup.MY_WAREHOUSE,
       });
       setWarehouseDetails(data?.data ?? []);
     } catch (error) {
