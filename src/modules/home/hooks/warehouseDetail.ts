@@ -28,7 +28,7 @@ export function useWarehouseDetail(search?: string) {
       const data = await getWarehouseDetails({
         limit: 999,
         page: 1,
-        search: search || undefined,
+        search: search?.trim() || undefined,
         group: WarehouseGroup.MY_WAREHOUSE,
       });
       setWarehouseDetails(data?.data ?? []);

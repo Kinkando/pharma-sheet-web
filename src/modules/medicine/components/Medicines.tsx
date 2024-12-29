@@ -90,7 +90,7 @@ export default function Medicines() {
       limit: 999,
       page: 1,
       warehouseID: warehouse.warehouseID,
-      search: search || undefined,
+      search: search.trim() || undefined,
       sort: `${sortBy} ${order}`,
     });
     setSyncMedicineMetadata(undefined);

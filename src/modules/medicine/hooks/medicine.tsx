@@ -56,6 +56,7 @@ export function useMedicine(warehouseID: string | null) {
 
   const fetchMedicine = async (filter: FilterMedicine) => {
     try {
+      filter.search = filter.search?.trim() || undefined;
       replaceQueryParams(filter);
       const { data } = await getMedicines(filter);
       setMedicines(data ?? []);
@@ -117,10 +118,8 @@ export function useMedicine(warehouseID: string | null) {
   }: FilterMedicine) => {
     const params = new URLSearchParams();
     params.set('warehouseID', warehouseID);
-    if (search?.trim()) {
-      params.set('search', search.trim());
-    } else {
-      params.delete('search');
+    if (search) {
+      params.set('search', search);
     }
     if (sort) {
       const [sortBy, order] = sort.split(' ');

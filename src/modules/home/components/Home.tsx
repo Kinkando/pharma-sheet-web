@@ -31,8 +31,8 @@ export default function Home() {
     useState<WarehouseDetail>();
 
   useEffect(() => {
-    if (search) {
-      replace(`/?search=${search}`);
+    if (search.trim()) {
+      replace(`/?search=${search.trim()}`);
     } else {
       replace('/');
     }
