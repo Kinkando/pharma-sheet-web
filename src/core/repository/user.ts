@@ -17,15 +17,22 @@ export async function getUser() {
   throw Error(error);
 }
 
-export async function updateUser(displayName: string, profileImage?: File) {
-  const formData = new FormData();
-  formData.append('displayName', displayName);
+export async function updateUser(
+  displayName: string,
+  profileImage?: File | null,
+) {
+  const data = new FormData();
+  data.append('displayName', displayName);
   if (profileImage) {
-    formData.append('profileImage', profileImage);
+    data.append('profileImage', profileImage);
   }
   const { status, error } = await client({
     url: '/user',
-    method: 'GET',
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    data,
   });
   if (status !== HttpStatusCode.NoContent) {
     throw Error(error);

@@ -2,8 +2,19 @@ import { Avatar } from '@mui/material';
 import Image from 'next/image';
 import { useMemo } from 'react';
 
+const toSize = (size: number) => {
+  return {
+    width: size,
+    minWidth: size,
+    maxWidth: size,
+    height: size,
+    minHeight: size,
+    maxHeight: size,
+  };
+};
+
 export type UserAvatarProps = {
-  size?: 'small' | 'medium' | 'large';
+  size?: 'small' | 'medium' | 'large' | 'extra-large';
   imageURL?: string;
   avatar?: boolean;
   email: string;
@@ -12,12 +23,14 @@ export type UserAvatarProps = {
 export function UserAvatar({ size, imageURL, avatar, email }: UserAvatarProps) {
   const imageSize = useMemo(() => {
     switch (size) {
+      case 'extra-large':
+        return toSize(150);
       case 'large':
-        return { width: 52, height: 52 };
+        return toSize(52);
       case 'small':
-        return { width: 24, height: 24 };
+        return toSize(24);
     }
-    return { width: 36, height: 36 };
+    return toSize(36);
   }, [size]);
 
   if (imageURL) {
@@ -30,6 +43,7 @@ export function UserAvatar({ size, imageURL, avatar, email }: UserAvatarProps) {
         height={imageSize.height}
         unoptimized
         className="rounded-full"
+        style={{ ...imageSize }}
       />
     );
   } else if (avatar) {

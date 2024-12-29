@@ -8,6 +8,9 @@ import {
   sendPasswordResetEmail,
   checkActionCode,
   confirmPasswordReset,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  updatePassword,
 } from 'firebase/auth';
 import app from './firebase';
 
@@ -36,6 +39,20 @@ export async function signUpWithEmailPassword(email: string, password: string) {
 export async function signout() {
   await auth.authStateReady();
   await signOut(auth);
+}
+
+export async function changePassword(
+  email: string,
+  oldPassword: string,
+  newPassword: string,
+) {
+  await auth.authStateReady();
+  if (auth.currentUser) {
+    const credential = EmailAuthProvider.credential(email, oldPassword);
+    await reauthenticateWithCredential(auth.currentUser, credential);
+    await updatePassword(auth.currentUser, newPassword);
+  }
+  return false;
 }
 
 export async function forgotPassword(email: string) {
