@@ -16,3 +16,18 @@ export async function getUser() {
   }
   throw Error(error);
 }
+
+export async function updateUser(displayName: string, profileImage?: File) {
+  const formData = new FormData();
+  formData.append('displayName', displayName);
+  if (profileImage) {
+    formData.append('profileImage', profileImage);
+  }
+  const { status, error } = await client({
+    url: '/user',
+    method: 'GET',
+  });
+  if (status !== HttpStatusCode.NoContent) {
+    throw Error(error);
+  }
+}
