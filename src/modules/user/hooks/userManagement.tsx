@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from 'react';
 import {
   CreateWarehouseUser,
   DeleteWarehouseUser,
+  GetWarehouseUsersResponse,
   UpdateWarehouseUser,
   WarehouseUser,
   WarehouseUserStatus,
@@ -17,7 +18,10 @@ import {
   updateWarehouseUser,
 } from '@/core/repository';
 
-export function useUserManagement(warehouseID: string) {
+export function useUserManagement(
+  warehouseID: string,
+  onFetchUsers: (result: GetWarehouseUsersResponse) => void,
+) {
   const { alert } = useContext(GlobalContext);
 
   const { push } = useRouter();
@@ -34,12 +38,13 @@ export function useUserManagement(warehouseID: string) {
   const fetchWarehouseUsers = async (warehouseID: string) => {
     setIsLoading(true);
     try {
-      const { data } = await getWarehouseUsers(warehouseID, {
+      const result = await getWarehouseUsers(warehouseID, {
         page: 1,
         limit: 999,
         status: WarehouseUserStatus.APPROVED,
       });
-      setWarehouseUsers(data ?? []);
+      setWarehouseUsers(result.data ?? []);
+      onFetchUsers(result);
     } catch (error) {
       alert({ message: `${error}`, severity: 'error' });
     } finally {

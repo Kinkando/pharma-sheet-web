@@ -5,6 +5,7 @@ import {
   DeleteWarehouseUser,
   FilterWarehouseDetail,
   FilterWarehouseUser,
+  GetWarehouseUsersResponse,
   SyncMedicineMetadata,
   UpdateWarehouseUser,
   Warehouse,
@@ -40,7 +41,7 @@ export async function getWarehouseUsers(
   warehouseID: string,
   filter: FilterWarehouseUser,
 ) {
-  const { data, status, error } = await client<Data<WarehouseUser>>({
+  const { data, status, error } = await client<GetWarehouseUsersResponse>({
     url: `/warehouse/${warehouseID}/user`,
     method: 'GET',
     params: filter,

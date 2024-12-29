@@ -13,6 +13,7 @@ export function UserManagementTab({
   warehouse,
   user,
   onLoading,
+  onFetchUsers,
 }: UserTabProps) {
   const {
     isLoading,
@@ -21,7 +22,7 @@ export function UserManagementTab({
     editWarehouseUser,
     removeWarehouseUser,
     leaveWarehouseUser,
-  } = useUserManagement(warehouse.warehouseID);
+  } = useUserManagement(warehouse.warehouseID, onFetchUsers);
 
   useEffect(() => {
     onLoading(isLoading);

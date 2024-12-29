@@ -1,3 +1,5 @@
+import { Data } from './pagination';
+
 export enum WarehouseRole {
   ADMIN = 'ADMIN',
   EDITOR = 'EDITOR',
@@ -67,6 +69,11 @@ export interface WarehouseUser {
   displayName?: string;
   role: WarehouseRole;
 }
+
+export type GetWarehouseUsersResponse = Data<WarehouseUser> & {
+  totalApproved: number;
+  totalPending: number;
+};
 
 export interface CreateWarehouseUser {
   warehouseID: string;

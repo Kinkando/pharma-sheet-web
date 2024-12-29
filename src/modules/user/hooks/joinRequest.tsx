@@ -1,10 +1,17 @@
-import { WarehouseUser, WarehouseUserStatus } from '@/core/@types';
+import {
+  GetWarehouseUsersResponse,
+  WarehouseUser,
+  WarehouseUserStatus,
+} from '@/core/@types';
 import { GlobalContext } from '@/core/context';
 import { approveUser, getWarehouseUsers, rejectUser } from '@/core/repository';
 import { HttpStatusCode } from 'axios';
 import { useContext, useEffect, useState } from 'react';
 
-export function useJoinRequest(warehouseID: string) {
+export function useJoinRequest(
+  warehouseID: string,
+  onFetchUsers: (result: GetWarehouseUsersResponse) => void,
+) {
   const { alert } = useContext(GlobalContext);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -17,12 +24,13 @@ export function useJoinRequest(warehouseID: string) {
   const fetchWarehouseUsers = async (warehouseID: string) => {
     setIsLoading(true);
     try {
-      const { data } = await getWarehouseUsers(warehouseID, {
+      const result = await getWarehouseUsers(warehouseID, {
         page: 1,
         limit: 999,
         status: WarehouseUserStatus.PENDING,
       });
-      setWarehouseUsers(data ?? []);
+      setWarehouseUsers(result.data ?? []);
+      onFetchUsers(result);
     } catch (error) {
       alert({ message: `${error}`, severity: 'error' });
     } finally {

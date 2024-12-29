@@ -4,6 +4,7 @@ import { useCallback, useState, useContext, useEffect } from 'react';
 import { Box, MenuItem, Select, Tab, Tabs } from '@mui/material';
 import { LoadingScreen } from '@/components/ui';
 import {
+  GetWarehouseUsersResponse,
   User as UserModel,
   Warehouse,
   Warehouse as WarehouseModel,
@@ -19,6 +20,7 @@ export type UserTabProps = {
   warehouse: Warehouse;
   user: UserModel;
   onLoading: (isLoading: boolean) => void;
+  onFetchUsers: (result: GetWarehouseUsersResponse) => void;
 };
 
 const label = {
@@ -28,11 +30,15 @@ const label = {
 
 const tabs = [
   {
-    label: 'สมาชิก',
+    id: 'member',
+    label: ({ totalApproved }: GetWarehouseUsersResponse) =>
+      'สมาชิก' + (totalApproved ? ` (${totalApproved})` : ''),
     component: (props: UserTabProps) => <UserManagementTab {...props} />,
   },
   {
-    label: 'คำขอเข้าร่วม',
+    id: 'join-request',
+    label: ({ totalPending }: GetWarehouseUsersResponse) =>
+      'คำขอเข้าร่วม' + (totalPending ? ` (${totalPending})` : ''),
     component: (props: UserTabProps) => <JoinRequestTab {...props} />,
   },
 ];
@@ -47,6 +53,18 @@ export default function User() {
   const { user, alert } = useContext(GlobalContext);
   const [isLoading, setIsLoading] = useState(false);
   const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
+  const [result, setResult] = useState<GetWarehouseUsersResponse>({
+    data: [],
+    metadata: {
+      limit: 0,
+      offset: 0,
+      totalItem: 0,
+      totalPage: 0,
+      currentPage: 0,
+    },
+    totalApproved: 0,
+    totalPending: 0,
+  });
 
   const { replace } = useRouter();
   const searchParam = useSearchParams();
@@ -118,10 +136,10 @@ export default function User() {
               >
                 {tabs.map((tab, index) => (
                   <Tab
-                    key={tab.label}
+                    key={tab.id}
                     id={`${label.id}-${index}`}
                     aria-controls={`${label['aria-controls']}-${index}`}
-                    label={tab.label}
+                    label={tab.label(result)}
                     className="!normal-case"
                   />
                 ))}
@@ -131,7 +149,7 @@ export default function User() {
             {user &&
               tabs.map((tab, index) => (
                 <div
-                  key={tab.label}
+                  key={tab.id}
                   role="tabpanel"
                   hidden={currentTab !== index}
                   id={`${label['aria-controls']}-${index}`}
@@ -139,7 +157,12 @@ export default function User() {
                   className="space-y-4 py-4"
                 >
                   {index === currentTab &&
-                    tab.component({ user, warehouse, onLoading: setIsLoading })}
+                    tab.component({
+                      user,
+                      warehouse,
+                      onLoading: setIsLoading,
+                      onFetchUsers: setResult,
+                    })}
                 </div>
               ))}
           </Box>

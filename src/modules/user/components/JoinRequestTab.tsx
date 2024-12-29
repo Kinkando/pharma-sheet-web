@@ -5,9 +5,14 @@ import { UserTabProps } from './User';
 import { WarehouseRole } from '@/core/@types';
 import { Divider } from '@mui/material';
 
-export function JoinRequestTab({ warehouse, onLoading }: UserTabProps) {
+export function JoinRequestTab({
+  warehouse,
+  onLoading,
+  onFetchUsers,
+}: UserTabProps) {
   const { isLoading, approve, reject, warehouseUsers } = useJoinRequest(
     warehouse.warehouseID,
+    onFetchUsers,
   );
 
   useEffect(() => {
