@@ -1,7 +1,7 @@
 import React, { JSX, useContext, useMemo, useState } from 'react';
 import { GlobalContext } from '@/core/context';
 import { Backdrop } from '@mui/material';
-import { Group, Home, Medication } from '@mui/icons-material';
+import { Group, Home, Medication, Warehouse } from '@mui/icons-material';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
 
@@ -28,6 +28,12 @@ export const routers: Router[] = [
     icon: <Medication />,
     name: 'ข้อมูลยา',
     path: '/medicine',
+  },
+  {
+    title: 'Warehouse | PHARMA SHEET',
+    icon: <Warehouse />,
+    name: 'ศูนย์สุขภาพชุมชน',
+    path: '/warehouse',
   },
   {
     title: 'User | PHARMA SHEET',
