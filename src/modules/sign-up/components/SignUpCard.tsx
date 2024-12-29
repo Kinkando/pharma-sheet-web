@@ -30,7 +30,7 @@ export default function SignUpCard() {
     <>
       <LoadingScreen isLoading={isSigningUp} />
       <div className="flex flex-col gap-4 max-w-96 rounded-lg p-4 bg-white w-full">
-        <h1 className="text-2xl font-semibold text-center mb-2">Sign Up</h1>
+        <h1 className="text-2xl font-semibold text-center mb-2">สมัครสมาชิก</h1>
         <div className="flex flex-col gap-1">
           <label htmlFor="email">อีเมล</label>
           <TextField
@@ -107,7 +107,7 @@ export default function SignUpCard() {
           }
           onClick={() => signUp(email, password)}
         >
-          สมัครสมาชิก
+          ยืนยัน
         </Button>
 
         <div className="flex items-center justify-between gap-4">

@@ -17,7 +17,7 @@ export default function SignInCard() {
     <>
       <LoadingScreen isLoading={isSigningIn} />
       <div className="flex flex-col gap-4 max-w-96 rounded-lg p-4 bg-white w-full">
-        <h1 className="text-2xl font-semibold text-center mb-2">Sign In</h1>
+        <h1 className="text-2xl font-semibold text-center mb-2">เข้าสู่ระบบ</h1>
         <div className="flex flex-col gap-1">
           <label htmlFor="email">อีเมล</label>
           <TextField
@@ -66,7 +66,7 @@ export default function SignInCard() {
           disabled={!email || !password || isSigningIn}
           onClick={() => signInEmailPassword(email, password)}
         >
-          เข้าสู่ระบบ
+          ยืนยัน
         </Button>
 
         <div className="flex items-center justify-between gap-4">

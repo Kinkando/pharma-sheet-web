@@ -260,7 +260,7 @@ export function MedicineModal({
           onClick={onClose}
           disabled={isLoading}
         >
-          Cancel
+          ยกเลิก
         </Button>
         <Button
           variant="contained"
@@ -271,7 +271,7 @@ export function MedicineModal({
           {isLoading && (
             <CircularProgress size={16} className="mr-2 !text-white" />
           )}
-          Submit
+          ยืนยัน
         </Button>
       </DialogActions>
     </Dialog>

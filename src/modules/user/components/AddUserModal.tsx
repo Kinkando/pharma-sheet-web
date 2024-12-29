@@ -60,7 +60,7 @@ export function AddUserModal({ isOpen, onClose, onCreate }: AddUserModalProps) {
       <DialogTitle>
         <div className="flex items-center justify-between gap-4 overflow-hidden w-full">
           <div className="text-ellipsis whitespace-nowrap overflow-hidden w-full">
-            Add User
+            เพิ่มผู้ใช้งาน
           </div>
           <IconButton
             aria-label="close"
@@ -114,7 +114,7 @@ export function AddUserModal({ isOpen, onClose, onCreate }: AddUserModalProps) {
           onClick={onClose}
           disabled={isLoading}
         >
-          Cancel
+          ยกเลิก
         </Button>
         <Button
           variant="contained"
@@ -125,7 +125,7 @@ export function AddUserModal({ isOpen, onClose, onCreate }: AddUserModalProps) {
           {isLoading && (
             <CircularProgress size={16} className="mr-2 !text-white" />
           )}
-          Add
+          ยืนยัน
         </Button>
       </DialogActions>
     </Dialog>

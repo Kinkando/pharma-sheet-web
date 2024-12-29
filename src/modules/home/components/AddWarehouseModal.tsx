@@ -88,7 +88,7 @@ export function AddWarehouseModal({
           onClick={onClose}
           disabled={isLoading}
         >
-          Cancel
+          ยกเลิก
         </Button>
         <Button
           variant="contained"
@@ -99,7 +99,7 @@ export function AddWarehouseModal({
           {isLoading && (
             <CircularProgress size={16} className="mr-2 !text-white" />
           )}
-          Add
+          ยืนยัน
         </Button>
       </DialogActions>
     </Dialog>

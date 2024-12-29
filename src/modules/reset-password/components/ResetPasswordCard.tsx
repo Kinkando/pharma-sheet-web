@@ -31,7 +31,7 @@ export default function ResetPasswordCard() {
       <LoadingScreen isLoading={isResetting || !email} />
       <div className="flex flex-col gap-4 max-w-96 rounded-lg p-4 bg-white w-full">
         <h1 className="text-2xl font-semibold text-center mb-2">
-          Reset Password
+          ตั้งรหัสผ่านใหม่
         </h1>
         <div className="flex flex-col gap-1">
           <label htmlFor="email">อีเมล</label>

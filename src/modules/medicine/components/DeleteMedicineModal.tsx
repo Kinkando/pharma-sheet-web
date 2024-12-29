@@ -37,7 +37,7 @@ export function DeleteMedicineModal({
       <DialogTitle>
         <div className="flex items-center justify-between gap-4 overflow-hidden w-full">
           <div className="text-ellipsis whitespace-nowrap overflow-hidden w-full">
-            Delete Medicine
+            ลบข้อมูลยา
           </div>
           <IconButton
             aria-label="close"
@@ -53,7 +53,7 @@ export function DeleteMedicineModal({
       </DialogTitle>
       <Divider />
       <DialogContent>
-        Are you sure to delete medicine{' '}
+        คุณต้องการลบข้อมูลยา
         <span className="text-red-500">{medicine.description}</span>?
       </DialogContent>
 
@@ -65,7 +65,7 @@ export function DeleteMedicineModal({
           onClick={onClose}
           disabled={isDeleting}
         >
-          Cancel
+          ยกเลิก
         </Button>
         <Button
           variant="contained"
@@ -76,7 +76,7 @@ export function DeleteMedicineModal({
           {isDeleting && (
             <CircularProgress size={16} className="mr-2 !text-white" />
           )}
-          Delete
+          ลบ
         </Button>
       </DialogActions>
     </Dialog>

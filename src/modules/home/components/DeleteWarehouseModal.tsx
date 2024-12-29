@@ -42,7 +42,7 @@ export function DeleteWarehouseModal({
       <DialogTitle>
         <div className="flex items-center justify-between gap-4 overflow-hidden w-full">
           <div className="text-ellipsis whitespace-nowrap overflow-hidden w-full">
-            Delete Warehouse
+            ลบข้อมูลศูนย์สุขภาพชุมชน
           </div>
           <IconButton
             aria-label="close"
@@ -58,7 +58,7 @@ export function DeleteWarehouseModal({
       </DialogTitle>
       <Divider />
       <DialogContent>
-        Are you sure to delete warehouse{' '}
+        คุณต้องการลบข้อมูลศูนย์สุขภาพชุมชน{' '}
         <span className="text-red-500">{warehouseDetail.warehouseName}</span>?
       </DialogContent>
 
@@ -70,7 +70,7 @@ export function DeleteWarehouseModal({
           onClick={onClose}
           disabled={isDeleting}
         >
-          Cancel
+          ยกเลิก
         </Button>
         <Button
           variant="contained"
@@ -81,7 +81,7 @@ export function DeleteWarehouseModal({
           {isDeleting && (
             <CircularProgress size={16} className="mr-2 !text-white" />
           )}
-          Delete
+          ลบ
         </Button>
       </DialogActions>
     </Dialog>

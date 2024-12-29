@@ -42,7 +42,7 @@ export function DeleteUserModal({
       <DialogTitle>
         <div className="flex items-center justify-between gap-4 overflow-hidden w-full">
           <div className="text-ellipsis whitespace-nowrap overflow-hidden w-full">
-            Delete User
+            ลบผู้ใช้งาน
           </div>
           <IconButton
             aria-label="close"
@@ -58,7 +58,7 @@ export function DeleteUserModal({
       </DialogTitle>
       <Divider />
       <DialogContent>
-        Are you sure to delete user{' '}
+        คุณต้องการลบผู้ใช้งาน{' '}
         <span className="text-red-500">{warehouseUser.email}</span>?
       </DialogContent>
 
@@ -70,7 +70,7 @@ export function DeleteUserModal({
           onClick={onClose}
           disabled={isDeleting}
         >
-          Cancel
+          ยกเลิก
         </Button>
         <Button
           variant="contained"
@@ -81,7 +81,7 @@ export function DeleteUserModal({
           {isDeleting && (
             <CircularProgress size={16} className="mr-2 !text-white" />
           )}
-          Delete
+          ลบ
         </Button>
       </DialogActions>
     </Dialog>
