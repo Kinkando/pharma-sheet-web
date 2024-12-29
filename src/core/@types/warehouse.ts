@@ -77,3 +77,12 @@ export interface DeleteWarehouseUser {
   warehouseID: string;
   userID: string;
 }
+
+export interface SyncMedicineMetadata {
+  title: string;
+  sheetName: string;
+  totalMedicine: number;
+  totalNewMedicine: number;
+  totalUpdatedMedicine: number;
+  totalSkippedMedicine: number;
+}

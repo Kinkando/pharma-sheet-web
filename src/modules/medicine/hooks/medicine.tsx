@@ -4,10 +4,16 @@ import {
   FilterMedicine,
   Medicine,
   OrderSequence,
+  SyncMedicineMetadata,
   Warehouse,
 } from '@/core/@types';
 import { GlobalContext } from '@/core/context';
-import { getMedicines, getWarehouses, syncMedicine } from '@/core/repository';
+import {
+  getMedicines,
+  getSyncMedicineMetadata,
+  getWarehouses,
+  syncMedicine,
+} from '@/core/repository';
 import { HttpStatusCode } from 'axios';
 
 export function useMedicine(warehouseID: string | null) {
@@ -16,6 +22,8 @@ export function useMedicine(warehouseID: string | null) {
   const [warehouse, setWarehouse] = useState<Warehouse>();
   const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
   const [medicines, setMedicines] = useState<Medicine[]>([]);
+  const [syncMedicineMetadata, setSyncMedicineMetadata] =
+    useState<SyncMedicineMetadata>();
   const { replace } = useRouter();
 
   useEffect(() => {
@@ -56,11 +64,30 @@ export function useMedicine(warehouseID: string | null) {
     }
   };
 
+  const fetchSyncMedicineMetadata = async (
+    warehouseID: string,
+    url: string,
+  ) => {
+    try {
+      const data = await getSyncMedicineMetadata(warehouseID, url);
+      setSyncMedicineMetadata(data);
+    } catch (error) {
+      alert({ message: `${error}`, severity: 'error' });
+    }
+  };
+
   const syncGoogleSheet = async (warehouseID: string, link: string) => {
     try {
       const { status } = await syncMedicine(warehouseID, link);
-      if (status !== HttpStatusCode.NoContent) {
-        throw new Error('ซิงค์ข้อมูลยาไม่สำเร็จ');
+      switch (status) {
+        case HttpStatusCode.NotFound:
+          throw new Error('ไม่พบข้อมูลใน Google Sheet');
+        case HttpStatusCode.BadRequest:
+          throw new Error('ข้อมูลใน Google Sheet ไม่ถูกต้อง');
+        case HttpStatusCode.InternalServerError:
+          throw new Error('เกิดข้อผิดพลาดในการซิงค์ข้อมูล');
+        case HttpStatusCode.Conflict:
+          throw new Error('มีข้อมูลที่ซิงค์ซ้ำกัน');
       }
       alert({ message: 'ซิงค์ข้อมูลยาสำเร็จ', severity: 'success' });
     } catch (error) {
@@ -96,6 +123,9 @@ export function useMedicine(warehouseID: string | null) {
     fetchMedicine,
     warehouse,
     setWarehouse,
+    syncMedicineMetadata,
+    setSyncMedicineMetadata,
+    fetchSyncMedicineMetadata,
     syncGoogleSheet,
   };
 }

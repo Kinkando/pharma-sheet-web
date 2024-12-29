@@ -5,6 +5,7 @@ import {
   DeleteWarehouseUser,
   FilterWarehouseDetail,
   FilterWarehouseUser,
+  SyncMedicineMetadata,
   UpdateWarehouseUser,
   Warehouse,
   WarehouseDetail,
@@ -153,6 +154,21 @@ export async function rejectUser(warehouseID: string, userID: string) {
     url: `/warehouse/${warehouseID}/user/${userID}/reject`,
     method: 'PATCH',
   });
+}
+
+export async function getSyncMedicineMetadata(
+  warehouseID: string,
+  url: string,
+) {
+  const { data, status, error } = await client<SyncMedicineMetadata>({
+    url: `/warehouse/${warehouseID}/sync/medicine`,
+    method: 'GET',
+    params: { url },
+  });
+  if (status === HttpStatusCode.Ok) {
+    return data;
+  }
+  throw Error(error);
 }
 
 export async function syncMedicine(warehouseID: string, url: string) {

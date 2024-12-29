@@ -33,6 +33,9 @@ export default function Medicines() {
     fetchMedicine,
     warehouse,
     setWarehouse,
+    syncMedicineMetadata,
+    setSyncMedicineMetadata,
+    fetchSyncMedicineMetadata,
     syncGoogleSheet,
   } = useMedicine(searchParam.get('warehouseID'));
   const [selectedMedicine, setSelectedMedicine] = useState<Medicine>();
@@ -168,6 +171,7 @@ export default function Medicines() {
           fetchData(),
         ]);
         setOpenModal('closed');
+        setSyncMedicineMetadata(undefined);
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
@@ -257,10 +261,14 @@ export default function Medicines() {
 
       {warehouse && (
         <SyncMedicineModal
-          isOpen={openModal === 'sync'}
-          onClose={() => setOpenModal('closed')}
           link={warehouse.sheetURL ?? ''}
           lastSync={warehouse.latestSyncedAt?.toLocaleString() ?? ''}
+          metadata={syncMedicineMetadata}
+          isOpen={openModal === 'sync'}
+          onClose={() => setOpenModal('closed')}
+          onModifiy={(url: string) =>
+            fetchSyncMedicineMetadata(warehouse.warehouseID, url)
+          }
           onSync={syncMedicine}
         />
       )}
