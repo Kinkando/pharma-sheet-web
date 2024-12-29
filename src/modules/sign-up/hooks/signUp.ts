@@ -35,7 +35,7 @@ export function useSignUp() {
       }
       if (err.includes('weak-password')) {
         severity = 'warning';
-        err = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษรขึ้นไป+';
+        err = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษรขึ้นไป!';
       }
       if (err.includes('email-already-in-use')) {
         severity = 'warning';

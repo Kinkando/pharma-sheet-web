@@ -12,8 +12,8 @@ import {
   TextField,
 } from '@mui/material';
 import { User } from '@/core/@types';
-import { useProfile } from '@/core/hooks/profile';
-import { UserAvatar } from '../ui';
+import { useProfile } from '@/core/hooks';
+import { UserAvatar } from '@/components/ui';
 
 export type ProfileModalProps = {
   user: User;
@@ -115,7 +115,8 @@ export function ProfileModal({ user, isOpen, onClose }: ProfileModalProps) {
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               onKeyDown={(e) =>
-                e.key === 'Enter' && onUpdateProfile(displayName, profileImage)
+                e.key === 'Enter' &&
+                onUpdateProfile(displayName, profileImage, onClose)
               }
               disabled={isLoading}
             />
@@ -137,7 +138,7 @@ export function ProfileModal({ user, isOpen, onClose }: ProfileModalProps) {
           <Button
             variant="contained"
             color="info"
-            onClick={() => onUpdateProfile(displayName, profileImage)}
+            onClick={() => onUpdateProfile(displayName, profileImage, onClose)}
             disabled={isLoading}
           >
             {isLoading && (

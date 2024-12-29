@@ -130,6 +130,7 @@ export function UserPanel({ user, width, signOut }: UserPanelProps) {
       />
 
       <ChangePasswordModal
+        email={user.email}
         isOpen={openModal === 'change-password'}
         onClose={() => setOpenModal('closed')}
       />

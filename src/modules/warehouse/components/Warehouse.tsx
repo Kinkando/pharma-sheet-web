@@ -6,7 +6,7 @@ import { DelaySearchBox } from '@/components/ui';
 import { Box, Tab, Tabs } from '@mui/material';
 import { WarehouseDetail, WarehouseGroup } from '@/core/@types';
 import { WarehouseCard } from './WarehouseCard';
-import { useWarehouse } from '../hooks/warehouse';
+import { useWarehouse } from '@/modules/warehouse/hooks/warehouse';
 import { WarehouseModal } from './WarehouseModal';
 import { LoadingCircular } from '@/components/ui/LoadingCircular';
 
