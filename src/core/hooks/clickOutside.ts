@@ -2,16 +2,16 @@ import { DependencyList, RefObject, useEffect } from 'react';
 
 export function useClickOutside(
   ref: RefObject<HTMLElement | null>,
-  skip: boolean,
+  ref2: RefObject<HTMLElement | null>,
   onClickOutside: () => void,
   deps?: DependencyList,
 ) {
   useEffect(() => {
-    if (skip) {
-      return;
-    }
     const handleOutSideClick = (event: MouseEvent) => {
-      if (!ref.current?.contains(event.target as HTMLElement)) {
+      if (
+        !ref.current?.contains(event.target as HTMLElement) &&
+        !ref2.current?.contains(event.target as HTMLElement)
+      ) {
         onClickOutside();
       }
     };

@@ -47,11 +47,11 @@ export default function Topbar({
         />
       </div>
 
-      <Link href="/" className="w-full">
-        <h1 className="font-bold text-xl text-black line-clamp-1">
+      <h1 className="font-bold text-xl text-black line-clamp-1 w-full">
+        <Link href="/" className="w-fit">
           บ้านเลขที่ยา
-        </h1>
-      </Link>
+        </Link>
+      </h1>
 
       <UserPanel user={user} width={width} signOut={signOut} />
     </div>

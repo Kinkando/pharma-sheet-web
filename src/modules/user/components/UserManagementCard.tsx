@@ -1,7 +1,7 @@
 import { WarehouseUser } from '@/core/@types';
 import { Delete, ExitToApp } from '@mui/icons-material';
 import { Button } from '@mui/material';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { RoleMenu } from './RoleMenu';
 import { UserAvatar } from '@/components/ui';
 
@@ -27,6 +27,7 @@ export function UserManagementCard({
   onLeave,
 }: UserManagementCardProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   return (
     <div className="px-4 py-2 sm:flex sm:items-center sm:justify-between sm:gap-4 space-y-4 sm:space-y-0">
       <div className="flex items-center gap-4 w-full overflow-hidden">
@@ -48,12 +49,14 @@ export function UserManagementCard({
           color="primary"
           className="w-full sm:w-fit"
           onClick={() => setIsOpen(true)}
+          ref={buttonRef}
         >
           <p className="whitespace-nowrap w-24 normal-case overflow-hidden text-ellipsis">
             Role: {user.role}
           </p>
         </Button>
         <RoleMenu
+          butttonRef={buttonRef}
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
           role={user.role}

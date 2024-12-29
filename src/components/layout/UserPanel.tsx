@@ -21,7 +21,8 @@ export function UserPanel({ user, width, signOut }: UserPanelProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const userPanel = useRef<HTMLDivElement>(null);
-  useClickOutside(userPanel, false, () => setIsOpen(false), [
+  const userAvatar = useRef<HTMLDivElement>(null);
+  useClickOutside(userPanel, userAvatar, () => setIsOpen(false), [
     userPanel,
     isOpen,
     width,
@@ -64,13 +65,19 @@ export function UserPanel({ user, width, signOut }: UserPanelProps) {
 
   return (
     <>
-      <IconButton
-        color="inherit"
-        size="small"
-        onClick={() => setIsOpen((open) => !open)}
-      >
-        <UserAvatar size="medium" imageURL={user.imageURL} email={user.email} />
-      </IconButton>
+      <div ref={userAvatar}>
+        <IconButton
+          color="inherit"
+          size="small"
+          onClick={() => setIsOpen((open) => !open)}
+        >
+          <UserAvatar
+            size="medium"
+            imageURL={user.imageURL}
+            email={user.email}
+          />
+        </IconButton>
+      </div>
 
       <div
         className={

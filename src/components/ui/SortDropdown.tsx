@@ -32,7 +32,8 @@ export function SortDropdown({
   const [isOpen, setIsOpen] = useState(false);
 
   const ref = useRef<HTMLDivElement>(null);
-  useClickOutside(ref, false, () => setIsOpen(false), [ref, isOpen]);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  useClickOutside(ref, buttonRef, () => setIsOpen(false), [ref, isOpen]);
   return (
     <div className="relative">
       <Button
@@ -41,6 +42,7 @@ export function SortDropdown({
         size="large"
         onClick={() => setIsOpen(true)}
         {...buttonProps}
+        ref={buttonRef}
       >
         <p className="whitespace-nowrap w-24 normal-case overflow-hidden text-ellipsis">
           การเรียงลำดับ

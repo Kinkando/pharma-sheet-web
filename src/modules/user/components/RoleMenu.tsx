@@ -1,4 +1,4 @@
-import { Fragment, useRef } from 'react';
+import { Fragment, RefObject, useRef } from 'react';
 import { Close } from '@mui/icons-material';
 import { Divider, IconButton } from '@mui/material';
 import { WarehouseRole } from '@/core/@types';
@@ -20,6 +20,7 @@ const roles = [
 ];
 
 export type RoleMenuProps = {
+  butttonRef: RefObject<HTMLButtonElement | null>;
   isOpen: boolean;
   onClose: () => void;
   role: WarehouseRole;
@@ -28,6 +29,7 @@ export type RoleMenuProps = {
 };
 
 export function RoleMenu({
+  butttonRef,
   isOpen,
   onClose,
   role,
@@ -35,7 +37,7 @@ export function RoleMenu({
   onClick,
 }: RoleMenuProps) {
   const ref = useRef<HTMLDivElement>(null);
-  useClickOutside(ref, false, onClose, [ref, isOpen]);
+  useClickOutside(ref, butttonRef, onClose, [ref, isOpen]);
   return (
     <div
       className={
