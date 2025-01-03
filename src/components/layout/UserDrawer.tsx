@@ -1,9 +1,9 @@
-import Link from 'next/link';
 import { Logout, Menu } from '@mui/icons-material';
 import { Divider, Drawer, IconButton } from '@mui/material';
 import { UserAvatar } from '@/components/ui';
-import { Router } from './BaseLayout';
 import { User } from '@/core/@types';
+import { Router } from './BaseLayout';
+import { RouterLink } from './RouterLink';
 
 export type UserDrawerProps = {
   user: User;
@@ -55,21 +55,12 @@ export function UserDrawer({
         <div className="p-4 flex flex-col justify-between h-full">
           <main>
             {routers.map((router) => (
-              <Link
+              <RouterLink
                 key={router.name}
-                href={router.path}
+                router={router}
+                pathname={pathname}
                 onClick={() => openDrawer(false)}
-              >
-                <div
-                  className={
-                    'px-4 py-2 my-2 flex items-center gap-2 hover:bg-blue-200 ease-in duration-150 transition-colors rounded-lg cursor-pointer' +
-                    (pathname === router.path ? ' bg-blue-200' : '')
-                  }
-                >
-                  {router.icon}
-                  <span>{router.name}</span>
-                </div>
-              </Link>
+              />
             ))}
           </main>
           <div
