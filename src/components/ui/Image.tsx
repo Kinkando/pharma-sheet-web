@@ -1,7 +1,7 @@
-import { useScreen } from '@/core/hooks';
-import { CircularProgress } from '@mui/material';
 import Img from 'next/image';
 import { useMemo, useState } from 'react';
+import { CircularProgress } from '@mui/material';
+import { useScreen } from '@/core/hooks';
 
 const gap = 0.3;
 
@@ -19,6 +19,10 @@ export function Image({
 }: ImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const { width } = useScreen();
+
+  if (useLoader && !loaderSize) {
+    throw Error('loaderSize and responsiveSize are required');
+  }
 
   const size = useMemo(() => {
     const size = !loaderSize ? undefined : loaderSize - gap * loaderSize;
