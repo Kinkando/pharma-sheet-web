@@ -44,6 +44,8 @@ export function UserAvatar({ size, imageURL, avatar, email }: UserAvatarProps) {
         unoptimized
         className="rounded-full"
         style={{ ...imageSize }}
+        loaderSize={imageSize.width}
+        useLoader
       />
     );
   } else if (avatar) {

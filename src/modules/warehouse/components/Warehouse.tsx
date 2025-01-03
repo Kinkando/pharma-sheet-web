@@ -38,7 +38,7 @@ export default function Warehouse() {
   const [search, setSearch] = useState(searchParam.get('search') ?? '');
 
   const [currentTab, setCurrentTab] = useState(
-    searchParam.get('tab') === 'pending' ? 1 : 0,
+    searchParam.get('group') === 'pending' ? 1 : 0,
   );
   const handleChange = (_: React.SyntheticEvent, newTab: number) =>
     setCurrentTab(newTab);

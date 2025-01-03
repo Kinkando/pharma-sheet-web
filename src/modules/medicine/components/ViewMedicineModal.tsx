@@ -93,6 +93,10 @@ export function ViewMedicineModal({
                 width={400}
                 height={400}
                 unoptimized
+                useLoader
+                loaderSize={400}
+                responsiveSize={510}
+                style={{ height: 400 }}
               />
             </div>
           )}

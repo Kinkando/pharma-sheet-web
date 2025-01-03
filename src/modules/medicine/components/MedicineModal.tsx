@@ -240,6 +240,10 @@ export function MedicineModal({
                   width={400}
                   height={400}
                   unoptimized
+                  useLoader
+                  loaderSize={400}
+                  responsiveSize={510}
+                  style={{ height: 400 }}
                 />
                 <div className="absolute right-2 top-2 bg-red-500 rounded-full">
                   <IconButton onClick={removeFile} disabled={isLoading}>
