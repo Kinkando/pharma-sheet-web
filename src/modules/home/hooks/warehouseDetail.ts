@@ -1,3 +1,6 @@
+import { HttpStatusCode } from 'axios';
+import { useRouter } from 'next/navigation';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { WarehouseDetail, WarehouseGroup } from '@/core/@types';
 import { GlobalContext } from '@/core/context';
 import {
@@ -9,11 +12,10 @@ import {
   updateWarehouse,
   updateWarehouseLocker,
 } from '@/core/repository';
-import { HttpStatusCode } from 'axios';
-import { useCallback, useContext, useEffect, useState } from 'react';
 
 export function useWarehouseDetail(search?: string) {
   const { alert } = useContext(GlobalContext);
+  const { replace } = useRouter();
   const [warehouseDetails, setWarehouseDetails] = useState<WarehouseDetail[]>(
     [],
   );
@@ -143,6 +145,17 @@ export function useWarehouseDetail(search?: string) {
     [],
   );
 
+  const replaceQueryParams = (search: string) => {
+    const params = new URLSearchParams(location.search);
+    if (search?.trim()) {
+      params.set('search', search.trim());
+    } else {
+      params.delete('search');
+    }
+    const query = params.toString() ? `?${params.toString()}` : '';
+    replace(`/${query}`);
+  };
+
   return {
     isLoading,
     warehouseDetails,
@@ -152,5 +165,6 @@ export function useWarehouseDetail(search?: string) {
     addLocker,
     editLocker,
     removeLocker,
+    replaceQueryParams,
   };
 }

@@ -66,7 +66,9 @@ export function GlobalContextProvider({
         />
         {isReady && (
           <div>
-            <BaseLayout pathname={pathname}>{children}</BaseLayout>
+            <BaseLayout pathname={pathname} params={params}>
+              {children}
+            </BaseLayout>
           </div>
         )}
       </GlobalContext.Provider>

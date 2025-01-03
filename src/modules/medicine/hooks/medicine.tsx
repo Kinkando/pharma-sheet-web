@@ -116,10 +116,12 @@ export function useMedicine(warehouseID: string | null) {
     search,
     sort,
   }: FilterMedicine) => {
-    const params = new URLSearchParams();
+    const params = new URLSearchParams(location.search);
     params.set('warehouseID', warehouseID);
     if (search) {
       params.set('search', search);
+    } else {
+      params.delete('search');
     }
     if (sort) {
       const [sortBy, order] = sort.split(' ');

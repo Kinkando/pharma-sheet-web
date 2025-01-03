@@ -20,7 +20,7 @@ export function useWarehouse() {
   const fetchWarehouseDetails = useCallback(
     async (group: WarehouseGroup, search: string) => {
       try {
-        repalceQueryParams(group, search);
+        replaceQueryParams(group, search);
         setIsLoading(true);
         const { data } = await getWarehouseDetails({
           limit: 999,
@@ -68,10 +68,12 @@ export function useWarehouse() {
     [],
   );
 
-  const repalceQueryParams = (group: WarehouseGroup, search: string) => {
-    const params = new URLSearchParams();
+  const replaceQueryParams = (group: WarehouseGroup, search: string) => {
+    const params = new URLSearchParams(location.search);
     if (search?.trim()) {
       params.set('search', search.trim());
+    } else {
+      params.delete('search');
     }
     params.set(
       'group',

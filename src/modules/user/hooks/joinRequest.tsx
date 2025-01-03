@@ -26,7 +26,7 @@ export function useJoinRequest(
   const fetchWarehouseUsers = async (warehouseID: string) => {
     setIsLoading(true);
     try {
-      repalceQueryParams();
+      replaceQueryParams();
       const result = await getWarehouseUsers(warehouseID, {
         page: 1,
         limit: 999,
@@ -77,8 +77,8 @@ export function useJoinRequest(
     }
   };
 
-  const repalceQueryParams = () => {
-    const params = new URLSearchParams();
+  const replaceQueryParams = () => {
+    const params = new URLSearchParams(location.search);
     params.set('warehouseID', warehouseID);
     params.set('tab', 'join-request');
     replace(`/user?${params.toString()}`);

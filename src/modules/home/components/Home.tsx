@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useWarehouseDetail } from '@/modules/home/hooks/warehouseDetail';
 import { WarehouseCard } from './WarehouseCard';
@@ -14,7 +14,6 @@ import { AddWarehouseModal } from './AddWarehouseModal';
 import { EditWarehouseModal } from './EditWarehouseModal';
 
 export default function Home() {
-  const { replace } = useRouter();
   const searchParam = useSearchParams();
   const [search, setSearch] = useState(searchParam.get('search') || '');
   const {
@@ -26,16 +25,13 @@ export default function Home() {
     addLocker,
     editLocker,
     removeLocker,
+    replaceQueryParams,
   } = useWarehouseDetail(search);
   const [selectedWarehouseDetail, setSelectedWarehouseDetail] =
     useState<WarehouseDetail>();
 
   useEffect(() => {
-    if (search.trim()) {
-      replace(`/?search=${search.trim()}`);
-    } else {
-      replace('/');
-    }
+    replaceQueryParams(search);
   }, [search]);
 
   const [openModal, setOpenModal] = useState<

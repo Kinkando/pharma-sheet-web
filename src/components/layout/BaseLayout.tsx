@@ -1,7 +1,8 @@
+import { ReadonlyURLSearchParams } from 'next/navigation';
 import React, { JSX, useContext, useMemo, useState } from 'react';
-import { GlobalContext } from '@/core/context';
-import { Backdrop } from '@mui/material';
 import { Group, Home, Medication, Warehouse } from '@mui/icons-material';
+import { Backdrop } from '@mui/material';
+import { GlobalContext } from '@/core/context';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
 
@@ -56,9 +57,11 @@ export const routers: Router[] = [
 export default function BaseLayout({
   children,
   pathname,
+  params,
 }: Readonly<{
   children: React.ReactNode;
   pathname: string;
+  readonly params: ReadonlyURLSearchParams;
 }>) {
   const { user } = useContext(GlobalContext);
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -66,6 +69,25 @@ export default function BaseLayout({
     () => !skipBaseLayoutPaths.includes(pathname),
     [pathname],
   );
+
+  const routersInfo = useMemo<Router[]>(() => {
+    const searchParams = new URLSearchParams();
+    const queryKeys = ['warehouseID'];
+    for (const queryKey of queryKeys) {
+      const query = params.get(queryKey);
+      if (query) {
+        searchParams.set(queryKey, query);
+      }
+    }
+    const queryParams = searchParams.toString()
+      ? `?${searchParams.toString()}`
+      : '';
+    return routers.map((router) => ({
+      ...router,
+      path: `${router.path}${queryParams}`,
+    }));
+  }, [routers, params]);
+
   if (!isUseBaseLayout || !user) {
     return children;
   }
@@ -74,7 +96,7 @@ export default function BaseLayout({
       <Topbar
         pathname={pathname}
         user={user}
-        routers={routers}
+        routers={routersInfo}
         onOpenDrawer={setOpenDrawer}
         isOpenDrawer={openDrawer}
       />
@@ -85,7 +107,7 @@ export default function BaseLayout({
       ></Backdrop>
       <main className="w-full h-[calc(100vh-60px)] lg:flex">
         <section className="bg-white text-black max-w-64 min-w-64 w-64 hidden lg:block overflow-y-auto hide-scrollbar z-20">
-          <Sidebar pathname={pathname} routers={routers} />
+          <Sidebar pathname={pathname} routers={routersInfo} />
         </section>
         <main className="bg-white text-black lg:bg-gray-100 w-full h-full lg:p-6">
           <div className="bg-white lg:rounded-lg h-full overflow-auto">
