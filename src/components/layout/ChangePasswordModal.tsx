@@ -110,7 +110,7 @@ export function ChangePasswordModal({
             <div key={input.label} className="flex flex-col gap-1">
               <label htmlFor="email">{input.label}</label>
               <TextField
-                placeholder="กรุณาใส่รหัสผ่านเดิมของคุณ"
+                placeholder={input.placeholder}
                 value={input.value}
                 onChange={(e) => input.onChange(e.target.value)}
                 onKeyDown={(e) =>

@@ -9,6 +9,7 @@ import { WarehouseCard } from './WarehouseCard';
 import { useWarehouse } from '@/modules/warehouse/hooks/warehouse';
 import { WarehouseModal } from './WarehouseModal';
 import { LoadingCircular } from '@/components/ui/LoadingCircular';
+import Image from 'next/image';
 
 export type WarehouseTabProps = {
   search: string;
@@ -88,6 +89,19 @@ export default function Warehouse() {
               ))}
             </Tabs>
           </Box>
+
+          {!warehouseDetails.length && (
+            <div className="w-full flex flex-col items-center justify-center my-2">
+              <Image
+                src="/images/empty.png"
+                width={200}
+                height={200}
+                alt="Empty Box"
+                unoptimized
+              />
+              <p>ไม่พบข้อมูลศูนย์สุขภาพชุมชน</p>
+            </div>
+          )}
 
           {tabs.map((tab, index) => (
             <div
