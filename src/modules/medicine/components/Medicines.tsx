@@ -1,7 +1,7 @@
 'use client';
 
 import { HttpStatusCode } from 'axios';
-import Image from 'next/image';
+import { Image } from '@/components/ui';
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { MenuItem, Select } from '@mui/material';

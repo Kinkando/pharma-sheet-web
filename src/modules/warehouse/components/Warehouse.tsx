@@ -9,7 +9,7 @@ import { WarehouseCard } from './WarehouseCard';
 import { useWarehouse } from '@/modules/warehouse/hooks/warehouse';
 import { WarehouseModal } from './WarehouseModal';
 import { LoadingCircular } from '@/components/ui/LoadingCircular';
-import Image from 'next/image';
+import { Image } from '@/components/ui';
 
 export type WarehouseTabProps = {
   search: string;

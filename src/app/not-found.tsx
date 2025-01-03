@@ -1,5 +1,7 @@
+'use client';
+
+import { Image } from '@/components/ui';
 import { Button } from '@mui/material';
-import Image from 'next/image';
 import Link from 'next/link';
 
 export default function NotFoundPage() {

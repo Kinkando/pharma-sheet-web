@@ -1,7 +1,7 @@
 'use client';
 
 import { useContext } from 'react';
-import Image from 'next/image';
+import { Image } from '@/components/ui';
 import { GlobalContext } from '@/core/context';
 import ResetPasswordCard from '@/modules/reset-password/components/ResetPasswordCard';
 

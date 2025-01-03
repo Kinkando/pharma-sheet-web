@@ -15,7 +15,7 @@ import {
   SelectChangeEvent,
   TextField,
 } from '@mui/material';
-import Image from 'next/image';
+import { Image } from '@/components/ui';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 
 const initMedicine: Medicine = {

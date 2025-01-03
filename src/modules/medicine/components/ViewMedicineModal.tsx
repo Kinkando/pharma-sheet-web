@@ -7,7 +7,7 @@ import {
   Divider,
   IconButton,
 } from '@mui/material';
-import Image from 'next/image';
+import { Image } from '@/components/ui';
 import { useMemo } from 'react';
 
 export type ViewMedicineModalProps = {
