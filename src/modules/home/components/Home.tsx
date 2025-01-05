@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useWarehouseDetail } from '@/modules/home/hooks/warehouseDetail';
 import { WarehouseCard } from './WarehouseCard';
 import { DelaySearchBox, LoadingScreen } from '@/components/ui';
-import { Fab } from '@mui/material';
+import { Button } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { WarehouseDetail, WarehouseRole } from '@/core/@types';
 import { ViewWarehouseModal } from './ViewWarehouseModal';
@@ -62,7 +62,19 @@ export default function Home() {
       <LoadingScreen isLoading={isLoading} />
 
       <main className="space-y-4 lg:p-6 p-4">
-        <DelaySearchBox onSearch={setSearch} />
+        <div className="flex items-center gap-2">
+          <DelaySearchBox onSearch={setSearch} />
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            onClick={() => setOpenModal('add')}
+            className="w-fit whitespace-nowrap max-[440px]:w-full h-14"
+          >
+            <Add />
+            เพิ่มศูนย์
+          </Button>
+        </div>
 
         {warehouseDetails && (
           <div className="grid grid-cols-[repeat(auto-fill,_minmax(15rem,_1fr))] gap-4">
@@ -81,17 +93,6 @@ export default function Home() {
             ))}
           </div>
         )}
-
-        <div className="absolute bottom-4 lg:bottom-10 right-4 lg:right-10">
-          <Fab
-            color="primary"
-            aria-label="add"
-            size="small"
-            onClick={() => setOpenModal('add')}
-          >
-            <Add />
-          </Fab>
-        </div>
 
         <AddWarehouseModal
           isOpen={openModal === 'add'}
