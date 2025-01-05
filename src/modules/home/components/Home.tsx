@@ -69,10 +69,10 @@ export default function Home() {
             color="primary"
             size="large"
             onClick={() => setOpenModal('add')}
-            className="w-fit whitespace-nowrap max-[440px]:w-full h-14"
+            className="w-fit whitespace-nowrap h-14"
           >
             <Add />
-            เพิ่มศูนย์
+            <span className="hidden lg:block">เพิ่มศูนย์</span>
           </Button>
         </div>
 
