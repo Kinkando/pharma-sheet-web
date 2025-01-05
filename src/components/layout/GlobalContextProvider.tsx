@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { Kanit } from 'next/font/google';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import { Alert } from '@/core/@types';
@@ -9,9 +10,14 @@ import { useUser } from '@/core/hooks';
 import { Alert as AlertComponent } from '@/components/ui';
 import BaseLayout, { unauthorizedPaths } from '@/components/layout/BaseLayout';
 
+const comicNeue = Kanit({
+  weight: ['300', '400', '700'],
+  subsets: ['latin'],
+});
+
 const theme = createTheme({
   typography: {
-    fontFamily: '"TH-Chara", sans-serif', // Set your custom font as default for MUI
+    fontFamily: 'Kanit, sans-serif', // Set your custom font as default for MUI
   },
 });
 
@@ -65,7 +71,7 @@ export function GlobalContextProvider({
           onDismiss={() => setAlert((alert) => ({ ...alert, isOpen: false }))}
         />
         {isReady && (
-          <div>
+          <div className={`${comicNeue.className}`}>
             <BaseLayout pathname={pathname} params={params}>
               {children}
             </BaseLayout>
