@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { PublicEnvScript } from 'next-runtime-env';
 import NextTopLoader from 'nextjs-toploader';
 import { GlobalContextProvider } from '@/components/layout/GlobalContextProvider';
 import { DynamicTitle } from '@/components/layout/Title';
@@ -20,7 +19,6 @@ export default function RootLayout({
       <head>
         <title>Pharma Sheet</title>
         <DynamicTitle />
-        <PublicEnvScript />
       </head>
       <body>
         <NextTopLoader
