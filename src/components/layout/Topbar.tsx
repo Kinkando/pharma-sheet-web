@@ -35,7 +35,7 @@ export default function Topbar({
   }, [onOpenDrawer, width]);
 
   return (
-    <div className="flex items-center justify-between px-8 py-4 h-[60px] bg-blue-300 gap-6">
+    <div className="flex items-center justify-between px-2 lg:px-8 py-4 h-[60px] bg-blue-300 gap-1 lg:gap-6">
       <div className="lg:hidden">
         <UserDrawer
           isOpen={isOpenDrawer}
