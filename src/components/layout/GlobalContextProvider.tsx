@@ -11,7 +11,7 @@ import { Alert as AlertComponent } from '@/components/ui';
 import BaseLayout, { unauthorizedPaths } from '@/components/layout/BaseLayout';
 
 const comicNeue = Kanit({
-  weight: ['300', '400', '700'],
+  weight: ['300'],
   subsets: ['latin'],
 });
 
