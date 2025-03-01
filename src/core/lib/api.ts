@@ -21,7 +21,7 @@ interface AxiosRequestCustomConfig extends AxiosRequestConfig {
 
 const instance = axios.create({
   baseURL: config.apiHost,
-  timeout: 1000 * 30,
+  timeout: 1000 * 60 * 2, // 2 minutes
   headers: {
     'Content-Type': 'application/json',
   },

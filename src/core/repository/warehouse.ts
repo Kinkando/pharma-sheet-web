@@ -177,7 +177,6 @@ export async function getSyncMedicineMetadata(
 ) {
   return await client<SyncMedicineMetadata>({
     url: `/warehouse/${warehouseID}/sync/medicine`,
-    timeout: 1000 * 60 * 2, // 2 minutes
     method: 'GET',
     params: { url },
   });
@@ -186,7 +185,6 @@ export async function getSyncMedicineMetadata(
 export async function syncMedicine(warehouseID: string, url: string) {
   return await client({
     url: `/warehouse/${warehouseID}/sync/medicine`,
-    timeout: 1000 * 60 * 2, // 2 minutes
     method: 'PUT',
     data: { url },
   });
