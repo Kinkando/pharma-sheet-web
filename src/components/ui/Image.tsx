@@ -1,3 +1,5 @@
+'use client';
+
 import Img from 'next/image';
 import { useMemo, useState } from 'react';
 import { CircularProgress } from '@mui/material';

@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useWarehouseDetail } from '@/modules/home/hooks/warehouseDetail';
 import { WarehouseCard } from './WarehouseCard';
 import { DelaySearchBox, LoadingScreen } from '@/components/ui';
@@ -63,7 +63,9 @@ export default function Home() {
 
       <main className="space-y-4 lg:p-6 p-4">
         <div className="flex items-center gap-2">
-          <DelaySearchBox onSearch={setSearch} />
+          <Suspense fallback={null}>
+            <DelaySearchBox onSearch={setSearch} />
+          </Suspense>
           <Button
             variant="contained"
             color="primary"

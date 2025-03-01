@@ -1,3 +1,5 @@
+'use client';
+
 import { Avatar } from '@mui/material';
 import { Image } from '@/components/ui';
 import { useMemo } from 'react';

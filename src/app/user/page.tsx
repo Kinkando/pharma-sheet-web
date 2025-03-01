@@ -1,5 +1,10 @@
+import { Suspense } from 'react';
 import User from '@/modules/user/components/User';
 
 export default function UserPage() {
-  return <User />;
+  return (
+    <Suspense fallback={null}>
+      <User />
+    </Suspense>
+  );
 }

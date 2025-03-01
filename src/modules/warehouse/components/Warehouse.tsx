@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { DelaySearchBox } from '@/components/ui';
 import { Box, Tab, Tabs } from '@mui/material';
 import { WarehouseDetail, WarehouseGroup } from '@/core/@types';
@@ -69,7 +69,9 @@ export default function Warehouse() {
       <LoadingCircular isLoading={isLoading} blur />
 
       <main className="space-y-4 lg:p-6 p-4">
-        <DelaySearchBox onSearch={setSearch} />
+        <Suspense fallback={null}>
+          <DelaySearchBox onSearch={setSearch} />
+        </Suspense>
 
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

@@ -1,5 +1,10 @@
+import { Suspense } from 'react';
 import Warehouse from '@/modules/warehouse/components/Warehouse';
 
 export default function WarehousePage() {
-  return <Warehouse />;
+  return (
+    <Suspense fallback={null}>
+      <Warehouse />
+    </Suspense>
+  );
 }

@@ -1,3 +1,5 @@
+'use client';
+
 import { useRef, useState } from 'react';
 import { OrderOption, OrderSequence, SortOption } from '@/core/@types';
 import { useClickOutside } from '@/core/hooks';

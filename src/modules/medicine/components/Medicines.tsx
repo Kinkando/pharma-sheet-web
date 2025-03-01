@@ -3,7 +3,7 @@
 import { HttpStatusCode } from 'axios';
 import { Image } from '@/components/ui';
 import { useSearchParams } from 'next/navigation';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { Suspense, useCallback, useContext, useEffect, useState } from 'react';
 import { MenuItem, Select } from '@mui/material';
 import { DelaySearchBox } from '@/components/ui';
 import { Medicine, OrderSequence, WarehouseRole } from '@/core/@types';
@@ -214,7 +214,11 @@ export default function Medicines() {
           />
         )}
 
-        {warehouse?.warehouseID && <DelaySearchBox onSearch={setSearch} />}
+        {warehouse?.warehouseID && (
+          <Suspense fallback={null}>
+            <DelaySearchBox onSearch={setSearch} />
+          </Suspense>
+        )}
 
         {warehouse?.warehouseID && !medicines.length && (
           <div className="w-full flex flex-col items-center justify-center">

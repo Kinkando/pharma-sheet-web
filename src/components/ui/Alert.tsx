@@ -1,3 +1,5 @@
+'use client';
+
 import { Severity } from '@/core/@types';
 import { Close } from '@mui/icons-material';
 import { Slide, Alert as AlertMaterial, IconButton, Fade } from '@mui/material';

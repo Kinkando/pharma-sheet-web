@@ -3,6 +3,7 @@ import './globals.css';
 import NextTopLoader from 'nextjs-toploader';
 import { GlobalContextProvider } from '@/components/layout/GlobalContextProvider';
 import { DynamicTitle } from '@/components/layout/Title';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   description:
@@ -32,7 +33,9 @@ export default function RootLayout({
           speed={200}
           shadow="0 0 10px #49A569,0 0 5px #49A569"
         />
-        <GlobalContextProvider>{children}</GlobalContextProvider>
+        <Suspense fallback={null}>
+          <GlobalContextProvider>{children}</GlobalContextProvider>
+        </Suspense>
       </body>
     </html>
   );
