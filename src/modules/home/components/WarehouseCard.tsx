@@ -1,5 +1,5 @@
 import { useRouter } from 'next/navigation';
-import { WarehouseDetail } from '@/core/@types';
+import { resolveWarehouseName, WarehouseDetail } from '@/core/@types';
 import { Delete, Edit, Visibility } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 
@@ -29,15 +29,10 @@ export function WarehouseCard({
       }
     >
       <h1 className="font-bold line-clamp-3 text-lg mb-1">
-        {warehouseDetail.warehouseName}
+        {resolveWarehouseName(warehouseDetail)}
       </h1>
-      <div className="flex items-end justify-between">
+      <div className="flex items-center justify-between">
         <section className="space-y-2">
-          <div className="flex items-center gap-4">
-            <span>
-              จำนวนตู้: <span>{warehouseDetail.totalLocker}</span>
-            </span>
-          </div>
           <div className="flex items-center gap-4">
             <span>
               จำนวนยา: <span>{warehouseDetail.totalMedicine}</span>

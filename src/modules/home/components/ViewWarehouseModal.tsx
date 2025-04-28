@@ -40,17 +40,14 @@ export function ViewWarehouseModal({
       <Divider />
       <DialogContent>
         <div className="space-y-2">
-          <p className="font-bold">{warehouseDetail.warehouseName}</p>
-          <ul>
-            {warehouseDetail.lockerDetails?.map((locker) => (
-              <li key={locker.lockerID}>
-                <span>
-                  - ตู้ <span>{locker.lockerName}</span>{' '}
-                  {`(${locker.totalMedicine})`}
-                </span>
-              </li>
-            ))}
-          </ul>
+          <p className="font-bold">
+            ไอดี:{' '}
+            <span className="font-normal">{warehouseDetail.warehouseID}</span>
+          </p>
+          <p className="font-bold">
+            ชื่อ:{' '}
+            <span className="font-normal">{warehouseDetail.warehouseName}</span>
+          </p>
         </div>
       </DialogContent>
     </Dialog>

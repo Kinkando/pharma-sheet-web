@@ -1,5 +1,14 @@
 import { HttpStatusCode } from 'axios';
-import { Data, FilterMedicine, Medicine } from '@/core/@types';
+import {
+  AddBlisterDateRequest,
+  CreateMedicineBrandRequest,
+  CreateMedicineHouseRequest,
+  Data,
+  FilterMedicine,
+  Medicine,
+  UpdateMedicineBrandRequest,
+  UpdateMedicineHouseRequest,
+} from '@/core/@types';
 import { client } from '@/core/lib';
 
 export async function getMedicines(filter: FilterMedicine) {
@@ -77,6 +86,131 @@ export async function updateMedicine(
 export async function deleteMedicine(medicineID: string) {
   const { status, error } = await client({
     url: `/medicine/${medicineID}`,
+    method: 'DELETE',
+  });
+  if (status !== HttpStatusCode.NoContent) {
+    throw Error(error);
+  }
+}
+
+export async function createMedicineHouse(req: CreateMedicineHouseRequest) {
+  return await client<{ id: string }>({
+    url: '/house',
+    method: 'POST',
+    data: req,
+  });
+}
+
+export async function updateMedicineHouse(
+  id: string,
+  req: UpdateMedicineHouseRequest,
+) {
+  const { status, error } = await client<{ id: string }>({
+    url: `/house/${id}`,
+    method: 'PUT',
+    data: req,
+  });
+  if (status !== HttpStatusCode.NoContent) {
+    throw Error(error);
+  }
+}
+
+export async function deleteMedicineHouse(id: string) {
+  const { status, error } = await client({
+    url: `/house/${id}`,
+    method: 'DELETE',
+  });
+  if (status !== HttpStatusCode.NoContent) {
+    throw Error(error);
+  }
+}
+
+export async function createMedicineBrand(req: CreateMedicineBrandRequest) {
+  const formData = new FormData();
+  formData.append('medicationID', req.medicationID);
+  formData.append('tradeID', req.tradeID);
+  if (req.tradeName) {
+    formData.append('tradeName', req.tradeName);
+  }
+  if (req.blisterImageFile) {
+    formData.append('blisterImageFile', req.blisterImageFile);
+  }
+  if (req.tabletImageFile) {
+    formData.append('tabletImageFile', req.tabletImageFile);
+  }
+  if (req.boxImageFile) {
+    formData.append('boxImageFile', req.boxImageFile);
+  }
+  return await client<{ id: string }>({
+    url: '/brand',
+    method: 'POST',
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+}
+
+export async function updateMedicineBrand(
+  brandID: string,
+  req: UpdateMedicineBrandRequest,
+) {
+  const formData = new FormData();
+  if (req.tradeName) {
+    formData.append('tradeName', req.tradeName);
+  }
+  if (req.blisterImageFile) {
+    formData.append('blisterImageFile', req.blisterImageFile);
+  }
+  if (req.tabletImageFile) {
+    formData.append('tabletImageFile', req.tabletImageFile);
+  }
+  if (req.boxImageFile) {
+    formData.append('boxImageFile', req.boxImageFile);
+  }
+  if (req.deleteBlisterImage) {
+    formData.append('deleteBlisterImage', `${req.deleteBlisterImage}`);
+  }
+  if (req.deleteTabletImage) {
+    formData.append('deleteTabletImage', `${req.deleteTabletImage}`);
+  }
+  if (req.deleteBoxImage) {
+    formData.append('deleteBoxImage', `${req.deleteBoxImage}`);
+  }
+  const { status, error } = await client({
+    url: `/brand/${brandID}`,
+    method: 'PUT',
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  if (status !== HttpStatusCode.NoContent) {
+    throw Error(error);
+  }
+}
+
+export async function deleteMedicineBrand(brandID: string) {
+  const { status, error } = await client({
+    url: `/brand/${brandID}`,
+    method: 'DELETE',
+  });
+  if (status !== HttpStatusCode.NoContent) {
+    throw Error(error);
+  }
+}
+
+export async function addBlisterDate(req: AddBlisterDateRequest) {
+  return await client<{ id: string }>({
+    url: '/history',
+    method: 'POST',
+    data: req,
+  });
+}
+
+export async function deleteBlisterDate(historyID: string) {
+  const { status, error } = await client({
+    url: `/history/${historyID}`,
     method: 'DELETE',
   });
   if (status !== HttpStatusCode.NoContent) {

@@ -21,14 +21,8 @@ export interface Warehouse {
   warehouseID: string;
   warehouseName: string;
   role: WarehouseRole;
-  lockers: Locker[];
   sheetURL?: string;
   latestSyncedAt?: Date;
-}
-
-export interface Locker {
-  lockerID: string;
-  lockerName: string;
 }
 
 export interface FilterWarehouseDetail {
@@ -50,16 +44,8 @@ export interface WarehouseDetail {
   warehouseID: string;
   warehouseName: string;
   role: WarehouseRole;
-  lockerDetails: LockerDetail[];
   totalMedicine: number;
-  totalLocker: number;
   users: WarehouseUser[];
-}
-
-export interface LockerDetail {
-  lockerID: string;
-  lockerName: string;
-  totalMedicine: number;
 }
 
 export interface WarehouseUser {
@@ -99,4 +85,14 @@ export interface SyncMedicineMetadata {
   totalNewMedicine: number;
   totalUpdatedMedicine: number;
   totalSkippedMedicine: number;
+}
+
+export function resolveWarehouseName({
+  warehouseID,
+  warehouseName,
+}: WarehouseDetail): string {
+  if (warehouseID === warehouseName) {
+    return warehouseID;
+  }
+  return `${warehouseName} (${warehouseID})`;
 }
