@@ -1,4 +1,4 @@
-import { Data } from './pagination';
+import { Data, PaginationRequest } from './pagination';
 
 export enum WarehouseRole {
   ADMIN = 'ADMIN',
@@ -25,17 +25,11 @@ export interface Warehouse {
   latestSyncedAt?: Date;
 }
 
-export interface FilterWarehouseDetail {
-  limit: number;
-  page: number;
-  search?: string;
+export interface FilterWarehouseDetail extends PaginationRequest {
   group?: WarehouseGroup;
 }
 
-export interface FilterWarehouseUser {
-  limit: number;
-  page: number;
-  search?: string;
+export interface FilterWarehouseUser extends PaginationRequest {
   role?: WarehouseRole;
   status?: WarehouseUserStatus;
 }

@@ -1,4 +1,4 @@
-import { Medicine } from '@/core/@types';
+import { MedicineHouse } from '@/core/@types';
 import { Close } from '@mui/icons-material';
 import {
   Dialog,
@@ -7,16 +7,17 @@ import {
   Divider,
   IconButton,
 } from '@mui/material';
-import { Image } from '@/components/ui';
 import { useMemo } from 'react';
 
 export type ViewMedicineModalProps = {
-  medicine: Medicine;
+  warehouseID: string;
+  medicine: MedicineHouse;
   isOpen: boolean;
   onClose: () => void;
 };
 
 export function ViewMedicineModal({
+  warehouseID,
   medicine,
   isOpen,
   onClose,
@@ -24,8 +25,12 @@ export function ViewMedicineModal({
   const list = useMemo(
     () => [
       {
+        label: 'House ID',
+        value: `${warehouseID}-${medicine.medicationID}`,
+      },
+      {
         label: 'ตู้',
-        value: medicine.lockerName,
+        value: medicine.locker,
       },
       {
         label: 'ชั้น',
@@ -37,15 +42,15 @@ export function ViewMedicineModal({
       },
       {
         label: 'บ้านเลขที่ยา',
-        value: medicine.address,
+        value: `${medicine.locker}-${medicine.floor}-${medicine.no}`,
+      },
+      {
+        label: 'Medication ID',
+        value: medicine.medicationID,
       },
       {
         label: 'ชื่อสามัญทางยา',
-        value: medicine.description,
-      },
-      {
-        label: 'ชื่อการค้า',
-        value: medicine.medicalName || '-',
+        value: medicine.medicalName,
       },
       {
         label: 'Label ตะกร้า',
@@ -82,24 +87,6 @@ export function ViewMedicineModal({
               <p className="text-md font-semibold">{item.value}</p>
             </div>
           ))}
-          {medicine.imageURL && (
-            <div className="space-y-1">
-              <p className="text-sm">ภาพประกอบ</p>
-              <Image
-                alt="Medicine Image"
-                className="rounded-md"
-                src={medicine.imageURL}
-                loader={() => medicine.imageURL!}
-                width={400}
-                height={400}
-                unoptimized
-                useLoader
-                loaderSize={400}
-                responsiveSize={510}
-                style={{ height: 400 }}
-              />
-            </div>
-          )}
         </div>
       </DialogContent>
     </Dialog>

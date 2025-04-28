@@ -5,17 +5,60 @@ import {
   CreateMedicineHouseRequest,
   Data,
   FilterMedicine,
+  FilterMedicineHouse,
   Medicine,
+  MedicineBrandView,
+  MedicineHouse,
+  MedicineView,
+  PaginationRequest,
   UpdateMedicineBrandRequest,
   UpdateMedicineHouseRequest,
 } from '@/core/@types';
 import { client } from '@/core/lib';
 
 export async function getMedicines(filter: FilterMedicine) {
-  const { data, status, error } = await client<Data<Medicine>>({
+  const { data, status, error } = await client<Data<MedicineView>>({
     url: '/medicine',
     method: 'GET',
     params: filter,
+    signalID: 'LIST_MEDICINE',
+  });
+  if (status === HttpStatusCode.Ok) {
+    return data;
+  }
+  throw Error(error);
+}
+
+export async function getAllMedicines() {
+  const { data, status, error } = await client<Medicine[]>({
+    url: '/medicine/master/all',
+    method: 'GET',
+  });
+  if (status === HttpStatusCode.Ok) {
+    return data;
+  }
+  throw Error(error);
+}
+
+export async function getMedicineHouses(filter: FilterMedicineHouse) {
+  const { data, status, error } = await client<Data<MedicineHouse>>({
+    url: '/house',
+    method: 'GET',
+    params: filter,
+    signalID: 'LIST_MEDICINE_HOUSE',
+  });
+  if (status === HttpStatusCode.Ok) {
+    return data;
+  }
+  throw Error(error);
+}
+
+export async function getMedicineWithBrands(filter: PaginationRequest) {
+  const { data, status, error } = await client<Data<MedicineBrandView>>({
+    url: '/brand',
+    method: 'GET',
+    params: filter,
+    signalID: 'LIST_MEDICINE_BRAND',
   });
   if (status === HttpStatusCode.Ok) {
     return data;
@@ -24,76 +67,40 @@ export async function getMedicines(filter: FilterMedicine) {
 }
 
 export async function createMedicine(
-  warehouseID: string,
-  medicine: Medicine,
-  file?: File,
+  medicationID: string,
+  medicalName: string,
 ) {
-  const formData = new FormData();
-  if (file) {
-    formData.append('file', file);
-  }
-  formData.append('warehouseID', warehouseID);
-  formData.append('lockerID', medicine.lockerID);
-  formData.append('floor', medicine.floor.toString());
-  formData.append('no', medicine.no.toString());
-  formData.append('address', medicine.address);
-  formData.append('description', medicine.description);
-  formData.append('medicalName', medicine.medicalName);
-  formData.append('label', medicine.label);
-
-  return await client<{ medicineID: string }>({
-    url: `/medicine`,
+  return await client<{ medicationID: string }>({
+    url: `/medicine/${medicationID}`,
     method: 'POST',
-    data: formData,
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
+    data: { medicalName },
   });
 }
 
 export async function updateMedicine(
-  medicineID: string,
-  medicine: Medicine,
-  file?: File,
-  deleteImage?: boolean,
+  medicationID: string,
+  medicalName: string,
 ) {
-  const formData = new FormData();
-  if (file) {
-    formData.append('file', file);
-  }
-  formData.append('medicineID', medicineID);
-  formData.append('lockerID', medicine.lockerID);
-  formData.append('floor', medicine.floor.toString());
-  formData.append('no', medicine.no.toString());
-  formData.append('address', medicine.address);
-  formData.append('description', medicine.description);
-  formData.append('medicalName', medicine.medicalName);
-  formData.append('label', medicine.label);
-  if (deleteImage) {
-    formData.append('deleteImage', `${deleteImage}`);
-  }
-
-  return await client({
-    url: `/medicine/${medicine.medicineID}`,
-    method: 'PATCH',
-    data: formData,
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-}
-
-export async function deleteMedicine(medicineID: string) {
   const { status, error } = await client({
-    url: `/medicine/${medicineID}`,
-    method: 'DELETE',
+    url: `/medicine/${medicationID}`,
+    method: 'PATCH',
+    data: { medicalName },
   });
   if (status !== HttpStatusCode.NoContent) {
     throw Error(error);
   }
 }
 
+export async function deleteMedicine(medicationID: string) {
+  return await client({
+    url: `/medicine/${medicationID}`,
+    method: 'DELETE',
+  });
+}
+
 export async function createMedicineHouse(req: CreateMedicineHouseRequest) {
+  req.floor = Number(req.floor);
+  req.no = Number(req.no);
   return await client<{ id: string }>({
     url: '/house',
     method: 'POST',
@@ -105,14 +112,13 @@ export async function updateMedicineHouse(
   id: string,
   req: UpdateMedicineHouseRequest,
 ) {
-  const { status, error } = await client<{ id: string }>({
+  req.floor = Number(req.floor);
+  req.no = Number(req.no);
+  return await client({
     url: `/house/${id}`,
     method: 'PUT',
     data: req,
   });
-  if (status !== HttpStatusCode.NoContent) {
-    throw Error(error);
-  }
 }
 
 export async function deleteMedicineHouse(id: string) {
@@ -191,13 +197,10 @@ export async function updateMedicineBrand(
 }
 
 export async function deleteMedicineBrand(brandID: string) {
-  const { status, error } = await client({
+  return await client({
     url: `/brand/${brandID}`,
     method: 'DELETE',
   });
-  if (status !== HttpStatusCode.NoContent) {
-    throw Error(error);
-  }
 }
 
 export async function addBlisterDate(req: AddBlisterDateRequest) {

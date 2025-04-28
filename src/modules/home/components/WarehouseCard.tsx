@@ -24,9 +24,7 @@ export function WarehouseCard({
   return (
     <div
       className="rounded-lg bg-white text-black px-4 py-2 border cursor-pointer hover:bg-gray-50 ease-in duration-75 transition-colors min-h-40 flex flex-col justify-between"
-      onClick={() =>
-        push(`/medicine?warehouseID=${warehouseDetail.warehouseID}`)
-      }
+      onClick={() => push(`/house?warehouseID=${warehouseDetail.warehouseID}`)}
     >
       <h1 className="font-bold line-clamp-3 text-lg mb-1">
         {resolveWarehouseName(warehouseDetail)}

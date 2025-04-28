@@ -1,4 +1,4 @@
-import { Medicine } from '@/core/@types';
+import { MedicineHouse } from '@/core/@types';
 import { Close } from '@mui/icons-material';
 import {
   Button,
@@ -13,7 +13,7 @@ import {
 import { useState } from 'react';
 
 export type DeleteMedicineModalProps = {
-  medicine: Medicine;
+  medicine: MedicineHouse;
   isOpen: boolean;
   onClose: () => void;
   onDelete: () => Promise<void>;
@@ -54,7 +54,10 @@ export function DeleteMedicineModal({
       <Divider />
       <DialogContent>
         คุณต้องการลบข้อมูลยา
-        <span className="text-red-500">{medicine.description}</span>?
+        <span className="text-red-500">
+          {` [${medicine.medicationID}]`} {medicine.medicalName}
+        </span>
+        ?
       </DialogContent>
 
       <Divider />

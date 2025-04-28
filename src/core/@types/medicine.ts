@@ -1,22 +1,81 @@
+import { PaginationRequest } from './pagination';
+
 export interface Medicine {
-  medicineID: string;
-  lockerID: string;
-  lockerName: string;
-  floor: number;
-  no: number;
-  address: string;
-  description: string;
+  medicationID: string;
   medicalName: string;
-  label: string;
-  imageURL?: string;
 }
 
-export interface FilterMedicine {
-  limit: number;
-  page: number;
+export interface MedicineHouse {
+  id: string;
+  medicationID: string;
+  medicalName: string;
+  locker: string;
+  floor: number;
+  no: number;
+  label?: string;
+}
+
+export interface MedicineBrandView {
+  medicationID: string;
+  medicalName: string;
+  brands: MedicineBrand[];
+}
+
+export interface MedicineView {
+  medicationID: string;
+  medicalName: string;
+  brands: MedicineBrand[];
+  houses: MedicineHouseView[];
+  blisterDateHistories: MedicineBlisterDateHistoryView[];
+}
+
+export interface MedicineBrand {
+  id: string;
+  medicationID: string;
+  tradeID: string;
+  tradeName?: string;
+  blisterImageURL?: string;
+  tabletImageURL?: string;
+  boxImageURL?: string;
+}
+
+export interface MedicineHouseView {
+  warehouseID: string;
+  warehouseName: string;
+  addresses: MedicineHouseDetailView[];
+}
+
+export interface MedicineHouseDetailView {
+  id: string;
+  locker: string;
+  floor: number;
+  no: number;
+  label?: string;
+}
+
+export interface MedicineBlisterDateHistoryView {
+  warehouseID: string;
+  warehouseName: string;
+  brands: MedicineBrandBlisterDateHistory[];
+}
+
+export interface MedicineBrandBlisterDateHistory {
+  tradeID?: string;
+  tradeName?: string;
+  blisterChanges: MedicineBrandBlisterDateDetailHistory[];
+}
+
+export interface MedicineBrandBlisterDateDetailHistory {
+  id: string;
+  date: string;
+}
+
+export interface FilterMedicine extends PaginationRequest {
   warehouseID?: string;
-  search?: string;
-  sort?: string;
+}
+
+export interface FilterMedicineHouse extends PaginationRequest {
+  warehouseID: string;
 }
 
 export interface CreateMedicineHouseRequest {

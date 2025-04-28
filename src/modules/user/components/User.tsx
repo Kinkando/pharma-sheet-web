@@ -48,7 +48,6 @@ export default function User() {
     warehouseID: '',
     warehouseName: '',
     role: WarehouseRole.VIEWER,
-    lockers: [],
   });
   const { user, alert } = useContext(GlobalContext);
   const [isLoading, setIsLoading] = useState(false);

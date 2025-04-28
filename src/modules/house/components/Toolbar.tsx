@@ -10,10 +10,8 @@ import {
 } from '@/core/@types';
 
 export const sortOptions: SortOption[] = [
-  { value: 'description', label: 'ชื่อสามัญทางยา' },
-  { value: 'medicalName', label: 'ชื่อการค้า' },
+  { value: 'medicalName', label: 'ชื่อสามัญทางยา' },
   { value: 'address', label: 'บ้านเลขที่ยา' },
-  { value: 'label', label: 'Label ตะกร้า' },
 ];
 
 export const orderOptions: OrderOption[] = [

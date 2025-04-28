@@ -1,6 +1,12 @@
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import React, { JSX, useContext, useMemo, useState } from 'react';
-import { Group, Home, Medication, Warehouse } from '@mui/icons-material';
+import {
+  AllInbox,
+  Group,
+  Home,
+  Medication,
+  Warehouse,
+} from '@mui/icons-material';
 import { Backdrop } from '@mui/material';
 import { GlobalContext } from '@/core/context';
 import Sidebar from './Sidebar';
@@ -39,6 +45,12 @@ export const routers: Router[] = [
     icon: <Medication />,
     name: 'ข้อมูลยา',
     path: '/medicine',
+  },
+  {
+    title: 'Medicine House | PHARMA SHEET',
+    icon: <AllInbox />,
+    name: 'บ้านเลขที่ยา',
+    path: '/house',
   },
   {
     title: 'Warehouse | PHARMA SHEET',

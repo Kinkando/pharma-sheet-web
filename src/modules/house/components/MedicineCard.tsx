@@ -1,18 +1,20 @@
-import { Medicine } from '@/core/@types';
+import { MedicineHouse } from '@/core/@types';
 import { Delete, Edit } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 
 export type MedicineCardProps = {
-  medicine: Medicine;
+  warehouseID: string;
+  medicine: MedicineHouse;
   editable?: boolean;
   deletable?: boolean;
   selectMedicine: (
-    medicine: Medicine,
+    medicine: MedicineHouse,
     mode: 'view' | 'edit' | 'delete',
   ) => void;
 };
 
 export function MedicineCard({
+  warehouseID,
   medicine,
   editable,
   deletable,
@@ -23,9 +25,21 @@ export function MedicineCard({
       className="w-full px-4 py-2 rounded-lg cursor-pointer border border-gray-300 hover:bg-gray-100 ease-in duration-150 transition-colors"
       onClick={() => selectMedicine(medicine, 'view')}
     >
-      <h2 className="font-bold line-clamp-1">{medicine.description}</h2>
       <p className="text-sm">
-        บ้านเลขที่ยา: <b className="">{medicine.address}</b>
+        House ID:{' '}
+        <b className="">
+          {warehouseID}-{medicine.medicationID}
+        </b>
+      </p>
+      <p className="text-sm">
+        Medication ID: <b className="">{medicine.medicationID}</b>
+      </p>
+      <p className="text-sm">
+        บ้านเลขที่ยา:{' '}
+        <b className="">{`${medicine.locker}-${medicine.floor}-${medicine.no}`}</b>
+      </p>
+      <p className="text-sm">
+        ชื่อสามัญทางยา: <b className="">{medicine.medicalName}</b>
       </p>
       <p className="text-sm">
         Label ตะกร้า: <b className="">{medicine.label || '-'}</b>

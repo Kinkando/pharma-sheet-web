@@ -1,34 +1,55 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  FilterMedicine,
+  CreateMedicineHouseRequest,
+  FilterMedicineHouse,
   Medicine,
+  MedicineHouse,
   OrderSequence,
   SyncMedicineMetadata,
   Warehouse,
 } from '@/core/@types';
 import { GlobalContext } from '@/core/context';
 import {
-  getMedicines,
+  createMedicineHouse,
+  getAllMedicines,
+  getMedicineHouses,
   getSyncMedicineMetadata,
   getWarehouses,
   syncMedicine,
 } from '@/core/repository';
-import { HttpStatusCode } from 'axios';
+import { AxiosError, HttpStatusCode, isCancel } from 'axios';
 
 export function useMedicine(warehouseID: string | null) {
   const { alert } = useContext(GlobalContext);
 
+  const [isFetching, setIsFetching] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
   const [warehouse, setWarehouse] = useState<Warehouse>();
   const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
-  const [medicines, setMedicines] = useState<Medicine[]>([]);
+  const [medicines, setMedicines] = useState<MedicineHouse[]>([]);
+  const [medicinesMaster, setMedicinesMaster] = useState<Medicine[]>([]);
   const [syncMedicineMetadata, setSyncMedicineMetadata] =
     useState<SyncMedicineMetadata>();
   const { replace } = useRouter();
 
   useEffect(() => {
     fetchWarehouses();
+    fetchMedicinesMaster();
   }, []);
+
+  const fetchMedicinesMaster = async () => {
+    try {
+      const data = await getAllMedicines();
+      setMedicinesMaster(data ?? []);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        alert({ message: `${error?.response?.data}`, severity: 'error' });
+      } else {
+        alert({ message: `${error}`, severity: 'error' });
+      }
+    }
+  };
 
   const fetchWarehouses = useCallback(
     async (currentWarehouseID?: string) => {
@@ -49,19 +70,53 @@ export function useMedicine(warehouseID: string | null) {
         );
       } catch (error) {
         alert({ message: `${error}`, severity: 'error' });
+      } finally {
+        setIsMounted(true);
       }
     },
     [warehouseID],
   );
 
-  const fetchMedicine = async (filter: FilterMedicine) => {
+  const fetchMedicine = async (filter: FilterMedicineHouse) => {
+    setIsFetching(true);
     try {
       filter.search = filter.search?.trim() || undefined;
       replaceQueryParams(filter);
-      const { data } = await getMedicines(filter);
+      const { data } = await getMedicineHouses(filter);
       setMedicines(data ?? []);
+      setIsFetching(false);
     } catch (error) {
-      alert({ message: `${error}`, severity: 'error' });
+      if (isCancel(error)) {
+        return;
+      }
+      if (error instanceof AxiosError) {
+        alert({ message: `${error?.response?.data}`, severity: 'error' });
+      } else {
+        alert({ message: `${error}`, severity: 'error' });
+      }
+    }
+  };
+
+  const addMedicine = async (req: CreateMedicineHouseRequest) => {
+    try {
+      const { status, error } = await createMedicineHouse(req);
+      if (status === HttpStatusCode.Conflict) {
+        throw new Error('Medication ID นี้มีอยู่ในระบบแล้ว');
+      }
+      if (status !== HttpStatusCode.Ok) {
+        throw error;
+      }
+      alert({ message: 'เพิ่มข้อมูลบ้านเลขที่ยาสำเร็จ', severity: 'success' });
+    } catch (error) {
+      let err = `${error}`.replaceAll('Error: ', '');
+      try {
+        if (JSON.parse(err)?.error) {
+          err = `${JSON.parse(err).error}`;
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {}
+      alert({ message: err, severity: 'error' });
+      throw error;
     }
   };
 
@@ -115,7 +170,7 @@ export function useMedicine(warehouseID: string | null) {
     warehouseID,
     search,
     sort,
-  }: FilterMedicine) => {
+  }: FilterMedicineHouse) => {
     const params = new URLSearchParams(location.search);
     params.set('warehouseID', warehouseID);
     if (search) {
@@ -132,10 +187,14 @@ export function useMedicine(warehouseID: string | null) {
   };
 
   return {
+    isMounted,
+    isFetching,
     warehouses,
     fetchWarehouses,
     medicines,
+    medicinesMaster,
     fetchMedicine,
+    addMedicine,
     warehouse,
     setWarehouse,
     syncMedicineMetadata,
