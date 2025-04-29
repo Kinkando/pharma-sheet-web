@@ -5,7 +5,12 @@ import { useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useContext, useEffect, useState } from 'react';
 import { MenuItem, Select } from '@mui/material';
 import { DelaySearchBox } from '@/components/ui';
-import { MedicineHouse, OrderSequence, WarehouseRole } from '@/core/@types';
+import {
+  MedicineHouse,
+  OrderSequence,
+  resolveWarehouseName,
+  WarehouseRole,
+} from '@/core/@types';
 import { GlobalContext } from '@/core/context';
 import { useValidState } from '@/core/hooks';
 import { useMedicine } from '@/modules/house/hooks/medicine';
@@ -212,7 +217,7 @@ export default function Medicines() {
           </MenuItem>
           {warehouses.map((warehouse) => (
             <MenuItem key={warehouse.warehouseID} value={warehouse.warehouseID}>
-              {`[${warehouse.warehouseID}] ${warehouse.warehouseName}`}
+              {resolveWarehouseName(warehouse)}
             </MenuItem>
           ))}
         </Select>
@@ -250,6 +255,8 @@ export default function Medicines() {
             />
           ))}
       </main>
+
+      {/* TODO: manage blister date history */}
 
       {warehouse && (
         <MedicineModal

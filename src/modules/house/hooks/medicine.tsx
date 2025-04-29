@@ -101,7 +101,7 @@ export function useMedicine(warehouseID: string | null) {
     try {
       const { status, error } = await createMedicineHouse(req);
       if (status === HttpStatusCode.Conflict) {
-        throw new Error('Medication ID นี้มีอยู่ในระบบแล้ว');
+        throw new Error('บ้านเลขที่ยานี้มีอยู่ในระบบแล้ว');
       }
       if (status !== HttpStatusCode.Ok) {
         throw error;

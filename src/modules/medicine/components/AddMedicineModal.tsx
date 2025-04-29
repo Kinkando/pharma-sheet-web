@@ -12,40 +12,40 @@ import {
   TextField,
 } from '@mui/material';
 
-export type AddWarehouseModalProps = {
+export type AddMedicineModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onCreate: (warehouseID: string, warehouseName: string) => Promise<void>;
+  onCreate: (medicationID: string, medicalName: string) => Promise<void>;
 };
 
-export function AddWarehouseModal({
+export function AddMedicineModal({
   isOpen,
   onClose,
   onCreate,
-}: AddWarehouseModalProps) {
-  const [warehouseID, setWarehouseID] = useState('');
-  const [warehouseName, setWarehouseName] = useState<string | null>(null);
+}: AddMedicineModalProps) {
+  const [medicationID, setMedicationID] = useState('');
+  const [medicalName, setMedicalName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const addWarehouse = useCallback(async () => {
-    if (!warehouseID) {
+  const addMedicine = useCallback(async () => {
+    if (!medicationID || !medicationID) {
       return;
     }
     setIsLoading(true);
     try {
-      await onCreate(warehouseID, warehouseName || warehouseID);
+      await onCreate(medicationID, medicalName);
       onClose();
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
     } finally {
       setIsLoading(false);
     }
-  }, [onClose, onCreate, warehouseID, warehouseName]);
+  }, [onClose, onCreate, medicationID, medicalName]);
 
   useEffect(() => {
     if (isOpen) {
-      setWarehouseID('');
-      setWarehouseName(null);
+      setMedicationID('');
+      setMedicalName('');
     }
   }, [isOpen]);
 
@@ -54,7 +54,7 @@ export function AddWarehouseModal({
       <DialogTitle>
         <div className="flex items-center justify-between gap-4 overflow-hidden w-full">
           <div className="text-ellipsis whitespace-nowrap overflow-hidden w-full">
-            เพิ่มข้อมูลศูนย์สุขภาพชุมชน
+            เพิ่มข้อมูลยา
           </div>
           <IconButton
             aria-label="close"
@@ -74,25 +74,20 @@ export function AddWarehouseModal({
         <div className="space-y-4">
           <TextField
             type="text"
-            label="ไอดีศูนย์สุขภาพชุมชน"
-            placeholder="กรุณาใส่ไอดีของศูนย์สุขภาพชุมชน"
-            value={warehouseID}
-            onChange={(e) => {
-              setWarehouseID(e.target.value);
-              if (!warehouseName) {
-                setWarehouseName(null);
-              }
-            }}
+            label="Medication ID"
+            placeholder="กรุณากรอก Medication ID"
+            value={medicationID}
+            onChange={(e) => setMedicationID(e.target.value)}
             disabled={isLoading}
             size="small"
             className="w-full"
           />
           <TextField
             type="text"
-            label="ชื่อศูนย์สุขภาพชุมชน"
-            placeholder="กรุณาใส่ชื่อศูนย์สุขภาพชุมชน"
-            value={warehouseName ?? warehouseID}
-            onChange={(e) => setWarehouseName(e.target.value)}
+            label="ชื่อสามัญทางยา"
+            placeholder="กรุณากรอกชื่อสามัญทางยา"
+            value={medicalName}
+            onChange={(e) => setMedicalName(e.target.value)}
             disabled={isLoading}
             size="small"
             className="w-full"
@@ -113,8 +108,8 @@ export function AddWarehouseModal({
         <Button
           variant="contained"
           color="success"
-          onClick={addWarehouse}
-          disabled={isLoading || !warehouseID}
+          onClick={addMedicine}
+          disabled={isLoading || !medicationID || !medicalName}
         >
           {isLoading && (
             <CircularProgress size={16} className="mr-2 !text-white" />

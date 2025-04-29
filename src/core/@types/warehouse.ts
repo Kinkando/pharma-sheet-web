@@ -84,7 +84,10 @@ export interface SyncMedicineMetadata {
 export function resolveWarehouseName({
   warehouseID,
   warehouseName,
-}: WarehouseDetail): string {
+}: {
+  warehouseID: string;
+  warehouseName: string;
+}): string {
   if (warehouseID === warehouseName) {
     return warehouseID;
   }
