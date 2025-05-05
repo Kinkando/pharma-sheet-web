@@ -7,7 +7,7 @@ import {
   FilterMedicine,
   FilterMedicineHouse,
   Medicine,
-  MedicineBrandView,
+  MedicineBrand,
   MedicineHouse,
   MedicineView,
   PaginationRequest,
@@ -66,8 +66,8 @@ export async function getMedicineHouses(filter: FilterMedicineHouse) {
   throw Error(error);
 }
 
-export async function getMedicineWithBrands(filter: PaginationRequest) {
-  const { data, status, error } = await client<Data<MedicineBrandView>>({
+export async function getMedicineBrands(filter: PaginationRequest) {
+  const { data, status, error } = await client<Data<MedicineBrand>>({
     url: '/brand',
     method: 'GET',
     params: filter,

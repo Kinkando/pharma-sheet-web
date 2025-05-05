@@ -4,12 +4,13 @@ import { CloudUpload } from '@mui/icons-material';
 import { ChangeEvent, DragEvent, useState } from 'react';
 
 export type DropFileProps = {
+  id?: string;
   onSelect: (file: FileList) => void;
   disabled?: boolean;
   multiple?: boolean;
 };
 
-export function DropFile({ onSelect, disabled, multiple }: DropFileProps) {
+export function DropFile({ id, onSelect, disabled, multiple }: DropFileProps) {
   const [highlight, setHighlight] = useState(false);
   const selectFile = (e: ChangeEvent<HTMLInputElement>) => {
     const fileInput = e.target as HTMLInputElement;
@@ -27,7 +28,7 @@ export function DropFile({ onSelect, disabled, multiple }: DropFileProps) {
   return (
     <>
       <label
-        htmlFor="select-file"
+        htmlFor={`select-file${id ? '-' + id : ''}`}
         onDragOver={drag(true)}
         onDragLeave={drag(false)}
         draggable
@@ -51,7 +52,7 @@ export function DropFile({ onSelect, disabled, multiple }: DropFileProps) {
         </div>
       </label>
       <input
-        id="select-file"
+        id={`select-file${id ? '-' + id : ''}`}
         type="file"
         multiple={multiple}
         accept="image/*"

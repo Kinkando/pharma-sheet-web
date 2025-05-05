@@ -128,8 +128,17 @@ export function MedicineModal({
       {
         label: 'Medication ID',
         value: medicine.medicationID,
-        type: 'text',
-        disabled: true,
+        onSelect: (e: SelectChangeEvent<string | number>) =>
+          setMedicine((value) => ({
+            ...value,
+            medicationID: e.target.value as string,
+          })),
+        emptyText: 'กรุณาเลือก Medication ID',
+        values: medicines.map((item) => ({
+          value: item.medicationID,
+          text: item.medicationID,
+        })),
+        type: 'select',
       },
       {
         label: 'ชื่อสามัญทางยา',
@@ -139,6 +148,11 @@ export function MedicineModal({
             ...value,
             medicationID: e.target.value as string,
           })),
+        emptyText: 'กรุณาเลือกชื่อสามัญทางยา',
+        values: medicines.map((item) => ({
+          value: item.medicationID,
+          text: item.medicalName,
+        })),
         type: 'select',
       },
       {
@@ -148,7 +162,7 @@ export function MedicineModal({
         type: 'text',
       },
     ],
-    [medicine],
+    [address, medicine, medicines, warehouseID],
   );
 
   return (
@@ -185,11 +199,11 @@ export function MedicineModal({
                   size="small"
                 >
                   <MenuItem value="" disabled>
-                    กรุณาเลือกยา
+                    {item.emptyText}
                   </MenuItem>
-                  {medicines.map(({ medicationID, medicalName }) => (
-                    <MenuItem key={medicationID} value={medicationID}>
-                      {medicalName}
+                  {item.values.map(({ text, value }) => (
+                    <MenuItem key={value} value={value}>
+                      {text}
                     </MenuItem>
                   ))}
                 </Select>

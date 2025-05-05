@@ -4,6 +4,7 @@ import {
   AllInbox,
   Group,
   Home,
+  Image,
   Medication,
   Warehouse,
 } from '@mui/icons-material';
@@ -45,6 +46,13 @@ export const routers: Router[] = [
     icon: <Medication />,
     name: 'ข้อมูลยา',
     path: '/medicine',
+  },
+  {
+    title: 'Medicine Brands | PHARMA SHEET',
+    // eslint-disable-next-line jsx-a11y/alt-text
+    icon: <Image />,
+    name: 'ชื่อการค้า/รูปภาพยา',
+    path: '/brand',
   },
   {
     title: 'Medicine House | PHARMA SHEET',

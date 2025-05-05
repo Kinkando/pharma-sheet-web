@@ -15,12 +15,6 @@ export interface MedicineHouse {
   label?: string;
 }
 
-export interface MedicineBrandView {
-  medicationID: string;
-  medicalName: string;
-  brands: MedicineBrand[];
-}
-
 export interface MedicineView {
   medicationID: string;
   medicalName: string;
@@ -32,6 +26,7 @@ export interface MedicineView {
 export interface MedicineBrand {
   id: string;
   medicationID: string;
+  medicalName?: string;
   tradeID: string;
   tradeName?: string;
   blisterImageURL?: string;
@@ -118,4 +113,15 @@ export interface AddBlisterDateRequest {
   warehouseID: string;
   brandID?: string;
   date: string;
+}
+
+export interface FileInfo {
+  file: File | null;
+  imageURL: string;
+}
+
+export interface MedicineBrandFile {
+  blisterImage: FileInfo;
+  tabletImage: FileInfo;
+  boxImage: FileInfo;
 }
