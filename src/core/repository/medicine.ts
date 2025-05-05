@@ -40,6 +40,19 @@ export async function getAllMedicines() {
   throw Error(error);
 }
 
+export async function getMedicinesPagination(filter: PaginationRequest) {
+  const { data, status, error } = await client<Data<Medicine>>({
+    url: '/medicine/master/pagination',
+    method: 'GET',
+    params: filter,
+    signalID: 'GET_MEDICINE_MASTER',
+  });
+  if (status === HttpStatusCode.Ok) {
+    return data;
+  }
+  throw Error(error);
+}
+
 export async function getMedicineHouses(filter: FilterMedicineHouse) {
   const { data, status, error } = await client<Data<MedicineHouse>>({
     url: '/house',

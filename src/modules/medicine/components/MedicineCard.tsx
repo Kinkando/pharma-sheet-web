@@ -1,11 +1,11 @@
-import { MedicineBrandView } from '@/core/@types';
+import { Medicine } from '@/core/@types';
 import { Delete, Edit } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 
 export type MedicineCardProps = {
-  medicine: MedicineBrandView;
+  medicine: Medicine;
   selectMedicine: (
-    medicine: MedicineBrandView,
+    medicine: Medicine,
     mode: 'view' | 'edit' | 'delete',
   ) => void;
 };

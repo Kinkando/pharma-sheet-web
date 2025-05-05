@@ -2,7 +2,7 @@ import { DelaySearchBox, Image, LoadingCircular } from '@/components/ui';
 import { sortOptions, Toolbar } from './Toolbar';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useValidState } from '@/core/hooks';
-import { MedicineBrandView, OrderSequence } from '@/core/@types';
+import { Medicine, OrderSequence } from '@/core/@types';
 import { useSearchParams } from 'next/navigation';
 import { useMedicine } from '@/modules/medicine/hooks/medicine';
 import { MedicineCard } from './MedicineCard';
@@ -30,12 +30,12 @@ export default function Medicines() {
     'DESC',
   );
 
-  const [selectedMedicine, setSelectedMedicine] = useState<MedicineBrandView>();
+  const [selectedMedicine, setSelectedMedicine] = useState<Medicine>();
 
   const {
     isFetching,
-    medicineWithBrands,
-    fetchMedicineWithBrands,
+    medicines,
+    fetchMedicines,
     addMedicine,
     editMedicine,
     removeMedicine,
@@ -43,7 +43,7 @@ export default function Medicines() {
 
   const fetchData = useCallback(
     async (loading = true) => {
-      await fetchMedicineWithBrands(
+      await fetchMedicines(
         {
           limit: 999,
           page: 1,
@@ -96,7 +96,7 @@ export default function Medicines() {
           <DelaySearchBox onSearch={setSearch} />
         </Suspense>
 
-        {!medicineWithBrands.length && !isFetching && (
+        {!medicines.length && !isFetching && (
           <div className="w-full flex flex-col items-center justify-center">
             <Image
               src="/images/empty.png"
@@ -110,7 +110,7 @@ export default function Medicines() {
         )}
 
         {!isFetching &&
-          medicineWithBrands.map((medicine) => (
+          medicines.map((medicine) => (
             <MedicineCard
               key={medicine.medicationID}
               medicine={medicine}

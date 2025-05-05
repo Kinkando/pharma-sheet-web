@@ -1,19 +1,10 @@
-import {
-  CreateMedicineBrandRequest,
-  MedicineBrandView,
-  OrderSequence,
-  PaginationRequest,
-  UpdateMedicineBrandRequest,
-} from '@/core/@types';
+import { Medicine, OrderSequence, PaginationRequest } from '@/core/@types';
 import { GlobalContext } from '@/core/context';
 import {
   createMedicine,
-  createMedicineBrand,
   deleteMedicine,
-  deleteMedicineBrand,
-  getMedicineWithBrands,
+  getMedicinesPagination,
   updateMedicine,
-  updateMedicineBrand,
 } from '@/core/repository';
 import { AxiosError, HttpStatusCode, isCancel } from 'axios';
 import { useRouter } from 'next/navigation';
@@ -23,13 +14,11 @@ export function useMedicine() {
   const { alert } = useContext(GlobalContext);
 
   const [isFetching, setIsFetching] = useState(true);
-  const [medicineWithBrands, setMedicineWithBrands] = useState<
-    MedicineBrandView[]
-  >([]);
+  const [medicines, setMedicines] = useState<Medicine[]>([]);
 
   const { replace } = useRouter();
 
-  const fetchMedicineWithBrands = async (
+  const fetchMedicines = async (
     filter: PaginationRequest,
     loading?: boolean,
   ) => {
@@ -39,8 +28,8 @@ export function useMedicine() {
     try {
       filter.search = filter.search?.trim() || undefined;
       replaceQueryParams(filter);
-      const { data } = await getMedicineWithBrands(filter);
-      setMedicineWithBrands(data ?? []);
+      const { data } = await getMedicinesPagination(filter);
+      setMedicines(data);
     } catch (error) {
       if (isCancel(error)) {
         return;
@@ -122,66 +111,6 @@ export function useMedicine() {
     }
   };
 
-  const addMedicineBrand = async (req: CreateMedicineBrandRequest) => {
-    try {
-      const { status, error } = await createMedicineBrand(req);
-      if (status === HttpStatusCode.Conflict) {
-        throw new Error('Trade ID นี้มีอยู่ในระบบแล้ว');
-      }
-      if (status !== HttpStatusCode.Ok) {
-        throw error;
-      }
-      alert({ message: 'เพิ่มข้อมูลการค้าสำเร็จ', severity: 'success' });
-    } catch (error) {
-      let err = `${error}`.replaceAll('Error: ', '');
-      try {
-        if (JSON.parse(err)?.error) {
-          err = `${JSON.parse(err).error}`;
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (error) {}
-      alert({ message: err, severity: 'error' });
-      throw error;
-    }
-  };
-
-  const editMedicineBrand = async (
-    brandID: string,
-    req: UpdateMedicineBrandRequest,
-  ) => {
-    try {
-      await updateMedicineBrand(brandID, req);
-      alert({ message: 'แก้ไขข้อมูลการค้าสำเร็จ', severity: 'success' });
-    } catch (error) {
-      let err = `${error}`;
-      try {
-        if (JSON.parse(err)?.error) {
-          err = `${JSON.parse(err).error}`;
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (error) {}
-      alert({ message: err, severity: 'error' });
-      throw error;
-    }
-  };
-
-  const removeMedicineBrand = async (brandID: string) => {
-    try {
-      await deleteMedicineBrand(brandID);
-      alert({ message: 'ลบข้อมูลการค้าสำเร็จ', severity: 'success' });
-    } catch (error) {
-      let err = `${error}`;
-      try {
-        if (JSON.parse(err)?.error) {
-          err = `${JSON.parse(err).error}`;
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (error) {}
-      alert({ message: err, severity: 'error' });
-      throw error;
-    }
-  };
-
   const replaceQueryParams = async ({ search, sort }: PaginationRequest) => {
     const params = new URLSearchParams(location.search);
     if (search) {
@@ -199,13 +128,10 @@ export function useMedicine() {
 
   return {
     isFetching,
-    medicineWithBrands,
-    fetchMedicineWithBrands,
+    medicines,
+    fetchMedicines,
     addMedicine,
     editMedicine,
     removeMedicine,
-    addMedicineBrand,
-    editMedicineBrand,
-    removeMedicineBrand,
   };
 }

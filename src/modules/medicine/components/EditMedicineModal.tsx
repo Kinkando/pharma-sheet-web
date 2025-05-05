@@ -11,10 +11,10 @@ import {
   IconButton,
   TextField,
 } from '@mui/material';
-import { MedicineBrandView } from '@/core/@types';
+import { Medicine } from '@/core/@types';
 
 export type EditMedicineModalProps = {
-  medicine: MedicineBrandView;
+  medicine: Medicine;
   isOpen: boolean;
   onClose: () => void;
   onEdit: (medicationID: string, medicalName: string) => Promise<void>;

@@ -1,4 +1,4 @@
-import { MedicineBrandView } from '@/core/@types';
+import { Medicine } from '@/core/@types';
 import { Close } from '@mui/icons-material';
 import {
   Dialog,
@@ -10,7 +10,7 @@ import {
 import { useMemo } from 'react';
 
 export type ViewMedicineModalProps = {
-  medicine: MedicineBrandView;
+  medicine: Medicine;
   isOpen: boolean;
   onClose: () => void;
 };
