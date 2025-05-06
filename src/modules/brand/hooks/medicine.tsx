@@ -34,7 +34,7 @@ export function useMedicine() {
   const fetchMedicinesMaster = async () => {
     try {
       const data = await getAllMedicines();
-      setMedicines(data);
+      setMedicines(data ?? []);
     } catch (error) {
       if (error instanceof AxiosError) {
         alert({ message: `${error?.response?.data}`, severity: 'error' });

@@ -4,13 +4,16 @@ import {
   CreateMedicineBrandRequest,
   CreateMedicineHouseRequest,
   Data,
+  DeleteBlisterDateRequest,
   FilterMedicine,
   FilterMedicineHouse,
+  FilterRotationDateHistory,
   Medicine,
   MedicineBrand,
   MedicineHouse,
   MedicineView,
   PaginationRequest,
+  RotationDateHistoryGroup,
   UpdateMedicineBrandRequest,
   UpdateMedicineHouseRequest,
 } from '@/core/@types';
@@ -72,6 +75,34 @@ export async function getMedicineBrands(filter: PaginationRequest) {
     method: 'GET',
     params: filter,
     signalID: 'LIST_MEDICINE_BRAND',
+  });
+  if (status === HttpStatusCode.Ok) {
+    return data;
+  }
+  throw Error(error);
+}
+
+export async function getMedicineWithBrands(filter: PaginationRequest) {
+  const { data, status, error } = await client<Data<MedicineView>>({
+    url: '/brand/group',
+    method: 'GET',
+    params: filter,
+    signalID: 'LIST_MEDICINE_WITH_BRAND',
+  });
+  if (status === HttpStatusCode.Ok) {
+    return data;
+  }
+  throw Error(error);
+}
+
+export async function getRotationDateHistory(
+  filter: FilterRotationDateHistory,
+) {
+  const { data, status, error } = await client<Data<RotationDateHistoryGroup>>({
+    url: '/history',
+    method: 'GET',
+    params: filter,
+    signalID: 'LIST_MEDICINE_ROTATION_DATE_HISTORY',
   });
   if (status === HttpStatusCode.Ok) {
     return data;
@@ -224,12 +255,27 @@ export async function addBlisterDate(req: AddBlisterDateRequest) {
   });
 }
 
-export async function deleteBlisterDate(historyID: string) {
-  const { status, error } = await client({
-    url: `/history/${historyID}`,
+export async function deleteBlisterDate({
+  historyID,
+  warehouseID,
+  medicationID,
+  brandID,
+}: DeleteBlisterDateRequest) {
+  let url = `/history`;
+  if (historyID) {
+    url += `/${historyID}`;
+  }
+  if (warehouseID) {
+    url += `/warehouse/${warehouseID}`;
+  }
+  if (medicationID) {
+    url += `/medicine/${medicationID}`;
+  }
+  if (brandID) {
+    url += `/brand/${brandID}`;
+  }
+  return await client({
+    url,
     method: 'DELETE',
   });
-  if (status !== HttpStatusCode.NoContent) {
-    throw Error(error);
-  }
 }

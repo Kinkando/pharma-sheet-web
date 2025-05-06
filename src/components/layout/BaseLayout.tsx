@@ -2,6 +2,7 @@ import { ReadonlyURLSearchParams } from 'next/navigation';
 import React, { JSX, useContext, useMemo, useState } from 'react';
 import {
   AllInbox,
+  CalendarMonth,
   Group,
   Home,
   Image,
@@ -55,6 +56,12 @@ export const routers: Router[] = [
     path: '/brand',
   },
   {
+    title: 'Medication Rotation Date | PHARMA SHEET',
+    icon: <CalendarMonth />,
+    name: 'วันที่เปลี่ยนแผงยา',
+    path: '/rotation-date',
+  },
+  {
     title: 'Medicine House | PHARMA SHEET',
     icon: <AllInbox />,
     name: 'บ้านเลขที่ยา',
@@ -106,7 +113,7 @@ export default function BaseLayout({
       ...router,
       path: `${router.path}${queryParams}`,
     }));
-  }, [routers, params]);
+  }, [params]);
 
   if (!isUseBaseLayout || !user) {
     return children;

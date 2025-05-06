@@ -29,7 +29,7 @@ export function useMedicine() {
       filter.search = filter.search?.trim() || undefined;
       replaceQueryParams(filter);
       const { data } = await getMedicinesPagination(filter);
-      setMedicines(data);
+      setMedicines(data ?? []);
     } catch (error) {
       if (isCancel(error)) {
         return;

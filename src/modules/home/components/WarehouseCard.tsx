@@ -38,40 +38,38 @@ export function WarehouseCard({
           </div>
         </section>
 
-        {(deletable || editable) && (
-          <div className="flex items-center justify-end">
+        <div className="flex items-center justify-end">
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              onView(warehouseDetail);
+            }}
+          >
+            <Visibility />
+          </IconButton>
+
+          {deletable && (
             <IconButton
               onClick={(e) => {
                 e.stopPropagation();
-                onView(warehouseDetail);
+                onDelete(warehouseDetail);
               }}
             >
-              <Visibility />
+              <Delete />
             </IconButton>
+          )}
 
-            {deletable && (
-              <IconButton
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDelete(warehouseDetail);
-                }}
-              >
-                <Delete />
-              </IconButton>
-            )}
-
-            {editable && (
-              <IconButton
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onEdit(warehouseDetail);
-                }}
-              >
-                <Edit />
-              </IconButton>
-            )}
-          </div>
-        )}
+          {editable && (
+            <IconButton
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit(warehouseDetail);
+              }}
+            >
+              <Edit />
+            </IconButton>
+          )}
+        </div>
       </div>
     </div>
   );

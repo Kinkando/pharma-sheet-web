@@ -114,7 +114,7 @@ export default function Brands() {
               alt="Empty Box"
               unoptimized
             />
-            <p>ไม่พบข้อมูลยา</p>
+            <p>ไม่พบข้อมูลการค้า/รูปภาพยา</p>
           </div>
         )}
 

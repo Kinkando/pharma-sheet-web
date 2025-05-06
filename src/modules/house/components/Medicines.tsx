@@ -231,7 +231,7 @@ export default function Medicines() {
               alt="Empty Box"
               unoptimized
             />
-            <p>ไม่พบข้อมูลยา</p>
+            <p>ไม่พบข้อมูลบ้านเลขที่ยา</p>
           </div>
         )}
 
@@ -255,8 +255,6 @@ export default function Medicines() {
             />
           ))}
       </main>
-
-      {/* TODO: manage blister date history */}
 
       {warehouse && (
         <MedicineModal

@@ -78,7 +78,7 @@ export function MedicineModal({
     return (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       let text = e.target.value;
       if (isNumber) {
-        text = (+e.target.value).toString();
+        text = Math.abs(+e.target.value).toString();
       }
       setMedicine((value) => ({ ...value, [key]: text }));
     };

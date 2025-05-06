@@ -73,6 +73,10 @@ export interface FilterMedicineHouse extends PaginationRequest {
   warehouseID: string;
 }
 
+export interface FilterRotationDateHistory extends PaginationRequest {
+  warehouseID: string;
+}
+
 export interface CreateMedicineHouseRequest {
   medicationID: string;
   warehouseID: string;
@@ -115,6 +119,13 @@ export interface AddBlisterDateRequest {
   date: string;
 }
 
+export interface DeleteBlisterDateRequest {
+  medicationID?: string;
+  warehouseID?: string;
+  brandID?: string;
+  historyID?: string;
+}
+
 export interface FileInfo {
   file: File | null;
   imageURL: string;
@@ -124,4 +135,15 @@ export interface MedicineBrandFile {
   blisterImage: FileInfo;
   tabletImage: FileInfo;
   boxImage: FileInfo;
+}
+
+export interface RotationDateHistoryGroup {
+  medicationID: string;
+  medicalName: string;
+  warehouseID: string;
+  warehouseName: string;
+  brandID?: string;
+  tradeID?: string;
+  tradeName?: string;
+  histories: MedicineBrandBlisterDateDetailHistory[];
 }
