@@ -12,7 +12,7 @@ import {
 export const sortOptions: SortOption[] = [
   { value: 'medicationID', label: 'Medication ID' },
   { value: 'medicalName', label: 'ชื่อสามัญทางยา' },
-  { value: 'tradeID', label: 'Trade ID' },
+  { value: 'tradeID', label: 'Tradename ID' },
   { value: 'tradeName', label: 'ชื่อการค้า' },
 ];
 

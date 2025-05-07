@@ -165,7 +165,7 @@ export function AddMedicineModal({
         type: 'select',
       },
       {
-        label: 'Trade ID',
+        label: 'Tradename ID',
         value: medicineBrand.tradeID,
         onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
           setForm('tradeID', e.target.value),

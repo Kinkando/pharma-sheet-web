@@ -168,7 +168,7 @@ export function EditMedicineModal({
         type: 'text',
       },
       {
-        label: 'Trade ID',
+        label: 'Tradename ID',
         value: medicineBrand.tradeID,
         disabled: true,
         type: 'text',

@@ -76,7 +76,7 @@ export function useMedicine() {
     try {
       const { status, error } = await createMedicineBrand(req);
       if (status === HttpStatusCode.Conflict) {
-        throw new Error('Trade ID นี้มีอยู่ในระบบแล้ว');
+        throw new Error('Tradename ID นี้มีอยู่ในระบบแล้ว');
       }
       if (status !== HttpStatusCode.Ok) {
         throw error;

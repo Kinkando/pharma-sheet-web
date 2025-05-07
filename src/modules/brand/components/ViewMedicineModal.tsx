@@ -32,7 +32,7 @@ export function ViewMedicineModal({
         value: medicine.medicalName || '-',
       },
       {
-        label: 'Trade ID',
+        label: 'Tradename ID',
         value: medicine.tradeID,
       },
       {

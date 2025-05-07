@@ -38,7 +38,7 @@ export function MedicineCard({
         ชื่อสามัญทางยา: <b className="">{data.medicalName}</b>
       </p>
       <p className="text-sm">
-        Trade ID: <b className="">{data.tradeID || '-'}</b>
+        Tradename ID: <b className="">{data.tradeID || '-'}</b>
       </p>
       <p className="text-sm">
         ชื่อการค้า: <b className="">{data.tradeName || '-'}</b>

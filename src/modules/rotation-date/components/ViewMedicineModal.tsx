@@ -35,7 +35,7 @@ export function ViewMedicineModal({
         value: data.medicalName,
       },
       {
-        label: 'Trade ID',
+        label: 'Tradename ID',
         value: data.tradeID || '-',
       },
       {

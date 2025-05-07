@@ -138,7 +138,7 @@ export function AddMedicineModal({
         type: 'select',
       },
       {
-        label: 'Trade ID',
+        label: 'Tradename ID',
         value: medicineBlisterDate.tradeID,
         onSelect: (e: SelectChangeEvent<string | number>) => {
           setForm('tradeID', e.target.value as string);
@@ -153,7 +153,7 @@ export function AddMedicineModal({
               '',
           );
         },
-        emptyText: 'กรุณาเลือก Trade ID',
+        emptyText: 'กรุณาเลือก Tradename ID',
         values: !medicineBlisterDate.medicationID
           ? []
           : medicines
