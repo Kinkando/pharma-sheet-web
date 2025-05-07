@@ -117,10 +117,18 @@ export function useMedicine() {
 
   const removeMedicineBrand = async (brandID: string) => {
     try {
-      await deleteMedicineBrand(brandID);
+      const { status, error } = await deleteMedicineBrand(brandID);
+      if (status === HttpStatusCode.Locked) {
+        throw new Error(
+          'ไม่สามารถลบข้อมูลการค้าได้ เนื่องจากมีการใช้งานอยู่ในระบบ',
+        );
+      }
+      if (status !== HttpStatusCode.NoContent) {
+        throw error;
+      }
       alert({ message: 'ลบข้อมูลการค้าสำเร็จ', severity: 'success' });
     } catch (error) {
-      let err = `${error}`;
+      let err = `${error}`.replaceAll('Error: ', '');
       try {
         if (JSON.parse(err)?.error) {
           err = `${JSON.parse(err).error}`;

@@ -22,6 +22,10 @@ export interface Warehouse {
   warehouseName: string;
   role: WarehouseRole;
   sheetURL?: string;
+  medicineSheetName?: string;
+  medicineHouseSheetName?: string;
+  medicineBrandSheetName?: string;
+  medicineBlisterDateHistorySheetName?: string;
   latestSyncedAt?: Date;
 }
 
@@ -74,6 +78,13 @@ export interface DeleteWarehouseUser {
 
 export interface SyncMedicineMetadata {
   title: string;
+  medication: MedicineSheetMetadata;
+  house: MedicineSheetMetadata;
+  brand: MedicineSheetMetadata;
+  blisterDate: MedicineSheetMetadata;
+}
+
+export interface MedicineSheetMetadata {
   sheetName: string;
   totalMedicine: number;
   totalNewMedicine: number;

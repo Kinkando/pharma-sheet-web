@@ -69,8 +69,7 @@ export function MedicineModal({
       !!medicine.locker,
       medicine.floor > 0,
       medicine.no > 0,
-      // !!medicine.medicalName,
-      // !!medicine.label,
+      !!medicine.medicationID,
     ].every((pass) => pass);
   }, [medicine]);
 
