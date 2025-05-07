@@ -6,6 +6,7 @@ import { Box, MenuItem, Select, Tab, Tabs } from '@mui/material';
 import { LoadingCircular } from '@/components/ui';
 import {
   GetWarehouseUsersResponse,
+  resolveWarehouseName,
   User as UserModel,
   Warehouse,
   Warehouse as WarehouseModel,
@@ -48,7 +49,6 @@ export default function User() {
     warehouseID: '',
     warehouseName: '',
     role: WarehouseRole.VIEWER,
-    lockers: [],
   });
   const { user, alert } = useContext(GlobalContext);
   const [isLoading, setIsLoading] = useState(false);
@@ -119,7 +119,7 @@ export default function User() {
           </MenuItem>
           {warehouses.map((warehouse) => (
             <MenuItem key={warehouse.warehouseID} value={warehouse.warehouseID}>
-              {warehouse.warehouseName}
+              {resolveWarehouseName(warehouse)}
             </MenuItem>
           ))}
         </Select>

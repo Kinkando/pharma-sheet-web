@@ -1,19 +1,11 @@
-import { Add, Sync } from '@mui/icons-material';
+import { Add } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import { SortDropdown } from '@/components/ui';
-import {
-  OrderOption,
-  OrderSequence,
-  SortOption,
-  Warehouse,
-  WarehouseRole,
-} from '@/core/@types';
+import { OrderOption, OrderSequence, SortOption } from '@/core/@types';
 
 export const sortOptions: SortOption[] = [
-  { value: 'description', label: 'ชื่อสามัญทางยา' },
-  { value: 'medicalName', label: 'ชื่อการค้า' },
-  { value: 'address', label: 'บ้านเลขที่ยา' },
-  { value: 'label', label: 'Label ตะกร้า' },
+  { value: 'medicationID', label: 'Medication ID' },
+  { value: 'medicalName', label: 'ชื่อสามัญทางยา' },
 ];
 
 export const orderOptions: OrderOption[] = [
@@ -22,21 +14,17 @@ export const orderOptions: OrderOption[] = [
 ];
 
 export type ToolbarProps = {
-  warehouse: Warehouse;
   sortBy: string;
   order: OrderSequence;
   onSortChange: (sortBy: string, order: OrderSequence) => void;
   onAddMedicine: () => void;
-  onSyncMedicine: () => void;
 };
 
 export function Toolbar({
-  warehouse,
   sortBy,
   order,
-  onAddMedicine,
-  onSyncMedicine,
   onSortChange,
+  onAddMedicine,
 }: ToolbarProps) {
   return (
     <div className="relative">
@@ -54,20 +42,8 @@ export function Toolbar({
         <div className="flex items-center gap-4">
           <Button
             variant="contained"
-            color="warning"
-            size="large"
-            disabled={warehouse.role === WarehouseRole.VIEWER}
-            onClick={onSyncMedicine}
-            className="w-fit whitespace-nowrap max-[440px]:w-full"
-          >
-            <Sync />
-            ซิงค์ข้อมูล
-          </Button>
-          <Button
-            variant="contained"
             color="primary"
             size="large"
-            disabled={warehouse.role === WarehouseRole.VIEWER}
             onClick={onAddMedicine}
             className="w-fit whitespace-nowrap max-[440px]:w-full"
           >

@@ -1,6 +1,5 @@
-import { DropFile } from '@/components/ui';
-import { Locker, Medicine } from '@/core/@types';
-import { Close, Delete } from '@mui/icons-material';
+import { Medicine, MedicineHouse } from '@/core/@types';
+import { Close } from '@mui/icons-material';
 import {
   Button,
   CircularProgress,
@@ -15,68 +14,48 @@ import {
   SelectChangeEvent,
   TextField,
 } from '@mui/material';
-import { Image } from '@/components/ui';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 
-const initMedicine: Medicine = {
-  address: '',
-  description: '',
+const initMedicine: MedicineHouse = {
   floor: 0,
-  label: '',
-  lockerID: '',
-  lockerName: '',
-  medicalName: '',
-  medicineID: '',
+  locker: '',
   no: 0,
+  label: '',
+  medicalName: '',
+  medicationID: '',
+  id: '',
 };
 
 export type MedicineModalProps = {
-  medicine?: Medicine;
-  lockers: Locker[];
+  warehouseID: string;
+  medicines: Medicine[];
+  medicine?: MedicineHouse;
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (medicine: Medicine, file?: File) => Promise<void>;
+  onSubmit: (medicine: MedicineHouse) => Promise<void>;
 };
 
 export function MedicineModal({
+  warehouseID,
+  medicines,
   medicine: medicineInput,
-  lockers,
   isOpen,
   onClose,
   onSubmit,
 }: MedicineModalProps) {
-  const [medicine, setMedicine] = useState<Medicine>({ ...initMedicine });
-
-  const [file, setFile] = useState<File | null>(null);
-  const addFile = (file: FileList) => {
-    if (file.length === 1) {
-      setMedicine((medicine) => ({
-        ...medicine,
-        imageURL: URL.createObjectURL(file.item(0)!),
-      }));
-      setFile(file.item(0));
-    }
-  };
-  const removeFile = () => {
-    setMedicine((medicine) => ({
-      ...medicine,
-      imageURL: undefined,
-    }));
-    setFile(null);
-  };
+  const [medicine, setMedicine] = useState<MedicineHouse>({ ...initMedicine });
 
   useEffect(() => {
     if (isOpen) {
-      setFile(null);
       setMedicine(medicineInput ? { ...medicineInput } : { ...initMedicine });
     }
   }, [isOpen, medicineInput]);
 
   const [isLoading, setIsLoading] = useState(false);
-  const createMedicine = async (medicine: Medicine, file?: File) => {
+  const createMedicine = async (medicine: MedicineHouse) => {
     setIsLoading(true);
     try {
-      await onSubmit(medicine, file);
+      await onSubmit(medicine);
       onClose();
     } catch (error) {
       console.error(error);
@@ -87,13 +66,10 @@ export function MedicineModal({
 
   const isValid = useMemo(() => {
     return [
-      !!medicine.lockerID,
-      medicine.floor >= 0,
-      medicine.no >= 0,
-      !!medicine.address,
-      !!medicine.description.trim(),
-      // !!medicine.medicalName,
-      // !!medicine.label,
+      !!medicine.locker,
+      medicine.floor > 0,
+      medicine.no > 0,
+      !!medicine.medicationID,
     ].every((pass) => pass);
   }, [medicine]);
 
@@ -101,31 +77,34 @@ export function MedicineModal({
     return (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       let text = e.target.value;
       if (isNumber) {
-        text = (+e.target.value).toString();
+        text = Math.abs(+e.target.value).toString();
       }
       setMedicine((value) => ({ ...value, [key]: text }));
     };
   };
 
-  useEffect(() => {
-    let address = '';
-    if (medicine.floor > 0 && medicine.no > 0 && medicine.lockerID) {
-      address = `${lockers.find((locker) => locker.lockerID === medicine.lockerID)!.lockerName}-${medicine.floor}-${medicine.no}`;
+  const address = useMemo(() => {
+    if (medicine.floor > 0 && medicine.no > 0 && medicine.locker) {
+      return `${medicine.locker}-${medicine.floor}-${medicine.no}`;
     }
-    setMedicine((value) => ({ ...value, address }));
-  }, [medicine.floor, medicine.lockerID, medicine.no]);
+    return '';
+  }, [medicine.floor, medicine.locker, medicine.no]);
 
   const list = useMemo(
     () => [
       {
+        label: 'House ID',
+        value: medicine.medicationID
+          ? `${warehouseID}-${medicine.medicationID}`
+          : '',
+        type: 'text',
+        disabled: true,
+      },
+      {
         label: 'ตู้',
-        value: medicine.lockerID,
-        onSelect: (e: SelectChangeEvent<string | number>) =>
-          setMedicine((value) => ({
-            ...value,
-            lockerID: e.target.value.toString(),
-          })),
-        type: 'select',
+        value: medicine.locker,
+        onChange: setText('locker'),
+        type: 'text',
       },
       {
         label: 'ชั้น',
@@ -141,22 +120,39 @@ export function MedicineModal({
       },
       {
         label: 'บ้านเลขที่ยา',
-        value: medicine.address,
-        onChange: setText('address'),
+        value: address,
         type: 'text',
         disabled: true,
       },
       {
-        label: 'ชื่อสามัญทางยา',
-        value: medicine.description,
-        onChange: setText('description'),
-        type: 'text',
+        label: 'Medication ID',
+        value: medicine.medicationID,
+        onSelect: (e: SelectChangeEvent<string | number>) =>
+          setMedicine((value) => ({
+            ...value,
+            medicationID: e.target.value as string,
+          })),
+        emptyText: 'กรุณาเลือก Medication ID',
+        values: medicines.map((item) => ({
+          value: item.medicationID,
+          text: item.medicationID,
+        })),
+        type: 'select',
       },
       {
-        label: 'ชื่อการค้า',
-        value: medicine.medicalName,
-        onChange: setText('medicalName'),
-        type: 'text',
+        label: 'ชื่อสามัญทางยา',
+        value: medicine.medicationID,
+        onSelect: (e: SelectChangeEvent<string | number>) =>
+          setMedicine((value) => ({
+            ...value,
+            medicationID: e.target.value as string,
+          })),
+        emptyText: 'กรุณาเลือกชื่อสามัญทางยา',
+        values: medicines.map((item) => ({
+          value: item.medicationID,
+          text: item.medicalName,
+        })),
+        type: 'select',
       },
       {
         label: 'Label ตะกร้า',
@@ -165,7 +161,7 @@ export function MedicineModal({
         type: 'text',
       },
     ],
-    [medicine],
+    [address, medicine, medicines, warehouseID],
   );
 
   return (
@@ -173,7 +169,7 @@ export function MedicineModal({
       <DialogTitle>
         <div className="flex items-center justify-between gap-4 overflow-hidden w-full">
           <div className="text-ellipsis whitespace-nowrap overflow-hidden w-full">
-            {medicine.medicineID ? 'แก้ไข' : 'เพิ่ม'}ข้อมูลยา
+            {medicine.medicationID ? 'แก้ไข' : 'เพิ่ม'}ข้อมูลยา
           </div>
           <IconButton
             aria-label="close"
@@ -202,16 +198,16 @@ export function MedicineModal({
                   size="small"
                 >
                   <MenuItem value="" disabled>
-                    กรุณาเลือกตู้
+                    {item.emptyText}
                   </MenuItem>
-                  {lockers.map((locker) => (
-                    <MenuItem key={locker.lockerID} value={locker.lockerID}>
-                      {locker.lockerName}
+                  {item.values.map(({ text, value }) => (
+                    <MenuItem key={value} value={value}>
+                      {text}
                     </MenuItem>
                   ))}
                 </Select>
               )}
-              {item.type !== 'select' && item.onChange && (
+              {item.type !== 'select' && (
                 <TextField
                   type={item.type}
                   placeholder={item.label}
@@ -224,35 +220,6 @@ export function MedicineModal({
               )}
             </div>
           ))}
-
-          <div className="space-y-1">
-            <p className="text-sm">ภาพประกอบ</p>
-            {!medicine.imageURL && (
-              <DropFile onSelect={addFile} disabled={isLoading} />
-            )}
-            {medicine.imageURL && (
-              <div className="relative">
-                <Image
-                  alt="Medicine Image"
-                  className="rounded-md"
-                  src={medicine.imageURL}
-                  loader={() => medicine.imageURL!}
-                  width={400}
-                  height={400}
-                  unoptimized
-                  useLoader
-                  loaderSize={400}
-                  responsiveSize={510}
-                  style={{ height: 400 }}
-                />
-                <div className="absolute right-2 top-2 bg-red-500 rounded-full">
-                  <IconButton onClick={removeFile} disabled={isLoading}>
-                    <Delete fontSize="small" />
-                  </IconButton>
-                </div>
-              </div>
-            )}
-          </div>
         </div>
       </DialogContent>
 
@@ -269,7 +236,7 @@ export function MedicineModal({
         <Button
           variant="contained"
           color="success"
-          onClick={() => createMedicine(medicine, file ?? undefined)}
+          onClick={() => createMedicine(medicine)}
           disabled={isLoading || !isValid}
         >
           {isLoading && (

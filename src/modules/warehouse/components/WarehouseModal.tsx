@@ -9,7 +9,11 @@ import {
   Divider,
   IconButton,
 } from '@mui/material';
-import { WarehouseDetail, WarehouseGroup } from '@/core/@types';
+import {
+  resolveWarehouseName,
+  WarehouseDetail,
+  WarehouseGroup,
+} from '@/core/@types';
 import { UserAvatar } from '@/components/ui';
 
 export type WarehouseModalProps = {
@@ -30,7 +34,6 @@ export function WarehouseModal({
   onCancelJoin,
 }: WarehouseModalProps) {
   const [isLoading, setIsLoading] = useState(false);
-
   const onClick = useCallback(
     (
       callback: (warehouseID: string) => Promise<void>,
@@ -73,15 +76,10 @@ export function WarehouseModal({
 
       <DialogContent>
         <section className="space-y-2">
-          <p className="font-bold">{warehouseDetail.warehouseName}</p>
+          <p className="font-bold">{resolveWarehouseName(warehouseDetail)}</p>
           <div className="flex items-center gap-4">
             <span>
               จำนวนสมาชิก: <span>{warehouseDetail.users.length}</span>
-            </span>
-          </div>
-          <div className="flex items-center gap-4">
-            <span>
-              จำนวนตู้: <span>{warehouseDetail.totalLocker}</span>
             </span>
           </div>
           <div className="flex items-center gap-4">

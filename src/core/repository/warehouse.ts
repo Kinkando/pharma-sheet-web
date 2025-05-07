@@ -52,9 +52,12 @@ export async function getWarehouseUsers(
   throw Error(error);
 }
 
-export async function createWarehouse(warehouseName: string) {
+export async function createWarehouse(
+  warehouseID: string,
+  warehouseName: string,
+) {
   return await client<{ warehouseID: string }>({
-    url: `/warehouse`,
+    url: `/warehouse/${warehouseID}`,
     method: 'POST',
     data: { warehouseName },
   });
@@ -74,39 +77,6 @@ export async function updateWarehouse(
 export async function deleteWarehouse(warehouseID: string) {
   return await client({
     url: `/warehouse/${warehouseID}`,
-    method: 'DELETE',
-  });
-}
-
-export async function createWarehouseLocker(
-  warehouseID: string,
-  lockerName: string,
-) {
-  return await client<{ lockerID: string }>({
-    url: `/warehouse/${warehouseID}/locker`,
-    method: 'POST',
-    data: { lockerName },
-  });
-}
-
-export async function updateWarehouseLocker(
-  warehouseID: string,
-  lockerID: string,
-  lockerName: string,
-) {
-  return await client({
-    url: `/warehouse/${warehouseID}/locker/${lockerID}`,
-    method: 'PATCH',
-    data: { lockerName },
-  });
-}
-
-export async function deleteWarehouseLocker(
-  warehouseID: string,
-  lockerID: string,
-) {
-  return await client({
-    url: `/warehouse/${warehouseID}/locker/${lockerID}`,
     method: 'DELETE',
   });
 }
@@ -176,7 +146,7 @@ export async function getSyncMedicineMetadata(
   url: string,
 ) {
   return await client<SyncMedicineMetadata>({
-    url: `/warehouse/${warehouseID}/sync/medicine`,
+    url: `/sheet/warehouse/${warehouseID}`,
     method: 'GET',
     params: { url },
   });
@@ -184,7 +154,7 @@ export async function getSyncMedicineMetadata(
 
 export async function syncMedicine(warehouseID: string, url: string) {
   return await client({
-    url: `/warehouse/${warehouseID}/sync/medicine`,
+    url: `/sheet/warehouse/${warehouseID}`,
     method: 'PUT',
     data: { url },
   });

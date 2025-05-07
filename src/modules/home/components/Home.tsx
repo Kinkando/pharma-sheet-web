@@ -22,9 +22,6 @@ export default function Home() {
     addWarehouse,
     editWarehouse,
     removeWarehouse,
-    addLocker,
-    editLocker,
-    removeLocker,
     replaceQueryParams,
   } = useWarehouseDetail(search);
   const [selectedWarehouseDetail, setSelectedWarehouseDetail] =
@@ -114,9 +111,6 @@ export default function Home() {
               onClose={() => setOpenModal('closed')}
               warehouseDetail={selectedWarehouseDetail}
               onEditWarehouse={editWarehouse}
-              onAddLocker={addLocker}
-              onEditLocker={editLocker}
-              onDeleteLocker={removeLocker}
             />
             <DeleteWarehouseModal
               isOpen={openModal === 'remove'}

@@ -1,4 +1,4 @@
-import { Data } from './pagination';
+import { Data, PaginationRequest } from './pagination';
 
 export enum WarehouseRole {
   ADMIN = 'ADMIN',
@@ -21,27 +21,19 @@ export interface Warehouse {
   warehouseID: string;
   warehouseName: string;
   role: WarehouseRole;
-  lockers: Locker[];
   sheetURL?: string;
+  medicineSheetName?: string;
+  medicineHouseSheetName?: string;
+  medicineBrandSheetName?: string;
+  medicineBlisterDateHistorySheetName?: string;
   latestSyncedAt?: Date;
 }
 
-export interface Locker {
-  lockerID: string;
-  lockerName: string;
-}
-
-export interface FilterWarehouseDetail {
-  limit: number;
-  page: number;
-  search?: string;
+export interface FilterWarehouseDetail extends PaginationRequest {
   group?: WarehouseGroup;
 }
 
-export interface FilterWarehouseUser {
-  limit: number;
-  page: number;
-  search?: string;
+export interface FilterWarehouseUser extends PaginationRequest {
   role?: WarehouseRole;
   status?: WarehouseUserStatus;
 }
@@ -50,16 +42,8 @@ export interface WarehouseDetail {
   warehouseID: string;
   warehouseName: string;
   role: WarehouseRole;
-  lockerDetails: LockerDetail[];
   totalMedicine: number;
-  totalLocker: number;
   users: WarehouseUser[];
-}
-
-export interface LockerDetail {
-  lockerID: string;
-  lockerName: string;
-  totalMedicine: number;
 }
 
 export interface WarehouseUser {
@@ -94,9 +78,29 @@ export interface DeleteWarehouseUser {
 
 export interface SyncMedicineMetadata {
   title: string;
+  medication: MedicineSheetMetadata;
+  house: MedicineSheetMetadata;
+  brand: MedicineSheetMetadata;
+  blisterDate: MedicineSheetMetadata;
+}
+
+export interface MedicineSheetMetadata {
   sheetName: string;
   totalMedicine: number;
   totalNewMedicine: number;
   totalUpdatedMedicine: number;
   totalSkippedMedicine: number;
+}
+
+export function resolveWarehouseName({
+  warehouseID,
+  warehouseName,
+}: {
+  warehouseID: string;
+  warehouseName: string;
+}): string {
+  if (warehouseID === warehouseName) {
+    return warehouseID;
+  }
+  return `${warehouseName} (${warehouseID})`;
 }

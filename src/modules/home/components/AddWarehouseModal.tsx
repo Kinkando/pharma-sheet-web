@@ -15,7 +15,7 @@ import {
 export type AddWarehouseModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onCreate: (warehouseName: string) => Promise<void>;
+  onCreate: (warehouseID: string, warehouseName: string) => Promise<void>;
 };
 
 export function AddWarehouseModal({
@@ -23,27 +23,29 @@ export function AddWarehouseModal({
   onClose,
   onCreate,
 }: AddWarehouseModalProps) {
-  const [warehouseName, setWarehouseName] = useState('');
+  const [warehouseID, setWarehouseID] = useState('');
+  const [warehouseName, setWarehouseName] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const addWarehouse = useCallback(async () => {
-    if (!warehouseName) {
+    if (!warehouseID) {
       return;
     }
     setIsLoading(true);
     try {
-      await onCreate(warehouseName);
+      await onCreate(warehouseID, warehouseName || warehouseID);
       onClose();
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
     } finally {
       setIsLoading(false);
     }
-  }, [onClose, onCreate, warehouseName]);
+  }, [onClose, onCreate, warehouseID, warehouseName]);
 
   useEffect(() => {
     if (isOpen) {
-      setWarehouseName('');
+      setWarehouseID('');
+      setWarehouseName(null);
     }
   }, [isOpen]);
 
@@ -69,15 +71,33 @@ export function AddWarehouseModal({
       <Divider />
 
       <DialogContent>
-        <TextField
-          type="text"
-          placeholder="กรุณาใส่ชื่อศูนย์สุขภาพชุมชน"
-          value={warehouseName}
-          onChange={(e) => setWarehouseName(e.target.value)}
-          disabled={isLoading}
-          size="small"
-          className="w-full"
-        />
+        <div className="space-y-4">
+          <TextField
+            type="text"
+            label="ไอดีศูนย์สุขภาพชุมชน"
+            placeholder="กรุณาใส่ไอดีของศูนย์สุขภาพชุมชน"
+            value={warehouseID}
+            onChange={(e) => {
+              setWarehouseID(e.target.value);
+              if (!warehouseName) {
+                setWarehouseName(null);
+              }
+            }}
+            disabled={isLoading}
+            size="small"
+            className="w-full"
+          />
+          <TextField
+            type="text"
+            label="ชื่อศูนย์สุขภาพชุมชน"
+            placeholder="กรุณาใส่ชื่อศูนย์สุขภาพชุมชน"
+            value={warehouseName ?? warehouseID}
+            onChange={(e) => setWarehouseName(e.target.value)}
+            disabled={isLoading}
+            size="small"
+            className="w-full"
+          />
+        </div>
       </DialogContent>
 
       <Divider />
@@ -94,7 +114,7 @@ export function AddWarehouseModal({
           variant="contained"
           color="success"
           onClick={addWarehouse}
-          disabled={isLoading || !warehouseName}
+          disabled={isLoading || !warehouseID}
         >
           {isLoading && (
             <CircularProgress size={16} className="mr-2 !text-white" />

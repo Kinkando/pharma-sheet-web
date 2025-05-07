@@ -1,123 +1,118 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import {
-  FilterMedicine,
-  Medicine,
-  OrderSequence,
-  SyncMedicineMetadata,
-  Warehouse,
-} from '@/core/@types';
+import { Medicine, OrderSequence, PaginationRequest } from '@/core/@types';
 import { GlobalContext } from '@/core/context';
 import {
-  getMedicines,
-  getSyncMedicineMetadata,
-  getWarehouses,
-  syncMedicine,
+  createMedicine,
+  deleteMedicine,
+  getMedicinesPagination,
+  updateMedicine,
 } from '@/core/repository';
-import { HttpStatusCode } from 'axios';
+import { AxiosError, HttpStatusCode, isCancel } from 'axios';
+import { useRouter } from 'next/navigation';
+import { useContext, useState } from 'react';
 
-export function useMedicine(warehouseID: string | null) {
+export function useMedicine() {
   const { alert } = useContext(GlobalContext);
 
-  const [warehouse, setWarehouse] = useState<Warehouse>();
-  const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
+  const [isFetching, setIsFetching] = useState(true);
   const [medicines, setMedicines] = useState<Medicine[]>([]);
-  const [syncMedicineMetadata, setSyncMedicineMetadata] =
-    useState<SyncMedicineMetadata>();
+
   const { replace } = useRouter();
 
-  useEffect(() => {
-    fetchWarehouses();
-  }, []);
-
-  const fetchWarehouses = useCallback(
-    async (currentWarehouseID?: string) => {
-      try {
-        const data = await getWarehouses();
-        setWarehouses(data ?? []);
-        if (!data || !data.length) {
-          return;
-        }
-        setWarehouse(
-          warehouseID || currentWarehouseID
-            ? (data.find((warehouse) =>
-                currentWarehouseID
-                  ? warehouse.warehouseID === currentWarehouseID
-                  : warehouse.warehouseID === warehouseID,
-              ) ?? data[0])
-            : data[0],
-        );
-      } catch (error) {
-        alert({ message: `${error}`, severity: 'error' });
-      }
-    },
-    [warehouseID],
-  );
-
-  const fetchMedicine = async (filter: FilterMedicine) => {
+  const fetchMedicines = async (
+    filter: PaginationRequest,
+    loading?: boolean,
+  ) => {
+    if (loading) {
+      setIsFetching(true);
+    }
     try {
       filter.search = filter.search?.trim() || undefined;
       replaceQueryParams(filter);
-      const { data } = await getMedicines(filter);
+      const { data } = await getMedicinesPagination(filter);
       setMedicines(data ?? []);
     } catch (error) {
-      alert({ message: `${error}`, severity: 'error' });
+      if (isCancel(error)) {
+        return;
+      }
+      if (error instanceof AxiosError) {
+        alert({ message: `${error?.response?.data}`, severity: 'error' });
+      } else {
+        alert({ message: `${error}`, severity: 'error' });
+      }
+    } finally {
+      if (loading) {
+        setIsFetching(false);
+      }
     }
   };
 
-  const fetchSyncMedicineMetadata = async (
-    warehouseID: string,
-    url: string,
-  ) => {
+  const addMedicine = async (medicationID: string, medicalName: string) => {
     try {
-      const { data, status } = await getSyncMedicineMetadata(warehouseID, url);
-      switch (status) {
-        case HttpStatusCode.NotFound:
-          throw new Error('ไม่พบข้อมูลใน Google Sheet');
-        case HttpStatusCode.BadRequest:
-          throw new Error(
-            'ลิงก์ไม่ถูกต้อง กรุณาเปลี่ยนลิงก์แล้วลองใหม่อีกครั้ง',
-          );
-        case HttpStatusCode.InternalServerError:
-          throw new Error('เกิดข้อผิดพลาดในการซิงค์ข้อมูล');
-        case HttpStatusCode.Conflict:
-          throw new Error('ลิงก์นี้มีผู้ใช้งานแล้ว');
+      const { status, error } = await createMedicine(medicationID, medicalName);
+      if (status === HttpStatusCode.Conflict) {
+        throw new Error('Medication ID นี้มีอยู่ในระบบแล้ว');
       }
-      setSyncMedicineMetadata(data);
-    } catch (error) {
-      alert({ message: `${error}`, severity: 'error' });
-    }
-  };
-
-  const syncGoogleSheet = async (warehouseID: string, link: string) => {
-    try {
-      const { status } = await syncMedicine(warehouseID, link);
-      switch (status) {
-        case HttpStatusCode.NotFound:
-          throw new Error('ไม่พบข้อมูลใน Google Sheet');
-        case HttpStatusCode.BadRequest:
-          throw new Error(
-            'ลิงก์ไม่ถูกต้อง กรุณาเปลี่ยนลิงก์แล้วลองใหม่อีกครั้ง',
-          );
-        case HttpStatusCode.InternalServerError:
-          throw new Error('เกิดข้อผิดพลาดในการซิงค์ข้อมูล');
-        case HttpStatusCode.Conflict:
-          throw new Error('ลิงก์นี้มีผู้ใช้งานแล้ว');
+      if (status !== HttpStatusCode.Ok) {
+        throw error;
       }
-      alert({ message: 'ซิงค์ข้อมูลยาสำเร็จ', severity: 'success' });
+      alert({ message: 'เพิ่มข้อมูลยาสำเร็จ', severity: 'success' });
     } catch (error) {
-      alert({ message: `${error}`, severity: 'error' });
+      let err = `${error}`.replaceAll('Error: ', '');
+      try {
+        if (JSON.parse(err)?.error) {
+          err = `${JSON.parse(err).error}`;
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {}
+      alert({ message: err, severity: 'error' });
       throw error;
     }
   };
 
-  const replaceQueryParams = async ({
-    warehouseID,
-    search,
-    sort,
-  }: FilterMedicine) => {
+  const editMedicine = async (medicationID: string, medicalName: string) => {
+    try {
+      await updateMedicine(medicationID, medicalName);
+      alert({ message: 'แก้ไขข้อมูลยาสำเร็จ', severity: 'success' });
+    } catch (error) {
+      let err = `${error}`;
+      try {
+        if (JSON.parse(err)?.error) {
+          err = `${JSON.parse(err).error}`;
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {}
+      alert({ message: err, severity: 'error' });
+      throw error;
+    }
+  };
+
+  const removeMedicine = async (medicationID: string) => {
+    try {
+      const { status } = await deleteMedicine(medicationID);
+      if (status === HttpStatusCode.Locked) {
+        throw new Error(
+          'ไม่สามารถลบข้อมูลยาได้ เนื่องจากมีการใช้งานอยู่ในระบบ',
+        );
+      }
+      if (status !== HttpStatusCode.NoContent) {
+        throw new Error('ไม่สามารถลบข้อมูลยาได้');
+      }
+      alert({ message: 'ลบข้อมูลยาสำเร็จ', severity: 'success' });
+    } catch (error) {
+      let err = `${error}`.replaceAll('Error: ', '');
+      try {
+        if (JSON.parse(err)?.error) {
+          err = `${JSON.parse(err).error}`;
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {}
+      alert({ message: err, severity: 'error' });
+      throw error;
+    }
+  };
+
+  const replaceQueryParams = async ({ search, sort }: PaginationRequest) => {
     const params = new URLSearchParams(location.search);
-    params.set('warehouseID', warehouseID);
     if (search) {
       params.set('search', search);
     } else {
@@ -132,15 +127,11 @@ export function useMedicine(warehouseID: string | null) {
   };
 
   return {
-    warehouses,
-    fetchWarehouses,
+    isFetching,
     medicines,
-    fetchMedicine,
-    warehouse,
-    setWarehouse,
-    syncMedicineMetadata,
-    setSyncMedicineMetadata,
-    fetchSyncMedicineMetadata,
-    syncGoogleSheet,
+    fetchMedicines,
+    addMedicine,
+    editMedicine,
+    removeMedicine,
   };
 }

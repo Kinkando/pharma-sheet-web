@@ -5,12 +5,9 @@ import { WarehouseDetail, WarehouseGroup } from '@/core/@types';
 import { GlobalContext } from '@/core/context';
 import {
   createWarehouse,
-  createWarehouseLocker,
   deleteWarehouse,
-  deleteWarehouseLocker,
   getWarehouseDetails,
   updateWarehouse,
-  updateWarehouseLocker,
 } from '@/core/repository';
 
 export function useWarehouseDetail(search?: string) {
@@ -39,20 +36,31 @@ export function useWarehouseDetail(search?: string) {
     }
   }, [search]);
 
-  const addWarehouse = useCallback(async (warehouseName: string) => {
-    setIsLoading(true);
-    try {
-      const { status } = await createWarehouse(warehouseName);
-      if (status !== HttpStatusCode.Ok) {
-        throw Error('unable to add new warehouse');
+  const addWarehouse = useCallback(
+    async (warehouseID: string, warehouseName: string) => {
+      setIsLoading(true);
+      try {
+        const { status } = await createWarehouse(warehouseID, warehouseName);
+        if (status === HttpStatusCode.Conflict) {
+          throw Error('ไอดีศูนย์สุขภาพชุมชนนี้มีในระบบแล้ว');
+        }
+        if (status !== HttpStatusCode.Ok) {
+          throw Error(
+            'ไม่สามารถเพิ่มข้อมูลศูนย์สุขภาพชุมชนได้ กรุณกรุณาลองใหม่อีกครั้ง',
+          );
+        }
+        await fetchWarehouseDetails();
+      } catch (error) {
+        alert({
+          message: `${error}`.replaceAll('Error: ', ''),
+          severity: 'error',
+        });
+      } finally {
+        setIsLoading(false);
       }
-      await fetchWarehouseDetails();
-    } catch (error) {
-      alert({ message: `${error}`, severity: 'error' });
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+    },
+    [],
+  );
 
   const editWarehouse = useCallback(
     async (warehouseID: string, warehouseName: string) => {
@@ -87,64 +95,6 @@ export function useWarehouseDetail(search?: string) {
     }
   }, []);
 
-  const addLocker = useCallback(
-    async (warehouseID: string, lockerName: string) => {
-      setIsLoading(true);
-      try {
-        const { status } = await createWarehouseLocker(warehouseID, lockerName);
-        if (status !== HttpStatusCode.Ok) {
-          throw Error('unable to add new locker');
-        }
-        await fetchWarehouseDetails();
-      } catch (error) {
-        alert({ message: `${error}`, severity: 'error' });
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [],
-  );
-
-  const editLocker = useCallback(
-    async (warehouseID: string, lockerID: string, lockerName: string) => {
-      setIsLoading(true);
-      try {
-        const { status } = await updateWarehouseLocker(
-          warehouseID,
-          lockerID,
-          lockerName,
-        );
-        if (status !== HttpStatusCode.NoContent) {
-          throw Error('unable to edit locker');
-        }
-        await fetchWarehouseDetails();
-      } catch (error) {
-        alert({ message: `${error}`, severity: 'error' });
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [],
-  );
-
-  const removeLocker = useCallback(
-    async (warehouseID: string, lockerID: string) => {
-      setIsLoading(true);
-      try {
-        const { status } = await deleteWarehouseLocker(warehouseID, lockerID);
-        if (status !== HttpStatusCode.NoContent) {
-          throw Error('unable to remove locker');
-        }
-        await fetchWarehouseDetails();
-      } catch (error) {
-        alert({ message: `${error}`, severity: 'error' });
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [],
-  );
-
   const replaceQueryParams = (search: string) => {
     const params = new URLSearchParams(location.search);
     if (search?.trim()) {
@@ -162,9 +112,6 @@ export function useWarehouseDetail(search?: string) {
     addWarehouse,
     editWarehouse,
     removeWarehouse,
-    addLocker,
-    editLocker,
-    removeLocker,
     replaceQueryParams,
   };
 }

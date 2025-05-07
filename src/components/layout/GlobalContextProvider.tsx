@@ -9,6 +9,8 @@ import { GlobalContext } from '@/core/context';
 import { useUser } from '@/core/hooks';
 import { Alert as AlertComponent } from '@/components/ui';
 import BaseLayout, { unauthorizedPaths } from '@/components/layout/BaseLayout';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const comicNeue = Kanit({
   weight: ['300', '600'],
@@ -70,13 +72,15 @@ export function GlobalContextProvider({
           {...alert}
           onDismiss={() => setAlert((alert) => ({ ...alert, isOpen: false }))}
         />
-        {isReady && (
-          <div className={`${comicNeue.className}`}>
-            <BaseLayout pathname={pathname} params={params}>
-              {children}
-            </BaseLayout>
-          </div>
-        )}
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          {isReady && (
+            <div className={`${comicNeue.className}`}>
+              <BaseLayout pathname={pathname} params={params}>
+                {children}
+              </BaseLayout>
+            </div>
+          )}
+        </LocalizationProvider>
       </GlobalContext.Provider>
     </ThemeProvider>
   );

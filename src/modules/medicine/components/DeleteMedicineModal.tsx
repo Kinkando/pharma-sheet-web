@@ -28,9 +28,14 @@ export function DeleteMedicineModal({
   const [isDeleting, setIsDeleting] = useState(false);
   const deleteMedicine = async () => {
     setIsDeleting(true);
-    await onDelete();
-    setIsDeleting(false);
-    onClose();
+    try {
+      await onDelete();
+      onClose();
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+    } finally {
+      setIsDeleting(false);
+    }
   };
   return (
     <Dialog open={isOpen} maxWidth="xs" fullWidth>
@@ -54,7 +59,10 @@ export function DeleteMedicineModal({
       <Divider />
       <DialogContent>
         คุณต้องการลบข้อมูลยา
-        <span className="text-red-500">{medicine.description}</span>?
+        <span className="text-red-500">
+          {` [${medicine.medicationID}]`} {medicine.medicalName}
+        </span>
+        ?
       </DialogContent>
 
       <Divider />

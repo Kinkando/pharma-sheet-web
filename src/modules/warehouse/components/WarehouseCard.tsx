@@ -1,4 +1,4 @@
-import { WarehouseDetail } from '@/core/@types';
+import { resolveWarehouseName, WarehouseDetail } from '@/core/@types';
 
 export type WarehouseCardProps = {
   warehouseDetail: WarehouseDetail;
@@ -15,18 +15,13 @@ export function WarehouseCard({
       onClick={() => onClick(warehouseDetail)}
     >
       <h1 className="font-bold line-clamp-3 text-lg mb-1">
-        {warehouseDetail.warehouseName}
+        {resolveWarehouseName(warehouseDetail)}
       </h1>
       <div className="flex items-end justify-between">
         <section className="space-y-2">
           <div className="flex items-center gap-4">
             <span>
               จำนวนสมาชิก: <span>{warehouseDetail.users.length}</span>
-            </span>
-          </div>
-          <div className="flex items-center gap-4">
-            <span>
-              จำนวนตู้: <span>{warehouseDetail.totalLocker}</span>
             </span>
           </div>
           <div className="flex items-center gap-4">

@@ -1,6 +1,14 @@
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import React, { JSX, useContext, useMemo, useState } from 'react';
-import { Group, Home, Medication, Warehouse } from '@mui/icons-material';
+import {
+  AllInbox,
+  CalendarMonth,
+  Group,
+  Home,
+  Image,
+  Medication,
+  Warehouse,
+} from '@mui/icons-material';
 import { Backdrop } from '@mui/material';
 import { GlobalContext } from '@/core/context';
 import Sidebar from './Sidebar';
@@ -39,6 +47,25 @@ export const routers: Router[] = [
     icon: <Medication />,
     name: 'ข้อมูลยา',
     path: '/medicine',
+  },
+  {
+    title: 'Medicine Brands | PHARMA SHEET',
+    // eslint-disable-next-line jsx-a11y/alt-text
+    icon: <Image />,
+    name: 'ชื่อการค้า/รูปภาพยา',
+    path: '/brand',
+  },
+  {
+    title: 'Medication Rotation Date | PHARMA SHEET',
+    icon: <CalendarMonth />,
+    name: 'วันที่เปลี่ยนแผงยา',
+    path: '/rotation-date',
+  },
+  {
+    title: 'Medicine House | PHARMA SHEET',
+    icon: <AllInbox />,
+    name: 'บ้านเลขที่ยา',
+    path: '/house',
   },
   {
     title: 'Warehouse | PHARMA SHEET',
@@ -86,7 +113,7 @@ export default function BaseLayout({
       ...router,
       path: `${router.path}${queryParams}`,
     }));
-  }, [routers, params]);
+  }, [params]);
 
   if (!isUseBaseLayout || !user) {
     return children;
