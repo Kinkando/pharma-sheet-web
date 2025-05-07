@@ -104,6 +104,7 @@ export function AddMedicineModal({
     () =>
       !medicineBrand.medicationID ||
       !medicineBrand.tradeID ||
+      medicineBrand.tradeID === '-' ||
       (!medicineBrand.tradeName?.trim() &&
         !file.blisterImage.file &&
         !file.boxImage.file &&

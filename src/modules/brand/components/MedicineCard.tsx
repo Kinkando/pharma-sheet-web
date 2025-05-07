@@ -29,14 +29,16 @@ export function MedicineCard({ medicine, selectMedicine }: MedicineCardProps) {
         ชื่อการค้า: <b className="">{medicine.tradeName || '-'}</b>
       </p>
       <div className="flex items-center justify-end">
-        <IconButton
-          onClick={(e) => {
-            e.stopPropagation();
-            selectMedicine(medicine, 'delete');
-          }}
-        >
-          <Delete />
-        </IconButton>
+        {medicine.tradeID !== '-' && (
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              selectMedicine(medicine, 'delete');
+            }}
+          >
+            <Delete />
+          </IconButton>
+        )}
         <IconButton
           onClick={(e) => {
             e.stopPropagation();

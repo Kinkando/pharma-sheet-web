@@ -55,7 +55,7 @@ export interface MedicineBlisterDateHistoryView {
 }
 
 export interface MedicineBrandBlisterDateHistory {
-  tradeID?: string;
+  tradeID: string;
   tradeName?: string;
   blisterChanges: MedicineBrandBlisterDateDetailHistory[];
 }
@@ -115,7 +115,7 @@ export interface UpdateMedicineBrandRequest {
 export interface AddBlisterDateRequest {
   medicationID: string;
   warehouseID: string;
-  brandID?: string;
+  brandID: string;
   date: string;
 }
 
@@ -142,8 +142,8 @@ export interface RotationDateHistoryGroup {
   medicalName: string;
   warehouseID: string;
   warehouseName: string;
-  brandID?: string;
-  tradeID?: string;
+  brandID: string;
+  tradeID: string;
   tradeName?: string;
   histories: MedicineBrandBlisterDateDetailHistory[];
 }
