@@ -23,7 +23,7 @@ export function MedicineCard({ medicine, selectMedicine }: MedicineCardProps) {
         ชื่อสามัญทางยา: <b className="">{medicine.medicalName}</b>
       </p>
       <p className="text-sm">
-        Trade Name: <b className="">{medicine.tradeID}</b>
+        Tradename ID: <b className="">{medicine.tradeID}</b>
       </p>
       <p className="text-sm">
         ชื่อการค้า: <b className="">{medicine.tradeName || '-'}</b>
