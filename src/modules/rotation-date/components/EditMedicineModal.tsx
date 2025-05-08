@@ -46,6 +46,14 @@ export function EditMedicineModal({
     }
   };
 
+  const removeDate = (id: string) => {
+    if (new Date(id).getTime()) {
+      setAddRotationDates((prev) => prev.filter((date) => date !== id));
+    } else {
+      setDeleteHistoryIDs((prev) => [...prev, id]);
+    }
+  };
+
   const submit = useCallback(async () => {
     if (!addRotationDates.length && !deleteHistoryIDs.length) {
       return;
@@ -198,7 +206,7 @@ export function EditMedicineModal({
                 color="error"
                 size="small"
                 className="h-10"
-                onClick={() => setDeleteHistoryIDs((prev) => [...prev, id])}
+                onClick={() => removeDate(id)}
               >
                 <div className="overflow-hidden text-ellipsis max-w-16 w-full">
                   ลบ

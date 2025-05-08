@@ -61,7 +61,6 @@ export function AddMedicineModal({
   const addMedicineBlisterDate = useCallback(async () => {
     if (
       !medicineBlisterDate.date ||
-      !medicineBlisterDate.brandID ||
       !medicineBlisterDate.medicationID ||
       !medicineBlisterDate.warehouseID
     ) {
@@ -73,7 +72,7 @@ export function AddMedicineModal({
         medicationID: medicineBlisterDate.medicationID,
         warehouseID: medicineBlisterDate.warehouseID,
         date: medicineBlisterDate.date,
-        brandID: medicineBlisterDate.brandID,
+        brandID: medicineBlisterDate.brandID || undefined,
       });
       onClose();
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -100,8 +99,27 @@ export function AddMedicineModal({
     }));
   };
 
-  const formList = useMemo(
-    () => [
+  const formList = useMemo(() => {
+    const selectMedication = (e: SelectChangeEvent<string | number>) => {
+      setForm('medicationID', e.target.value as string);
+      setForm('tradeID', '');
+    };
+    const selectTrade = (e: SelectChangeEvent<string | number>) => {
+      setForm('tradeID', e.target.value as string);
+      setForm(
+        'brandID',
+        medicines
+          .find(
+            ({ medicationID }) =>
+              medicineBlisterDate.medicationID === medicationID,
+          )
+          ?.brands.find((item) => item.tradeID === e.target.value)?.id ?? '',
+      );
+    };
+    const tradeList = medicines.find(
+      ({ medicationID }) => medicineBlisterDate.medicationID === medicationID,
+    )?.brands;
+    return [
       {
         label: 'House ID',
         value: medicineBlisterDate.medicationID
@@ -113,10 +131,7 @@ export function AddMedicineModal({
       {
         label: 'Medication ID',
         value: medicineBlisterDate.medicationID,
-        onSelect: (e: SelectChangeEvent<string | number>) => {
-          setForm('medicationID', e.target.value as string);
-          setForm('tradeID', '');
-        },
+        onSelect: selectMedication,
         emptyText: 'กรุณาเลือก Medication ID',
         values: medicines.map((item) => ({
           value: item.medicationID,
@@ -127,10 +142,7 @@ export function AddMedicineModal({
       {
         label: 'ชื่อสามัญทางยา',
         value: medicineBlisterDate.medicationID,
-        onSelect: (e: SelectChangeEvent<string | number>) => {
-          setForm('medicationID', e.target.value as string);
-          setForm('tradeID', '');
-        },
+        onSelect: selectMedication,
         emptyText: 'กรุณาเลือกชื่อสามัญทางยา',
         values: medicines.map((item) => ({
           value: item.medicationID,
@@ -141,61 +153,25 @@ export function AddMedicineModal({
       {
         label: 'Tradename ID',
         value: medicineBlisterDate.tradeID,
-        onSelect: (e: SelectChangeEvent<string | number>) => {
-          setForm('tradeID', e.target.value as string);
-          setForm(
-            'brandID',
-            medicines
-              .find(
-                ({ medicationID }) =>
-                  medicineBlisterDate.medicationID === medicationID,
-              )
-              ?.brands.find((item) => item.tradeID === e.target.value)?.id ??
-              '',
-          );
-        },
+        onSelect: selectTrade,
         emptyText: 'กรุณาเลือก Tradename ID',
-        values: !medicineBlisterDate.medicationID
-          ? []
-          : medicines
-              .find(
-                ({ medicationID }) =>
-                  medicineBlisterDate.medicationID === medicationID,
-              )!
-              .brands.map((item) => ({
-                value: item.tradeID,
-                text: item.tradeID,
-              })),
+        values: tradeList?.map((item) => ({
+          value: item.tradeID,
+          text: item.tradeID,
+        })),
+        allowedEmpty: true,
         type: 'select',
       },
       {
         label: 'ชื่อการค้า',
         value: medicineBlisterDate.tradeID,
-        onSelect: (e: SelectChangeEvent<string | number>) => {
-          setForm('tradeID', e.target.value as string);
-          setForm(
-            'brandID',
-            medicines
-              .find(
-                ({ medicationID }) =>
-                  medicineBlisterDate.medicationID === medicationID,
-              )
-              ?.brands.find((item) => item.tradeID === e.target.value)?.id ??
-              '',
-          );
-        },
+        onSelect: selectTrade,
         emptyText: 'กรุณาเลือกชื่อการค้า',
-        values: !medicineBlisterDate.medicationID
-          ? []
-          : medicines
-              .find(
-                ({ medicationID }) =>
-                  medicineBlisterDate.medicationID === medicationID,
-              )!
-              .brands.map((item) => ({
-                value: item.tradeID,
-                text: item.tradeName || '-',
-              })),
+        values: tradeList?.map((item) => ({
+          value: item.tradeID,
+          text: item.tradeName || '-',
+        })),
+        allowedEmpty: true,
         type: 'select',
       },
       {
@@ -205,9 +181,8 @@ export function AddMedicineModal({
           setForm('date', value?.format('YYYY-MM-DD').toString() ?? ''),
         type: 'date',
       },
-    ],
-    [medicineBlisterDate, medicines],
-  );
+    ];
+  }, [medicineBlisterDate, medicines]);
 
   return (
     <Dialog open={isOpen} maxWidth="xs" fullWidth>
@@ -243,10 +218,10 @@ export function AddMedicineModal({
                   className="w-full"
                   size="small"
                 >
-                  <MenuItem value="" disabled>
-                    {item.emptyText}
+                  <MenuItem value="" disabled={!item.allowedEmpty}>
+                    <span className="text-gray-400">{item.emptyText}</span>
                   </MenuItem>
-                  {item.values.map(({ text, value }) => (
+                  {item.values?.map(({ text, value }) => (
                     <MenuItem key={value} value={value}>
                       {text}
                     </MenuItem>
@@ -299,7 +274,6 @@ export function AddMedicineModal({
           disabled={
             isLoading ||
             !medicineBlisterDate.date ||
-            !medicineBlisterDate.brandID ||
             !medicineBlisterDate.medicationID ||
             !medicineBlisterDate.warehouseID
           }
