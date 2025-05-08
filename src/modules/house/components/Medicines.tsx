@@ -31,7 +31,6 @@ export default function Medicines() {
     isMounted,
     isFetching,
     warehouses,
-    fetchWarehouses,
     medicines,
     medicinesMaster,
     fetchMedicine,
@@ -167,10 +166,7 @@ export default function Medicines() {
           (warehouse) =>
             warehouse && { ...warehouse, sheetURL, latestSyncedAt: new Date() },
         );
-        await Promise.all([
-          fetchWarehouses(warehouse.warehouseID),
-          fetchData(),
-        ]);
+        await fetchData();
         setOpenModal('closed');
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

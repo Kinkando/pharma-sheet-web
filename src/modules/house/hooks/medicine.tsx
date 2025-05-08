@@ -190,7 +190,6 @@ export function useMedicine(warehouseID: string | null) {
     isMounted,
     isFetching,
     warehouses,
-    fetchWarehouses,
     medicines,
     medicinesMaster,
     fetchMedicine,
