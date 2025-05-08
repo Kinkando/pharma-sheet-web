@@ -1,4 +1,4 @@
-import { MedicineBrand } from '@/core/@types';
+import { MedicineBrand, resolveWarehouseName } from '@/core/@types';
 import { Delete, Edit } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 
@@ -33,7 +33,11 @@ export function MedicineCard({ medicine, selectMedicine }: MedicineCardProps) {
           วันที่เปลี่ยนแผงยา:
           {medicine.blisterDates.map(({ warehouseID, warehouseName, date }) => (
             <div key={warehouseID} className="font-bold">
-              {warehouseName} {`(${warehouseID}): `}
+              {resolveWarehouseName({
+                warehouseID,
+                warehouseName: warehouseName || warehouseID,
+              })}
+              {': '}
               <span className="text-blue-500">{date}</span>
             </div>
           ))}

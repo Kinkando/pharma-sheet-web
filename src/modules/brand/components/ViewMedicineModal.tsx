@@ -1,5 +1,5 @@
 import { Image } from '@/components/ui';
-import { MedicineBrand } from '@/core/@types';
+import { MedicineBrand, resolveWarehouseName } from '@/core/@types';
 import { Close } from '@mui/icons-material';
 import {
   Dialog,
@@ -63,7 +63,10 @@ export function ViewMedicineModal({
               className="font-bold flex items-center justify-between w-full"
             >
               <div>
-                {warehouseName} {`(${warehouseID})`}
+                {resolveWarehouseName({
+                  warehouseID,
+                  warehouseName: warehouseName || warehouseID,
+                })}
               </div>
               <div className="text-blue-500">{date}</div>
             </div>

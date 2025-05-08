@@ -102,5 +102,5 @@ export function resolveWarehouseName({
   if (warehouseID === warehouseName) {
     return warehouseID;
   }
-  return `${warehouseName} (${warehouseID})`;
+  return `${warehouseName} [${warehouseID}]`;
 }
