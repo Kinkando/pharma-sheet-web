@@ -186,21 +186,18 @@ export function EditMedicineModal({
         value: file.blisterImage.imageURL,
         key: 'blisterImage' as keyof MedicineBrandFile,
         type: 'file',
-        disabled: medicineBrand.tradeID === '-',
       },
       {
         label: 'เม็ดยา',
         value: file.tabletImage.imageURL,
         key: 'tabletImage' as keyof MedicineBrandFile,
         type: 'file',
-        disabled: medicineBrand.tradeID === '-',
       },
       {
         label: 'กล่องยา',
         value: file.boxImage.imageURL,
         key: 'boxImage' as keyof MedicineBrandFile,
         type: 'file',
-        disabled: medicineBrand.tradeID === '-',
       },
     ],
     [medicineBrand, file],
@@ -229,60 +226,58 @@ export function EditMedicineModal({
 
       <DialogContent>
         <div className="space-y-4">
-          {formList
-            .filter(({ disabled, type }) => type !== 'file' || !disabled)
-            .map((item) => (
-              <div key={item.label} className="space-y-1">
-                <p className="text-sm">{item.label}</p>
-                {item.type === 'text' && (
-                  <TextField
-                    type={item.type}
-                    placeholder={item.label}
-                    value={item.value}
-                    onChange={item.onChange}
-                    disabled={item.disabled}
-                    className="w-full"
-                    size="small"
-                  />
-                )}
-                {item.type === 'file' && item.key && (
-                  <>
-                    {!item.value && (
-                      <DropFile
-                        id={item.key}
-                        onSelect={(e) => addFile(item.key, e)}
-                        disabled={isLoading}
+          {formList.map((item) => (
+            <div key={item.label} className="space-y-1">
+              <p className="text-sm">{item.label}</p>
+              {item.type === 'text' && (
+                <TextField
+                  type={item.type}
+                  placeholder={item.label}
+                  value={item.value}
+                  onChange={item.onChange}
+                  disabled={item.disabled}
+                  className="w-full"
+                  size="small"
+                />
+              )}
+              {item.type === 'file' && item.key && (
+                <>
+                  {!item.value && (
+                    <DropFile
+                      id={item.key}
+                      onSelect={(e) => addFile(item.key, e)}
+                      disabled={isLoading}
+                    />
+                  )}
+                  {item.value && (
+                    <div className="relative">
+                      <Image
+                        alt={`Medicine Brand Image ${item.label}`}
+                        className="rounded-md"
+                        src={item.value}
+                        loader={() => item.value!}
+                        width={400}
+                        height={400}
+                        unoptimized
+                        useLoader
+                        loaderSize={400}
+                        responsiveSize={510}
+                        style={{ height: 400 }}
                       />
-                    )}
-                    {item.value && (
-                      <div className="relative">
-                        <Image
-                          alt={`Medicine Brand Image ${item.label}`}
-                          className="rounded-md"
-                          src={item.value}
-                          loader={() => item.value!}
-                          width={400}
-                          height={400}
-                          unoptimized
-                          useLoader
-                          loaderSize={400}
-                          responsiveSize={510}
-                          style={{ height: 400 }}
-                        />
-                        <div className="absolute right-2 top-2 bg-red-500 rounded-full">
-                          <IconButton
-                            onClick={() => removeFile(item.key)}
-                            disabled={isLoading}
-                          >
-                            <Delete fontSize="small" />
-                          </IconButton>
-                        </div>
+                      <div className="absolute right-2 top-2 bg-red-500 rounded-full">
+                        <IconButton
+                          onClick={() => removeFile(item.key)}
+                          disabled={isLoading}
+                        >
+                          <Delete fontSize="small" />
+                        </IconButton>
                       </div>
-                    )}
-                  </>
-                )}
-              </div>
-            ))}
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          ))}
         </div>
       </DialogContent>
 

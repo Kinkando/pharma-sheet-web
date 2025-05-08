@@ -61,6 +61,7 @@ export function AddMedicineModal({
   const addMedicineBlisterDate = useCallback(async () => {
     if (
       !medicineBlisterDate.date ||
+      !medicineBlisterDate.brandID ||
       !medicineBlisterDate.medicationID ||
       !medicineBlisterDate.warehouseID
     ) {
@@ -298,6 +299,7 @@ export function AddMedicineModal({
           disabled={
             isLoading ||
             !medicineBlisterDate.date ||
+            !medicineBlisterDate.brandID ||
             !medicineBlisterDate.medicationID ||
             !medicineBlisterDate.warehouseID
           }
