@@ -121,17 +121,17 @@ export default function RotationDate() {
         brandID: selectedItem.brandID,
       });
     } else {
-      await Promise.all([
-        addRotationDates.map((date) =>
-          addHistory({
-            medicationID: selectedItem.medicationID,
-            warehouseID: selectedItem.warehouseID,
-            brandID: selectedItem.brandID,
-            date,
-          }),
-        ),
-        deleteHistoryIDs.map((historyID) => deleteHistory({ historyID })),
-      ]);
+      for (const historyID of deleteHistoryIDs) {
+        await deleteHistory({ historyID });
+      }
+      for (const date of addRotationDates) {
+        await addHistory({
+          medicationID: selectedItem.medicationID,
+          warehouseID: selectedItem.warehouseID,
+          brandID: selectedItem.brandID,
+          date,
+        });
+      }
     }
     setSelectedItem(undefined);
     await fetchData();

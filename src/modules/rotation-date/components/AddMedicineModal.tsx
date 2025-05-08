@@ -266,7 +266,7 @@ export function AddMedicineModal({
               {item.type === 'date' && (
                 <DatePicker
                   className="w-full"
-                  format="YYYY/MM/DD"
+                  format="DD/MM/YYYY"
                   onChange={item.onChange}
                   slotProps={{
                     textField: {

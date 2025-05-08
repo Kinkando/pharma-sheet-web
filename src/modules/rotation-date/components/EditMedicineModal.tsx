@@ -39,7 +39,7 @@ export function EditMedicineModal({
   const [deleteHistoryIDs, setDeleteHistoryIDs] = useState<string[]>([]);
 
   const addDate = (value: PickerValue) => {
-    const date = value?.format('YYYY-MM-DD').toString() ?? '';
+    const date = value?.format('YYYY-MM-DD') ?? '';
     if (date) {
       setAddRotationDates((prev) => [...prev, date]);
       setDate(null);
@@ -73,10 +73,15 @@ export function EditMedicineModal({
         ...medicine.histories.filter(
           ({ id }) => !deleteHistoryIDs.includes(id),
         ),
-        ...addRotationDates.map((date) => ({ id: date, date })),
-      ].sort((a, b) => {
-        const dateA = new Date(a.date).getTime();
-        const dateB = new Date(b.date).getTime();
+        ...addRotationDates.map((date) => ({
+          id: date,
+          date: date.split('-').reverse().join('/'),
+        })),
+      ].sort(({ date: a }, { date: b }) => {
+        const dateAText = a.split('/').reverse().join('/');
+        const dateBText = b.split('/').reverse().join('/');
+        const dateA = new Date(dateAText).getTime();
+        const dateB = new Date(dateBText).getTime();
         return dateA - dateB;
       }),
     [medicine.histories, addRotationDates, deleteHistoryIDs],
@@ -151,7 +156,7 @@ export function EditMedicineModal({
             <div className="flex items-center gap-4">
               <DatePicker
                 className="w-full"
-                format="YYYY/MM/DD"
+                format="DD/MM/YYYY"
                 value={date}
                 onChange={setDate}
                 slotProps={{
@@ -171,7 +176,7 @@ export function EditMedicineModal({
                 disabled={
                   !date ||
                   historyDates.some(
-                    ({ date: d }) => d === date.format('YYYY-MM-DD'),
+                    ({ date: d }) => d === date.format('DD/MM/YYYY'),
                   )
                 }
               >
@@ -185,7 +190,7 @@ export function EditMedicineModal({
               <TextField
                 className="w-full"
                 size="small"
-                value={date.replaceAll('-', '/')}
+                value={date}
                 disabled
               />
               <Button
