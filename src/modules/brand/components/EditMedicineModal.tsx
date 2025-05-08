@@ -249,7 +249,24 @@ export function EditMedicineModal({
                       disabled={isLoading}
                     />
                   )}
-                  {item.value && (
+                  {item.value && item.value.startsWith('https://') && (
+                    <div className="flex items-center gap-2">
+                      <Button variant="contained" color="success" size="small">
+                        <a href={item.value} target="_blank">
+                          ดูรูปภาพ
+                        </a>
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="error"
+                        size="small"
+                        onClick={() => removeFile(item.key)}
+                      >
+                        ลบรูปภาพ
+                      </Button>
+                    </div>
+                  )}
+                  {item.value && !item.value.startsWith('https://') && (
                     <div className="relative">
                       <Image
                         alt={`Medicine Brand Image ${item.label}`}

@@ -8,7 +8,7 @@ import {
   Divider,
   IconButton,
 } from '@mui/material';
-import { useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
 
 export type ViewMedicineModalProps = {
   medicine: MedicineBrand;
@@ -42,17 +42,34 @@ export function ViewMedicineModal({
       {
         label: 'แผงยา',
         value: medicine.blisterImageURL ?? '',
-        type: 'image',
+        type: 'link',
       },
       {
         label: 'เม็ดยา',
         value: medicine.tabletImageURL ?? '',
-        type: 'image',
+        type: 'link',
       },
       {
         label: 'กล่องยา',
         value: medicine.boxImageURL ?? '',
-        type: 'image',
+        type: 'link',
+      },
+      {
+        label: 'วันที่เปลี่ยนแผงยา',
+        items: medicine.blisterDates?.map(
+          ({ warehouseID, warehouseName, date }) => (
+            <div
+              key={warehouseID}
+              className="font-bold flex items-center justify-between w-full"
+            >
+              <div>
+                {warehouseName} {`(${warehouseID})`}
+              </div>
+              <div className="text-blue-500">{date}</div>
+            </div>
+          ),
+        ),
+        type: 'bullet',
       },
     ],
     [medicine],
@@ -63,7 +80,7 @@ export function ViewMedicineModal({
       <DialogTitle>
         <div className="flex items-center justify-between gap-4 overflow-hidden w-full">
           <div className="text-ellipsis whitespace-nowrap overflow-hidden w-full">
-            ข้อมูลยา
+            ข้อมูลการค้า/รูปภาพยา
           </div>
           <IconButton
             aria-label="close"
@@ -80,11 +97,11 @@ export function ViewMedicineModal({
       <DialogContent>
         <div className="space-y-3">
           {list
-            .filter(({ value, type }) => !type || !!value)
+            .filter(({ value, items, type }) => !type || !!value || !!items)
             .map((item) => (
               <div key={item.label} className="space-y-1">
                 <p className="text-sm">{item.label}</p>
-                {item.type === 'image' ? (
+                {item.type === 'image' && item.value && (
                   <Image
                     alt={`Medicine Brand Image ${item.label}`}
                     className="rounded-md"
@@ -98,7 +115,24 @@ export function ViewMedicineModal({
                     responsiveSize={510}
                     style={{ height: 400 }}
                   />
-                ) : (
+                )}
+                {item.type === 'link' && (
+                  <a
+                    href={item.value}
+                    target="_blank"
+                    className="underline text-blue-600"
+                  >
+                    ดูรูปภาพ
+                  </a>
+                )}
+                {item.type === 'bullet' &&
+                  item.items &&
+                  item.items.map((subItem) => (
+                    <Fragment key={item.label + '-' + subItem.key}>
+                      {subItem}
+                    </Fragment>
+                  ))}
+                {(!item.type || item.type === 'text') && (
                   <p className="text-md font-semibold">{item.value}</p>
                 )}
               </div>

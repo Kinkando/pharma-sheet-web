@@ -32,6 +32,13 @@ export interface MedicineBrand {
   blisterImageURL?: string;
   tabletImageURL?: string;
   boxImageURL?: string;
+  blisterDates?: MedicineBrandWithLatestBlisterDate[];
+}
+
+export interface MedicineBrandWithLatestBlisterDate {
+  warehouseID: string;
+  warehouseName?: string;
+  date: string;
 }
 
 export interface MedicineHouseView {
