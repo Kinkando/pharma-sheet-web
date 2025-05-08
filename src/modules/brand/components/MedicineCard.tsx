@@ -29,7 +29,7 @@ export function MedicineCard({ medicine, selectMedicine }: MedicineCardProps) {
         ชื่อการค้า: <b className="">{medicine.tradeName || '-'}</b>
       </p>
       {medicine.blisterDates && (
-        <p className="text-sm">
+        <div className="text-sm">
           วันที่เปลี่ยนแผงยา:
           {medicine.blisterDates.map(({ warehouseID, warehouseName, date }) => (
             <div key={warehouseID} className="font-bold">
@@ -37,7 +37,7 @@ export function MedicineCard({ medicine, selectMedicine }: MedicineCardProps) {
               <span className="text-blue-500">{date}</span>
             </div>
           ))}
-        </p>
+        </div>
       )}
       <div className="flex items-center justify-end">
         {medicine.tradeID !== '-' && (
