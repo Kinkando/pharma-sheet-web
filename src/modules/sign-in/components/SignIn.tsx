@@ -1,9 +1,12 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Image } from '@/components/ui';
 import { GlobalContext } from '@/core/context';
 import SignInCard from './SignInCard';
 
 export default function SignIn() {
+  useEffect(() => {
+    window.parent.postMessage('DATA_CHANGED', 'http://sentinel-dev.localhost');
+  }, []);
   const { user } = useContext(GlobalContext);
   if (user) {
     return <></>;
