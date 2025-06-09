@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSignIn } from '@/modules/sign-in/hooks/signIn';
 import { Button, TextField } from '@mui/material';
 import { LoadingScreen } from '@/components/ui';
@@ -12,10 +12,6 @@ export default function SignInCard() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isShowPassword, setIsShowPassword] = useState(false);
-
-  useEffect(() => {
-    window.parent.postMessage('DATA_CHANGED', 'http://sentinel-dev.localhost');
-  }, [email, password]);
 
   return (
     <>
