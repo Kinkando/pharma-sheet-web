@@ -34,9 +34,13 @@ export function useMedicine(warehouseID: string | null) {
   const { replace } = useRouter();
 
   useEffect(() => {
-    fetchWarehouses();
-    fetchMedicinesMaster();
+    init();
   }, []);
+
+  async function init() {
+    await Promise.all([fetchWarehouses, fetchMedicinesMaster]);
+    setIsFetching(false);
+  }
 
   const fetchMedicinesMaster = async () => {
     try {
@@ -84,7 +88,6 @@ export function useMedicine(warehouseID: string | null) {
       replaceQueryParams(filter);
       const { data } = await getMedicineHouses(filter);
       setMedicines(data ?? []);
-      setIsFetching(false);
     } catch (error) {
       if (isCancel(error)) {
         return;
@@ -94,6 +97,8 @@ export function useMedicine(warehouseID: string | null) {
       } else {
         alert({ message: `${error}`, severity: 'error' });
       }
+    } finally {
+      setIsFetching(false);
     }
   };
 

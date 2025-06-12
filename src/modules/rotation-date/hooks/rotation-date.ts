@@ -32,9 +32,13 @@ export function useRotationDate(warehouseID: string | null) {
   const { replace } = useRouter();
 
   useEffect(() => {
-    fetchWarehouses();
-    fetchMedicines();
+    init();
   }, []);
+
+  async function init() {
+    await Promise.all([fetchWarehouses, fetchMedicines]);
+    setIsFetching(false);
+  }
 
   const fetchMedicines = async () => {
     try {
