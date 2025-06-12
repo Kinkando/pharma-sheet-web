@@ -36,7 +36,7 @@ export function useRotationDate(warehouseID: string | null) {
   }, []);
 
   async function init() {
-    await Promise.all([fetchWarehouses, fetchMedicines]);
+    await Promise.all([fetchWarehouses(), fetchMedicines()]);
     setIsFetching(false);
   }
 

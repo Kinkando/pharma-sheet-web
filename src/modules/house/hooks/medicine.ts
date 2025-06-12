@@ -38,7 +38,7 @@ export function useMedicine(warehouseID: string | null) {
   }, []);
 
   async function init() {
-    await Promise.all([fetchWarehouses, fetchMedicinesMaster]);
+    await Promise.all([fetchWarehouses(), fetchMedicinesMaster()]);
     setIsFetching(false);
   }
 
