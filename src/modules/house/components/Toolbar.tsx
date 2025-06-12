@@ -74,7 +74,7 @@ export function Toolbar({
           >
             {isDownloading && <CircularProgress size={24} />}
             {!isDownloading && <Download />}
-            ดาวน์โหลด
+            <span className="hidden sm:block">ดาวน์โหลด</span>
           </Button>
           <Button
             variant="contained"
@@ -85,7 +85,7 @@ export function Toolbar({
             className="w-fit whitespace-nowrap max-[440px]:w-full"
           >
             <Sync />
-            ซิงค์ข้อมูล
+            <span className="hidden sm:block">ซิงค์ข้อมูล</span>
           </Button>
           <Button
             variant="contained"
@@ -96,7 +96,7 @@ export function Toolbar({
             className="w-fit whitespace-nowrap max-[440px]:w-full"
           >
             <Add />
-            เพิ่มข้อมูล
+            <span className="hidden sm:block">เพิ่มข้อมูล</span>
           </Button>
         </div>
       </div>

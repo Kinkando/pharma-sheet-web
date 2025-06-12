@@ -1,17 +1,18 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useWarehouseDetail } from '@/modules/home/hooks/warehouseDetail';
 import { WarehouseCard } from './WarehouseCard';
-import { DelaySearchBox, LoadingScreen } from '@/components/ui';
-import { Button } from '@mui/material';
-import { Add } from '@mui/icons-material';
+import { LoadingScreen } from '@/components/ui';
 import { WarehouseDetail, WarehouseRole } from '@/core/@types';
 import { ViewWarehouseModal } from './ViewWarehouseModal';
 import { DeleteWarehouseModal } from './DeleteWarehouseModal';
 import { AddWarehouseModal } from './AddWarehouseModal';
 import { EditWarehouseModal } from './EditWarehouseModal';
+import { Toolbar } from './Toolbar';
+import { exportMedicine } from '@/core/repository';
+import { ExportSheetModal } from './ExportSheetModal';
 
 export default function Home() {
   const searchParam = useSearchParams();
@@ -32,7 +33,7 @@ export default function Home() {
   }, [search]);
 
   const [openModal, setOpenModal] = useState<
-    'closed' | 'add' | 'edit' | 'remove' | 'view'
+    'closed' | 'add' | 'edit' | 'remove' | 'view' | 'export'
   >('closed');
 
   const setModal = (
@@ -54,26 +55,34 @@ export default function Home() {
     }
   }, [warehouseDetails, selectedWarehouseDetail]);
 
+  const downloadFile = async (warehouseIDs: string[]) => {
+    try {
+      const url = await exportMedicine(warehouseIDs);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `บ้านเลขที่ยา.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (error) {
+      alert({
+        message: `${error}`.replaceAll('Error: ', ''),
+        severity: 'error',
+      });
+    }
+  };
+
   return (
     <>
       <LoadingScreen isLoading={isLoading} />
 
       <main className="space-y-4 lg:p-6 p-4">
-        <div className="flex items-center gap-2">
-          <Suspense fallback={null}>
-            <DelaySearchBox onSearch={setSearch} />
-          </Suspense>
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            onClick={() => setOpenModal('add')}
-            className="w-fit whitespace-nowrap h-14"
-          >
-            <Add />
-            <span className="hidden lg:block">เพิ่มศูนย์</span>
-          </Button>
-        </div>
+        <Toolbar
+          warehouses={warehouseDetails || []}
+          setSearch={setSearch}
+          onAddWarehouse={() => setOpenModal('add')}
+          onExportMedicineSheet={() => setOpenModal('export')}
+        />
 
         {warehouseDetails && (
           <div className="grid grid-cols-[repeat(auto-fill,_minmax(15rem,_1fr))] gap-4">
@@ -92,6 +101,13 @@ export default function Home() {
             ))}
           </div>
         )}
+
+        <ExportSheetModal
+          warehouseDetails={warehouseDetails || []}
+          isOpen={openModal === 'export'}
+          onClose={() => setOpenModal('closed')}
+          onExport={downloadFile}
+        />
 
         <AddWarehouseModal
           isOpen={openModal === 'add'}
