@@ -159,3 +159,15 @@ export async function syncMedicine(warehouseID: string, url: string) {
     data: { url },
   });
 }
+
+export async function exportMedicine(warehouseIDs: string[]) {
+  const { data, headers } = await client<Blob>({
+    url: `/sheet/export`,
+    method: 'POST',
+    data: { warehouseIDs },
+    responseType: 'blob',
+  });
+  return URL.createObjectURL(
+    new Blob([data], { type: headers['Content-Type'] as string }),
+  );
+}

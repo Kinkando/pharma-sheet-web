@@ -1,5 +1,5 @@
-import { Add, Sync } from '@mui/icons-material';
-import { Button } from '@mui/material';
+import { Add, Download, Sync } from '@mui/icons-material';
+import { Button, CircularProgress } from '@mui/material';
 import { SortDropdown } from '@/components/ui';
 import {
   OrderOption,
@@ -8,6 +8,7 @@ import {
   Warehouse,
   WarehouseRole,
 } from '@/core/@types';
+import { useState } from 'react';
 
 export const sortOptions: SortOption[] = [
   { value: 'medicalName', label: 'ชื่อสามัญทางยา' },
@@ -26,6 +27,7 @@ export type ToolbarProps = {
   onSortChange: (sortBy: string, order: OrderSequence) => void;
   onAddMedicine: () => void;
   onSyncMedicine: () => void;
+  onExportMedicine: () => Promise<void>;
 };
 
 export function Toolbar({
@@ -35,7 +37,19 @@ export function Toolbar({
   onAddMedicine,
   onSyncMedicine,
   onSortChange,
+  onExportMedicine,
 }: ToolbarProps) {
+  const [isDownloading, setIsDownloading] = useState(false);
+  const download = async () => {
+    setIsDownloading(true);
+    try {
+      await onExportMedicine();
+    } catch (error) {
+      console.error('Error downloading medicine:', error);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
   return (
     <div className="relative">
       <SortDropdown
@@ -50,6 +64,18 @@ export function Toolbar({
       />
       <div className="absolute right-0 top-0 max-[440px]:relative max-[440px]:mt-4">
         <div className="flex items-center gap-4">
+          <Button
+            variant="contained"
+            color="secondary"
+            size="large"
+            onClick={download}
+            disabled={isDownloading}
+            className="w-fit whitespace-nowrap max-[440px]:w-full"
+          >
+            {isDownloading && <CircularProgress size={24} />}
+            {!isDownloading && <Download />}
+            ดาวน์โหลด
+          </Button>
           <Button
             variant="contained"
             color="warning"

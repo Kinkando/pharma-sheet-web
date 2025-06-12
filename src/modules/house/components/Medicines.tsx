@@ -14,7 +14,11 @@ import {
 import { GlobalContext } from '@/core/context';
 import { useValidState } from '@/core/hooks';
 import { useMedicine } from '@/modules/house/hooks/medicine';
-import { deleteMedicineHouse, updateMedicineHouse } from '@/core/repository';
+import {
+  deleteMedicineHouse,
+  exportMedicine,
+  updateMedicineHouse,
+} from '@/core/repository';
 import { DeleteMedicineModal } from './DeleteMedicineModal';
 import { MedicineCard } from './MedicineCard';
 import { ViewMedicineModal } from './ViewMedicineModal';
@@ -177,6 +181,26 @@ export default function Medicines() {
     [warehouse],
   );
 
+  const downloadFile = useCallback(async () => {
+    if (!warehouse?.warehouseID) {
+      return;
+    }
+    try {
+      const url = await exportMedicine([warehouse.warehouseID]);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `บ้านเลขที่ยา-${warehouse.warehouseName}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (error) {
+      alert({
+        message: `${error}`.replaceAll('Error: ', ''),
+        severity: 'error',
+      });
+    }
+  }, [warehouse]);
+
   return (
     <main className="h-full relative">
       <LoadingCircular isLoading={isFetching} blur />
@@ -193,6 +217,7 @@ export default function Medicines() {
             }}
             onAddMedicine={() => setOpenModal('create')}
             onSyncMedicine={() => setOpenModal('sync')}
+            onExportMedicine={downloadFile}
           />
         )}
 
