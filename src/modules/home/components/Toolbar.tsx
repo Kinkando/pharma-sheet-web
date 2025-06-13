@@ -28,7 +28,7 @@ export function Toolbar({
         size="large"
         onClick={onExportMedicineSheet}
         disabled={!warehouses}
-        className="w-fit whitespace-nowrap max-[440px]:w-full h-14"
+        className="w-fit whitespace-nowrap h-14"
       >
         <Download />
         <span className="hidden lg:block">ดาวน์โหลด</span>
